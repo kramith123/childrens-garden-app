@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Children's Garden High School - Reading Assessment</title>
+    <!-- Tailwind CSS for UI and responsiveness -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* బ్యాక్‌గ్రౌండ్ మరింత వైబ్రెంట్‌గా మారుస్తున్నాను */
+        body { 
+            background: linear-gradient(135deg, #bfdbfe 0%, #bbf7d0 50%, #fef08a 100%); 
+            min-height: 100vh; 
+        }
+        .listening { animation: pulse 1.5s infinite; }
+        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.6; } 100% { opacity: 1; } }
+        .hidden-panel { display: none; }
+    </style>
+</head>
+<body class="p-4 md:p-8 flex justify-center items-center">
+
+<div class="container max-w-2xl bg-white p-8 rounded-3xl shadow-2xl border-4 border-blue-100">
+    <h1 class="text-3xl font-extrabold text-blue-950 text-center uppercase mb-2">Children's Garden E.M. High School</h1>
+    <p class="text-blue-800 text-center font-bold mb-8">Student Reading Assessment Engine</p>
+
+    <!-- Setup Screen -->
+    <div id="setup-screen">
+        <div class="grid grid-cols-1 gap-4 mb-6">
+            <input type="text" id="student-name" class="p-4 border-2 border-blue-300 rounded-xl text-lg w-full focus:ring-4 focus:ring-blue-100" placeholder="Enter Student Name">
+            <select id="student-class" class="p-4 border-2 border-blue-300 rounded-xl text-lg w-full">
+                <option value="Nursery">Nursery</option><option value="LKG">LKG</option><option value="UKG">UKG</option>
+                <option value="1st Class">1st Class</option><option value="2nd Class">2nd Class</option>
+            </select>
+            <select id="language" class="p-4 border-2 rounded-xl text-lg w-full">
+                <option value="English">English</option><option value="Telugu">Telugu</option>
+            </select>
+        </div>
+        <button onclick="fetchQuestions()" class="w-full bg-blue-700 text-white p-4 rounded-xl font-bold text-lg hover:bg-blue-800 shadow-lg">Load Questions</button>
+        
+        <div id="selection-area" class="hidden-panel mt-6">
+            <div id="questions-list" class="max-h-60 overflow-y-auto border p-4 rounded-xl mb-4"></div>
+            <button onclick="startTest()" class="w-full bg-green-600 text-white p-4 rounded-xl font-bold text-lg hover:bg-green-700 shadow-lg">Start Assessment</button>
+        </div>
+    </div>
+
+    <!-- Active Assessment -->
+    <div id="assessment-panel" class="hidden-panel text-center">
+        <h2 id="q-counter" class="text-xl font-bold text-blue-900 mb-4"></h2>
+        <div id="target-text" class="text-4xl font-bold p-8 bg-blue-50 rounded-2xl border-4 border-blue-200 mb-6 text-blue-900"></div>
+        <button id="mic-btn" onclick="startMic()" class="bg-red-600 text-white p-6 rounded-2xl w-full text-2xl font-bold shadow-lg hover:bg-red-700">🎤 Start Reading</button>
+        <p id="feedback" class="mt-4 font-bold text-lg"></p>
+    </div>
+
+    <!-- Results/Certificate -->
+    <div id="result-panel" class="hidden-panel text-center">
+        <h2 class="text-3xl font-bold text-amber-700 mb-4">Assessment Complete! 🎉</h2>
+        <div id="final-score" class="text-6xl font-black text-green-700 mb-4"></div>
+        <div id="missed-words" class="text-left bg-red-50 p-4 rounded-xl mb-4 border border-red-200">
+            <h3 class="font-bold text-red-900 mb-2">Needs Practice:</h3>
+            <ul id="missed-list" class="list-disc pl-5 text-red-700"></ul>
+        </div>
+        <button onclick="location.reload()" class="bg-blue-950 text-white p-4 rounded-xl w-full font-bold hover:bg-black">Test Next Student</button>
+    </div>
+</div>
+
+<script>
+    let currentIdx = 0, sentences = [], missedWords = [];
+    const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+    
+    recognition.onresult = (event) => {
+        const transcript = event.results[0][0].transcript.toLowerCase();
+        checkReading(transcript);
+    };
+
+    function fetchQuestions() {
+        // Mocking database for now
+        sentences = ["apple is red", "cat is cute", "sky is blue"];
+        document.getElementById('setup-screen').classList.add('hidden-panel');
+        document.getElementById('selection-area').classList.remove('hidden-panel');
+        renderQuestions();
+    }
+
+    function renderQuestions() {
+        const list = document.getElementById('questions-list');
+        sentences.forEach((s, i) => {
+            list.innerHTML += `<div class="flex items-center p-2"><input type="checkbox" checked class="mr-2 h-6 w-6" value="${s}"> ${s}</div>`;
+        });
+    }
+
+    function startTest() {
+        document.getElementById('selection-area').classList.add('hidden-panel');
+        document.getElementById('assessment-panel').classList.remove('hidden-panel');
+        showSentence();
+    }
+
+    function showSentence() {
+        document.getElementById('q-counter').innerText = `Question ${currentIdx + 1} / ${sentences.length}`;
+        document.getElementById('target-text').innerText = sentences[currentIdx];
+    }
+
+    function startMic() {
+        recognition.start();
+        document.getElementById('mic-btn').classList.add('listening');
+    }
+
+    function checkReading(spoken) {
+        document.getElementById('mic-btn').classList.remove('listening');
+        const target = sentences[currentIdx].toLowerCase().split(" ");
+        const spokenWords = spoken.split(" ");
+        
+        target.forEach(word => {
+            if (!spokenWords.includes(word)) missedWords.push(word);
+        });
+
+        currentIdx++;
+        if (currentIdx < sentences.length) showSentence();
+        else showResults();
+    }
+
+    function showResults() {
+        document.getElementById('assessment-panel').classList.add('hidden-panel');
+        document.getElementById('result-panel').classList.remove('hidden-panel');
+        document.getElementById('final-score').innerText = `${Math.max(0, 100 - (missedWords.length * 10))}%`;
+        
+        const list = document.getElementById('missed-list');
+        [...new Set(missedWords)].forEach(w => list.innerHTML += `<li>${w}</li>`);
+    }
+</script>
+</body>
+</html>
