@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Children's Garden E.M. High School - Reading Assessment</title>
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-hover: #1d4ed8;
+            --bg: #f8fafc;
+            --card: #ffffff;
+            --text: #1e293b;
+            --border: #e2e8f0;
+            --success: #16a34a;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+        }
+        .container {
+            width: 100%;
+            max-width: 650px;
+            background: var(--card);
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+        .school-title {
+            font-size: 1.4rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 5px;
+            text-align: center;
+            color: #1e3a8a;
+        }
+        .app-title {
+            font-size: 1.1rem;
+            color: #64748b;
+            margin-bottom: 25px;
+            text-align: center;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+        }
+        input, select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            box-sizing: border-box;
+            font-size: 1rem;
+        }
+        button {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-top: 10px;
+        }
+        .btn-primary { background-color: var(--primary); color: white; }
+        .btn-primary:hover { background-color: var(--primary-hover); }
+        .btn-success { background-color: var(--success); color: white; }
+        .btn-mic { background-color: #ef4444; color: white; margin-top: 15px; font-size: 1.2rem; }
+        .btn-mic.listening { background-color: #16a34a; animation: pulse 1.5s infinite; }
+        
+        /* Checkbox Selection Area */
+        .q-selection-box {
+            display: none;
+            background: #f8fafc;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 15px;
+        }
+        .q-header-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            font-size: 0.9rem;
+        }
+        .btn-link {
+            background: none;
+            border: none;
+            color: var(--primary);
+            text-decoration: underline;
+            padding: 0;
+            width: auto;
+            margin: 0;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+        .q-scroll {
+            max-height: 250px;
+            overflow-y: auto;
+            border: 1px solid var(--border);
+            background: #ffffff;
+            border-radius: 6px;
+            padding: 10px;
+        }
+        .q-item {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            border-bottom: 1px solid #f1f5f9;
+            font-size: 1rem;
+            cursor: pointer;
+            user-select: none;
+        }
+        .q-item:last-child { border-bottom: none; }
+        .q-item input {
+            width: auto;
+            margin-right: 12px;
+            transform: scale(1.3);
+            cursor: pointer;
+        }
+        .q-item label {
+            margin: 0;
+            cursor: pointer;
+            flex-grow: 1;
+            font-weight: normal;
+        }
+        .badge {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: bold;
+            margin-left: 10px;
+        }
+        .badge-live { background-color: #dcfce7; color: #166534; }
+        .badge-offline { background-color: #fee2e2; color: #991b1b; }
+        
+        .panel { display: none; margin-top: 25px; border-top: 2px solid var(--border); padding-top: 20px; }
+        .sentence-box {
+            font-size: 1.6rem;
+            font-weight: bold;
+            padding: 25px;
+            background: #f1f5f9;
+            border-radius: 8px;
+            text-align: center;
+            margin: 20px 0;
+            min-height: 60px;
+            line-height: 1.5;
+        }
+        .status-msg { text-align: center; font-weight: 600; margin: 10px 0; height: 24px; color: #475569; }
+        .score-display { text-align: center; font-size: 2rem; font-weight: bold; color: var(--success); display: none; }
+        
+        /* Floating Notifications Area */
+        .notification-banner {
+            display: none;
+            background-color: #fee2e2;
+            border: 1px solid #fca5a5;
+            color: #991b1b;
+            padding: 12px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            font-weight: 500;
+            text-align: center;
+        }
+
+        /* Certificate Design */
+        .certificate-card {
+            display: none;
+            border: 8px double #b45309;
+            padding: 30px;
+            background: #ffffff;
+            text-align: center;
+            border-radius: 8px;
+            box-shadow: inset 0 0 20px rgba(180, 83, 9, 0.05);
+            margin-top: 20px;
+        }
+        .cert-school { font-size: 1.5rem; font-weight: bold; color: #78350f; margin-bottom: 20px; }
+        .cert-score { font-size: 2.5rem; font-weight: 800; color: #b45309; margin: 15px 0; }
+        
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.6; }
+            100% { opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="school-title">Children's Garden E.M. High School</div>
+    <div class="app-title">Student Reading Assessment Engine</div>
+
+    <!-- Alert Notifications banner inside UI instead of native window alerts -->
+    <div id="notice-banner" class="notification-banner"></div>
+
+    <!-- Configuration Setup Screen -->
+    <div id="setup-screen">
+        <div class="form-group">
+            <label for="student-name">Student Name</label>
+            <input type="text" id="student-name" placeholder="Enter student's full name">
+        </div>
+        <div class="form-group">
+            <label for="student-class">Select Class</label>
+            <select id="student-class">
+                <option value="Nursery">Nursery</option>
+                <option value="LKG">LKG</option>
+                <option value="UKG">UKG</option>
+                <option value="1st Class">1st Class</option>
+                <option value="2nd Class">2nd Class</option>
+                <option value="3rd Class">3rd Class</option>
+                <option value="4th Class">4th Class</option>
+                <option value="5th Class">5th Class</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="language">Select Subject / Language</label>
+            <select id="language">
+                <option value="English">English</option>
+                <option value="Telugu">Telugu</option>
+                <option value="Hindi">Hindi</option>
+                <option value="Numbers">Numbers</option>
+            </select>
+        </div>
+        
+        <button id="fetch-btn" class="btn-primary" onclick="fetchSheetQuestions()">Load Sheet Questions</button>
+        
+        <!-- Checklist container with custom "select/clear all" triggers -->
+        <div id="selection-box-container" class="q-selection-box">
+            <div class="q-header-controls">
+                <span style="font-weight: bold; color: #1e3a8a;">
+                    Select Questions to Ask: <span id="source-badge"></span>
+                </span>
+                <div>
+                    <button class="btn-link" onclick="selectAllQuestions(true)">Select All</button> | 
+                    <button class="btn-link" onclick="selectAllQuestions(false)">Clear All</button>
+                </div>
+            </div>
+            
+            <div class="q-scroll" id="questions-list"></div>
+            
+            <div style="margin-top: 10px; font-size: 0.95rem; font-weight: 600; color: #475569;">
+                Selected: <span id="selected-counter" style="color: var(--primary);">0</span>
+            </div>
+            
+            <button id="start-btn" class="btn-success" onclick="startSelectedAssessment()">Start Test with Selected</button>
+        </div>
+    </div>
+
+    <!-- Active Sentence Evaluation Screen -->
+    <div id="assessment-panel" class="panel">
+        <h3 id="progress-text" style="text-align: center; color: #475569;">Processing...</h3>
+        <div class="sentence-box" id="target-sentence">Please wait...</div>
+        <button id="mic-btn" class="btn-mic" onclick="startAssessmentListening()" disabled>🎤 Start Reading</button>
+        <div class="status-msg" id="status-text">Ready to start.</div>
+        <div class="score-display" id="current-score-view">100%</div>
+    </div>
+
+    <!-- Dynamic Graduation Certificate View -->
+    <div id="certificate-panel" class="certificate-card">
+        <div style="font-size: 1.8rem; margin-bottom: 5px;">🏆</div>
+        <h2 style="color: #78350f; font-family: Georgia, serif; margin-bottom: 5px;">Certificate of Completion</h2>
+        <div class="cert-school">Children's Garden E.M. High School</div>
+        <div style="font-size: 1.1rem; line-height: 1.8; margin: 20px 0; color: #451a03;">
+            This certifies that student <strong><span id="cert-name"></span></strong><br>
+            from <strong><span id="cert-class"></span></strong> has evaluated their performance in 
+            <strong><span id="cert-lang"></span></strong>.
+        </div>
+        <div style="font-size: 0.9rem; text-transform: uppercase; color: #9a3412; font-weight: bold; letter-spacing: 1px;">Assessment Metrics</div>
+        <div class="cert-score" id="cert-final-score">0%</div>
+        <div style="color: #78350f; margin-bottom: 15px; font-weight: 600;">
+            Total Questions: <span id="cert-q-count">0</span> | Time Taken: <span id="cert-time">0s</span>
+        </div>
+        <div style="font-size: 1.3rem; font-weight: bold; color: #78350f; margin-top: 15px;">Congratulations! 🎉</div>
+    </div>
+</div>
+
+<script>
+    // ⚠️ PASTE YOUR GOOGLE SHEET WEB APP WEB URL HERE when deployed:
+    // ఇక్కడ మీ గూగుల్ యాప్స్ స్క్రిప్ట్ డిప్లాయ్మెంట్ వెబ్ యాప్ URL ని పేస్ట్ చేయండి:
+    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbymR-lRJfJ43Q1fro235jNTJoL36DBA9usb1yQi-PjAlBIoFR3E43i3CqyUYQk1Q6YY/exec";
+
+    // Dynamic age-appropriate local fallback database to ensure user is never blocked
+    const OFFLINE_DATABASE = {
+        Nursery_Eng: ["A Apple", "B Ball", "C Cat", "D Dog", "E Elephant"],
+        Nursery_Tel: ["అమ్మ", "ఆవు", "ఇల్లు", "ఈల", "ఉడత"],
+        Nursery_Numbers: ["One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten"],
+        LKG_Eng: ["Red Apple", "Blue Balloon", "Green Tree", "Cat sits on mat"],
+        LKG_Tel: ["కమలం", "ఖడ్గం", "గంట", "ఘటము"],
+        LKG_Numbers: ["10 Ten", "20 Twenty", "30 Thirty", "40 Forty", "50 Fifty"],
+        LKG_Hindi: ["अ अनार", "आम", "इमली", "ईख"],
+        UKG_Eng: ["The sun is hot.", "I see a blue bird.", "The dog is big.", "This is my pencil."],
+        UKG_Tel: ["బలపము", "రథము", "లత", "వనము"],
+        UKG_Hindi: ["उल्लू", "ऊनी", "ऋषि", "एक"],
+        "1st Class_Eng": ["The sun is very bright.", "The boy runs fast.", "I read my text books daily.", "I drink sweet milk."],
+        "1st Class_Tel": ["అమ్మ మనకు దైవము.", "చెట్లు మనకు నీడను ఇస్తాయి.", "పిల్లలు చక్కగా చదవాలి."],
+        "1st Class_Hin": ["सूरज पूर्व से निकलता है।", "हमें सदा सच बोलना चाहिए।", "यह मेरी पाठशाला है।"],
+        "1st Class_Numbers": ["100 One Hundred", "200 Two Hundred", "300 Three Hundred", "400 Four Hundred"],
+        "2nd Class_Eng": ["Keep your surroundings clean and green.", "Honesty is the best moral policy.", "Birds fly high in the cloudless sky."],
+        "2nd Class_Tel": ["పెద్దలను గౌరవించడం మన కర్తవ్యం.", "పుస్తకాలు మంచి జ్ఞానాన్ని ఇస్తాయి.", "గాంధీజీ దేశానికి తండ్రి."],
+        "2nd Class_Hin": ["सफलता की कुंजी कठिन परिश्रम है।", "पेड़-पौधे हमारे सच्चे मित्र हैं।", "भारत एक महान और पवित्र देश है।"],
+        "2nd Class_Numbers": ["1000 One Thousand", "2000 Two Thousand", "3000 Three Thousand"],
+        "3rd Class_Eng": ["Healthy food keeps our body fit and active.", "Always wash your hands before eating.", "Reading improves our reading comprehension."],
+        "3rd Class_Tel": ["దేశ భాషలందు తెలుగు లెస్స.", "స్వచ్ఛమైన గాలి మన ఆరోగ్యానికి ఎంతో ముఖ్యం.", "మొక్కలు నాటడం ద్వారా పర్యావరణాన్ని రక్షించవచ్చు."],
+        "3rd Class_Hin": ["समय बहुत मूल्यवान है, इसका सदुपयोग करें।", "नियमित व्यायाम से हमारा शरीर स्वस्थ रहता है।", "विद्यार्थियों को अनुशासन का पालन करना चाहिए।"],
+        "3rd Class_Numbers": ["5000 Five Thousand", "10000 Ten Thousand"],
+        "4th Class_Eng": ["Global warming is a serious problem for our earth.", "We must practice daily to achieve high accuracy.", "The school library has a collection of historical books."],
+        "4th Class_Tel": ["వృక్షో రక్షతి రక్షితః అనగా చెట్లను రక్షించాల్సింది మనమే.", "చదువుతో పాటు మంచి సంస్కారం కూడా అలవర్చుకోవాలి.", "వ్యవసాయం మన దేశానికి వెన్నెముక వంటిది."],
+        "4th Class_Hin": ["पुस्तकालय ज्ञान का असीम महासागर होता है।", "हमे प्लास्टिक के उपयोग से बचना चाहिए।", "सत्य और अहिंसा ही मानव जीवन के सच्चे मार्ग हैं।"],
+        "4th Class_Numbers": ["25000 Twenty Five Thousand", "50000 Fifty Thousand"],
+        "5th Class_Eng": ["Education empowers individuals to build a prosperous nation.", "Digital learning helps students understand concepts easily.", "Environmental protection is the responsibility of every citizen."],
+        "5th Class_Tel": ["మాతృభాషను గౌరవించడం మన ప్రథమ బాధ్యత.", "సాంకేతిక పరిజ్ఞానం ద్వారా సమాచారాన్ని సులభంగా తెలుసుకోవచ్చు.", "పరిశుభ్రత దైవత్వంతో సమానమని పెద్దలు చెప్తారు."],
+        "5th Class_Hin": ["सच्चा मित्र वही है जो विपत्ति के समय काम आता है।", "विज्ञान वरदान भी है और विनाशकारी अभिशाप भी।", "योग और प्राणायाम मानसिक शांति का सबसे सुलभ साधन है।"],
+        "5th Class_Numbers": ["100000 One Lakh", "1000000 Ten Lakhs"]
+    };
+
+    let currentLanguage = "English";
+    let currentSentences = [];
+    let sentenceIndex = 0;
+    let accumulatedScores = 0;
+    
+    let recognition = null;
+    let isAssessmentActive = false;
+    
+    let startTime = null;
+    let totalTimeTaken = "";
+
+    if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        recognition = new SpeechRecognition();
+        recognition.continuous = true; 
+        recognition.interimResults = false;
+
+        recognition.onstart = () => {
+            const btn = document.getElementById("mic-btn");
+            btn.innerText = "🎙️ Mic is Live... Speak Now";
+            btn.classList.add("listening");
+            btn.disabled = true; 
+            document.getElementById("status-text").innerText = "Voice engine active. Read clearly...";
+        };
+
+        recognition.onresult = (event) => {
+            const lastResultIndex = event.results.length - 1;
+            const transcript = event.results[lastResultIndex][0].transcript;
+            processReadingResult(transcript);
+        };
+
+        recognition.onerror = (err) => { console.error(err.error); };
+
+        recognition.onend = () => {
+            if (isAssessmentActive) recognition.start();
+            else resetMicButtonUi();
+        };
+    }
+
+    function showToast(message, type = "error") {
+        const banner = document.getElementById("notice-banner");
+        banner.innerText = message;
+        banner.style.display = "block";
+        if(type === "success") {
+            banner.style.backgroundColor = "#dcfce7";
+            banner.style.borderColor = "#bbf7d0";
+            banner.style.color = "#15803d";
+        } else {
+            banner.style.backgroundColor = "#fee2e2";
+            banner.style.borderColor = "#fca5a5";
+            banner.style.color = "#991b1b";
+        }
+        setTimeout(() => {
+            banner.style.display = "none";
+        }, 5000);
+    }
+
+    function resetMicButtonUi() {
+        const btn = document.getElementById("mic-btn");
+        btn.disabled = false;
+        btn.innerText = "🎤 Start Reading";
+        btn.classList.remove("listening");
+    }
+
+    // Sheet database validation checks and listing setup
+    function fetchSheetQuestions() {
+        const studentClass = document.getElementById("student-class").value;
+        currentLanguage = document.getElementById("language").value;
+        const fetchBtn = document.getElementById("fetch-btn");
+        
+        fetchBtn.innerText = "Loading Database...";
+        fetchBtn.disabled = true;
+        
+        // Hide previous selections 
+        document.getElementById("selection-box-container").style.display = "none";
+
+        const fetchUrl = `${WEB_APP_URL}?class=${encodeURIComponent(studentClass)}&language=${encodeURIComponent(currentLanguage)}`;
+        
+        // Check Web App URL validity
+        if (WEB_APP_URL === "YOUR_DEPLOYED_WEB_APP_URL_HERE") {
+            loadLocalDatabaseFallback(studentClass, currentLanguage, "Web App URL is not pasted. Loaded Local Database.");
+            fetchBtn.innerText = "Load Sheet Questions";
+            fetchBtn.disabled = false;
+            return;
+        }
+
+        fetch(fetchUrl)
+        .then(response => response.json())
+        .then(res => {
+            fetchBtn.innerText = "Load Sheet Questions";
+            fetchBtn.disabled = false;
+
+            if(res.status === "success") {
+                const pool = res.data;
+                if(pool.length === 0) {
+                    loadLocalDatabaseFallback(studentClass, currentLanguage, "Sheet contains no rows. Loaded Local Database.");
+                } else {
+                    renderQuestionSelection(pool, true);
+                }
+            } else {
+                loadLocalDatabaseFallback(studentClass, currentLanguage, "Sheet Tab not found: " + res.message);
+            }
+        })
+        .catch(err => {
+            fetchBtn.innerText = "Load Sheet Questions";
+            fetchBtn.disabled = false;
+            loadLocalDatabaseFallback(studentClass, currentLanguage, "Cannot connect to URL. Loaded Local Database.");
+        });
+    }
+
+    // Load age-appropriate database questions when URL is not set
+    function loadLocalDatabaseFallback(studentClass, language, noticeMsg) {
+        showToast(noticeMsg, "success");
+        
+        // Standardise target lookup
+        var langKey = "Eng";
+        if (language === "Telugu") langKey = "Tel";
+        if (language === "Hindi") langKey = "Hin";
+        if (language === "Numbers") langKey = "Numbers";
+        
+        var lookupKey = `${studentClass}_${langKey}`;
+        var pool = OFFLINE_DATABASE[lookupKey] || OFFLINE_DATABASE["Nursery_Eng"];
+        
+        renderQuestionSelection(pool, false);
+    }
+
+    // Render sentences with default UNCHECKED state
+    function renderQuestionSelection(pool, isLiveCloud) {
+        const listContainer = document.getElementById("questions-list");
+        listContainer.innerHTML = "";
+
+        pool.forEach((sentence, index) => {
+            const itemDiv = document.createElement("div");
+            itemDiv.className = "q-item";
+            // Checkboxes start as unchecked (not checked by default)
+            itemDiv.innerHTML = `
+                <input type="checkbox" id="q-${index}" value="${sentence.replace(/"/g, '&quot;')}" onchange="updateSelectedCounter()">
+                <label for="q-${index}">${sentence}</label>
+            `;
+            
+            // Allow clicking the entire text block to toggle checkboxes smoothly
+            itemDiv.addEventListener("click", function(e) {
+                if(e.target.tagName !== 'INPUT') {
+                    const cb = itemDiv.querySelector("input[type='checkbox']");
+                    cb.checked = !cb.checked;
+                    updateSelectedCounter();
+                }
+            });
+
+            listContainer.appendChild(itemDiv);
+        });
+
+        // Set status indicators
+        const badge = document.getElementById("source-badge");
+        if(isLiveCloud) {
+            badge.innerText = "Live Cloud Mode";
+            badge.className = "badge badge-live";
+        } else {
+            badge.innerText = "Offline Mode";
+            badge.className = "badge badge-offline";
+        }
+
+        document.getElementById("selection-box-container").style.display = "block";
+        updateSelectedCounter();
+    }
+
+    // Select/Unselect All helper function
+    function selectAllQuestions(checkedValue) {
+        const checkboxes = document.querySelectorAll("#questions-list input[type='checkbox']");
+        checkboxes.forEach(cb => {
+            cb.checked = checkedValue;
+        });
+        updateSelectedCounter();
+    }
+
+    function updateSelectedCounter() {
+        const count = document.querySelectorAll("#questions-list input[type='checkbox']:checked").length;
+        document.getElementById("selected-counter").innerText = count;
+    }
+
+    // Active reading evaluation trigger
+    function startSelectedAssessment() {
+        const name = document.getElementById("student-name").value.trim();
+        if (!name) {
+            showToast("Please type a student name first.", "error");
+            return;
+        }
+
+        const checkboxes = document.querySelectorAll("#questions-list input[type='checkbox']:checked");
+        currentSentences = [];
+        checkboxes.forEach(cb => {
+            currentSentences.push(cb.value);
+        });
+
+        if (currentSentences.length === 0) {
+            showToast("Please select at least one question to ask!", "error");
+            return;
+        }
+
+        // Lock layout views and initialize reading panel
+        document.getElementById("setup-screen").style.display = "none";
+        document.getElementById("assessment-panel").style.display = "block";
+        
+        sentenceIndex = 0;
+        accumulatedScores = 0;
+
+        if(currentLanguage === "Telugu") recognition.lang = "te-IN";
+        else if(currentLanguage === "Hindi") recognition.lang = "hi-IN";
+        else recognition.lang = "en-US";
+
+        startTime = new Date();
+        document.getElementById("mic-btn").disabled = false;
+        displaySentence();
+    }
+
+    function displaySentence() {
+        document.getElementById("current-score-view").style.display = "none";
+        document.getElementById("target-sentence").style.display = "block";
+        document.getElementById("progress-text").innerText = `Question ${sentenceIndex + 1} of ${currentSentences.length}`;
+        document.getElementById("target-sentence").innerText = currentSentences[sentenceIndex];
+        
+        if (isAssessmentActive) {
+            document.getElementById("status-text").innerText = "Read the next item now...";
+        } else {
+            document.getElementById("status-text").innerText = "Click 'Start Reading' once to begin the full test.";
+            resetMicButtonUi();
+        }
+    }
+
+    function startAssessmentListening() {
+        if (!recognition) return;
+        isAssessmentActive = true;
+        recognition.start();
+    }
+
+    function cleanText(text) {
+        return text.toString().toLowerCase()
+            .replace(/[.,\/#!$%\^&\*;:{}=\-_`~()।?]/g, "") 
+            .replace(/\s+/g, " ")                           
+            .trim();
+    }
+
+    function processReadingResult(transcript) {
+        if (!isAssessmentActive) return;
+
+        const target = currentSentences[sentenceIndex];
+        const targetWords = cleanText(target).split(" ");
+        const spokenWords = cleanText(transcript).split(" ");
+
+        let matches = 0;
+        targetWords.forEach(word => {
+            if (spokenWords.includes(word)) matches++;
+        });
+
+        const score = Math.round((matches / targetWords.length) * 100);
+        accumulatedScores += score;
+
+        document.getElementById("target-sentence").style.display = "none";
+        const scoreView = document.getElementById("current-score-view");
+        scoreView.innerText = `Score: ${score}%`;
+        scoreView.style.display = "block";
+        document.getElementById("status-text").innerText = "Saving progress...";
+
+        setTimeout(() => {
+            sentenceIndex++;
+            if (sentenceIndex < currentSentences.length) {
+                displaySentence();
+            } else {
+                finishAssessment();
+            }
+        }, 2000);
+    }
+
+    function finishAssessment() {
+        isAssessmentActive = false;
+        if (recognition) recognition.stop();
+
+        const endTime = new Date();
+        const totalSeconds = Math.round((endTime - startTime) / 1000);
+        const minutes = Math.floor(totalSeconds / 60);
+        const seconds = totalSeconds % 60;
+        totalTimeTaken = minutes > 0 ? `${minutes}m ${seconds}s` : `${seconds}s`;
+
+        document.getElementById("assessment-panel").style.display = "none";
+        
+        const finalScore = Math.round(accumulatedScores / currentSentences.length);
+        const name = document.getElementById("student-name").value.trim();
+        const studentClass = document.getElementById("student-class").value;
+        
+        document.getElementById("cert-name").innerText = name;
+        document.getElementById("cert-class").innerText = studentClass;
+        document.getElementById("cert-lang").innerText = currentLanguage;
+        document.getElementById("cert-final-score").innerText = `${finalScore}%`;
+        document.getElementById("cert-q-count").innerText = currentSentences.length;
+        document.getElementById("cert-time").innerText = totalTimeTaken;
+        document.getElementById("certificate-panel").style.display = "block";
+
+        const today = new Date();
+        const formattedDate = `${String(today.getDate()).padStart(2, '0')}-${today.toLocaleString('default', { month: 'short' })}-${today.getFullYear()}`;
+
+        const scorePayload = {
+            date: formattedDate,
+            studentName: name,
+            studentClass: studentClass,
+            language: currentLanguage,
+            questions: currentSentences.length,
+            score: `${finalScore}%`,
+            timeTaken: totalTimeTaken
+        };
+
+        if (WEB_APP_URL !== "YOUR_DEPLOYED_WEB_APP_URL_HERE") {
+            fetch(WEB_APP_URL, {
+                method: "POST",
+                mode: "no-cors", 
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(scorePayload)
+            }).catch(err => console.error("Write error:", err));
+        }
+    }
+</script>
+
+</body>
+</html>
