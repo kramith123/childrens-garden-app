@@ -25,7 +25,7 @@
             background: linear-gradient(135deg, #e0f2fe 0%, #f0fdf4 50%, #fef9c3 100%);
             color: var(--text);
             margin: 0;
-            padding: 20px;
+            padding: 10px; /* Reduced padding to maximize space on projector */
             display: flex;
             justify-content: center;
             align-items: center;
@@ -35,7 +35,7 @@
             overflow-x: hidden;
         }
 
-        /* Background Doodles & Watermarks Area */
+        /* Beautiful floating SVG background elements for premium feel */
         .bg-doodles {
             position: fixed;
             top: 0;
@@ -49,12 +49,15 @@
 
         .doodle {
             position: absolute;
-            opacity: 0.12; /* Very soft watermarks so they don't distract */
+            opacity: 0.12; /* Subtle visibility */
             transform: rotate(0deg);
             transition: transform 0.5s ease;
         }
 
-        /* Positioning various doodles around the whitespace */
+        .doodle:hover {
+            transform: rotate(15deg) scale(1.1);
+        }
+
         .doodle-1 { top: 10%; left: 5%; width: 100px; height: 100px; }
         .doodle-2 { top: 15%; right: 8%; width: 120px; height: 120px; }
         .doodle-3 { bottom: 12%; left: 6%; width: 110px; height: 110px; }
@@ -62,29 +65,25 @@
         .doodle-5 { top: 48%; left: 3%; width: 80px; height: 80px; }
         .doodle-6 { top: 50%; right: 3%; width: 90px; height: 90px; }
 
-        /* Container Main Layout Adjustments */
+        /* Modified container to look wide like the requested full-width layout */
         .container {
-            width: 100%;
-            max-width: 960px; /* Enhanced size width */
+            width: 98%; /* Maximized to fit full width on screen */
+            max-width: 1800px; /* Massive max width for high res screens/projectors */
             background: rgba(255, 255, 255, 0.96);
-            /* Slightly translucent to blend with background */
-            padding: 50px 40px;
-            /* Spacious internal padding */
+            padding: 40px;
             border-radius: 24px;
-            /* Playful soft rounded corners */
             box-shadow: 0 20px 40px -10px rgba(15, 23, 42, 0.15), 0 10px 15px -3px rgba(15, 23, 42, 0.05);
-            border: 4px solid #ffffff; /* Frame effect */
+            border: 4px solid #ffffff; /* Sleek card look */
             box-sizing: border-box;
             position: relative;
-            z-index: 10; /* Placed above watermarks */
+            z-index: 10; /* Put above doodles */
             backdrop-filter: blur(8px);
-            margin: 20px auto;
+            margin: 10px auto;
         }
 
-        /* Typography Scaled Up for Prominence and Legibility */
+        /* Increased font sizes for titles to look great on projector */
         .school-title {
-            font-size: 2.2rem;
-            /* Larger bold school headline */
+            font-size: 3rem; /* Enlarged title */
             font-weight: 800;
             text-transform: uppercase;
             letter-spacing: 1.5px;
@@ -95,21 +94,11 @@
         }
         
         .app-title {
-            font-size: 1.4rem;
-            /* Scaled subtitle */
+            font-size: 1.8rem; /* Enlarged subtitle */
             color: #475569;
             font-weight: 600;
             margin-bottom: 40px;
             text-align: center;
-        }
-
-        .section-title {
-            font-size: 1.8rem;
-            font-weight: 700;
-            margin-bottom: 30px;
-            text-align: left;
-            border-bottom: 3px solid var(--border);
-            padding-bottom: 15px;
         }
 
         .form-grid {
@@ -126,12 +115,6 @@
             .school-title { font-size: 1.8rem; }
             .app-title { font-size: 1.1rem; }
             .container { padding: 30px 20px; }
-            .form-group.full-width { grid-column: span 1; }
-            .btn-mic { font-size: 1.1rem; padding: 15px; }
-            .sentence-box { font-size: 2rem; padding: 30px 20px; }
-            .score-display { font-size: 3rem; }
-            .cert-school { font-size: 1.8rem; }
-            .cert-score { font-size: 3.5rem; }
         }
 
         .form-group {
@@ -142,21 +125,27 @@
             grid-column: span 2;
         }
 
+        @media (max-width: 768px) {
+            .form-group.full-width {
+                grid-column: span 1;
+            }
+        }
+
         label {
             display: block;
             margin-bottom: 10px;
             font-weight: 700;
-            font-size: 1.15rem; /* Larger and clearer label size */
+            font-size: 1.4rem; /* Bigger form labels */
             color: #334155;
         }
 
         input, select {
             width: 100%;
-            padding: 14px 18px; /* Bigger input touchpoint padding */
+            padding: 16px 20px; /* More padding */
             border: 2px solid var(--border);
             border-radius: 12px;
             box-sizing: border-box;
-            font-size: 1.15rem; /* Scaled up font */
+            font-size: 1.4rem; /* Bigger input font size */
             background-color: #fcfcfc;
             font-weight: 500;
             color: #1e293b;
@@ -170,13 +159,12 @@
             box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.15);
         }
 
-        /* Large Kid-Friendly Action Buttons */
         button {
             width: 100%;
-            padding: 16px 20px; /* Substantial clickable areas */
+            padding: 20px 24px; /* Scaled up button sizing */
             border: none;
             border-radius: 12px;
-            font-size: 1.2rem; /* Easy-to-read scale */
+            font-size: 1.5rem; /* Bigger button text */
             font-weight: bold;
             cursor: pointer;
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
@@ -188,44 +176,49 @@
             transform: scale(0.98);
         }
 
-        .btn-primary { 
+        .btn-primary {
             background-color: #2563eb;
-            color: white; 
+            color: white;
         }
-        .btn-primary:hover { 
+
+        .btn-primary:hover {
             background-color: #1d4ed8;
             box-shadow: 0 8px 12px rgba(37, 99, 235, 0.25);
         }
 
-        .btn-success { 
+        .btn-success {
             background-color: var(--success);
-            color: white; 
-            margin-top: 25px; 
-            font-size: 1.25rem;
+            color: white;
+            margin-top: 25px;
+            font-size: 1.6rem; /* Scaled up text */
+            padding: 22px 24px;
         }
+
         .btn-success:hover {
             background-color: #15803d;
             box-shadow: 0 8px 12px rgba(21, 128, 61, 0.25);
         }
 
-        .btn-mic { 
+        .btn-mic {
             background-color: #ef4444;
-            color: white; 
-            margin-top: 25px; 
-            font-size: 1.4rem; 
-            padding: 20px; 
+            color: white;
+            margin-top: 25px;
+            font-size: 2rem; /* Massive mic button for easy visualization */
+            padding: 26px;
             border-radius: 16px;
         }
+
         .btn-mic:hover {
             background-color: #dc2626;
             box-shadow: 0 8px 16px rgba(239, 68, 68, 0.3);
         }
-        .btn-mic.listening { 
+
+        .btn-mic.listening {
             background-color: #16a34a;
-            animation: pulse 1.5s infinite; 
+            animation: pulse 1.5s infinite;
         }
         
-        /* Question Checklist Area */
+        /* Question Pool Interface Box styles */
         .q-selection-box {
             display: none;
             background: #f8fafc;
@@ -240,7 +233,7 @@
             justify-content: space-between;
             align-items: center;
             margin-bottom: 20px;
-            font-size: 1.1rem;
+            font-size: 1.3rem; /* Scaled up */
         }
 
         .btn-link {
@@ -252,16 +245,17 @@
             width: auto;
             margin: 0;
             cursor: pointer;
-            font-size: 1.05rem;
+            font-size: 1.25rem;
             font-weight: 600;
             box-shadow: none;
         }
+
         .btn-link:hover {
             color: #1d4ed8;
         }
 
         .q-scroll {
-            max-height: 380px;
+            max-height: 450px; /* Expanded space */
             overflow-y: auto;
             border: 2px solid #e2e8f0;
             background: #ffffff;
@@ -272,155 +266,138 @@
         .q-item {
             display: flex;
             align-items: center;
-            padding: 16px; /* Expanded checklist row heights */
+            padding: 18px; 
             border-bottom: 1px solid #f1f5f9;
-            font-size: 1.15rem; /* Large checklist text */
+            font-size: 1.4rem; /* Larger item sizes */
             cursor: pointer;
             user-select: none;
             transition: background 0.15s ease;
         }
+
         .q-item:hover {
             background-color: #f0fdf4;
         }
-        .q-item:last-child { border-bottom: none; }
+
+        .q-item:last-child {
+            border-bottom: none;
+        }
+
         .q-item input {
             width: auto;
             margin-right: 18px;
-            transform: scale(1.5); /* Big, easy checkboxes */
+            transform: scale(1.8); /* Massive checkbox inputs */
             cursor: pointer;
         }
+
         .q-item label {
             margin: 0;
             cursor: pointer;
             flex-grow: 1;
             font-weight: 500;
-            font-size: 1.15rem;
+            font-size: 1.4rem;
         }
 
         .badge {
             display: inline-block;
             padding: 6px 12px;
             border-radius: 20px;
-            font-size: 0.85rem;
+            font-size: 1rem;
             font-weight: bold;
             margin-left: 12px;
         }
+
         .badge-live { background-color: #dcfce7; color: #166534; }
         .badge-offline { background-color: #fee2e2; color: #991b1b; }
         
-        .panel { 
+        .panel {
             display: none;
-            margin-top: 30px; 
-            border-top: 3px solid var(--border); 
-            padding-top: 30px; 
+            margin-top: 30px;
+            border-top: 3px solid var(--border);
+            padding-top: 30px;
         }
         
-        /* High-Visibility Target Box */
+        /* Enlarged sentence display box optimized for clear projector visibility */
         .sentence-box {
-            font-size: 2.6rem;
-            /* Hugely legible sentence presentation for youngsters */
+            font-size: 5rem; /* Massive size so kids in the back row can easily read it */
             font-weight: 800;
-            padding: 50px 30px;
+            padding: 60px 30px;
             background: #f1f5f9;
             border-radius: 20px;
             text-align: center;
             margin: 30px 0;
-            min-height: 100px;
+            min-height: 140px;
             line-height: 1.5;
             color: #0f172a;
-            border: 3px dashed #cbd5e1;
+            border: 4px dashed #cbd5e1;
             box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
         }
 
-        .status-msg { 
-            text-align: center;
-            font-weight: bold; 
-            margin: 20px 0; 
-            height: 30px; 
-            color: #475569; 
-            font-size: 1.25rem;
+        /* Color-coded highlighting helper wrappers */
+        .w-correct {
+            color: var(--correct-word);
+            border-bottom: 5px solid var(--correct-word);
+            display: inline-block;
+            margin: 0 10px;
         }
 
-        .score-display { 
+        .w-incorrect {
+            color: var(--incorrect-word);
+            border-bottom: 5px solid var(--incorrect-word);
+            display: inline-block;
+            margin: 0 10px;
+        }
+
+        .w-normal {
+            color: #0f172a;
+            display: inline-block;
+            margin: 0 10px;
+        }
+
+        .status-msg {
             text-align: center;
-            font-size: 4rem; /* Prominent score viewing */
+            font-weight: bold;
+            margin: 20px 0;
+            height: 35px;
+            color: #475569;
+            font-size: 1.6rem; /* Enriched message sizing */
+        }
+
+        .score-display {
+            text-align: center;
+            font-size: 6rem; /* Giant standalone metrics */
             font-weight: 900;
-            color: var(--success); 
-            display: none; 
-            margin: 25px 0; 
+            color: var(--success);
+            display: none;
+            margin: 25px 0;
         }
         
-        /* Floating Notifications Area */
         .notification-banner {
             display: none;
             background-color: #fee2e2;
             border: 2px solid #fca5a5;
             color: #991b1b;
-            padding: 16px;
+            padding: 20px;
             border-radius: 12px;
             margin-bottom: 30px;
             font-weight: 600;
             text-align: center;
-            font-size: 1.1rem;
+            font-size: 1.3rem;
         }
 
-        /* Reading Report Section Styling */
-        .report-panel {
-            display: none;
-            margin-top: 35px;
-            text-align: left;
-        }
-
-        .report-section {
-            background-color: var(--card);
-            border: 2px solid var(--border);
-            border-radius: 16px;
-            padding: 25px;
-            margin-bottom: 25px;
-            position: relative;
-        }
-
-        .sentence-header {
-            font-size: 1.4rem;
-            font-weight: 800;
-            margin-bottom: 15px;
-            color: #1e3a8a;
-        }
-
-        .report-details p {
-            margin: 8px 0;
-            font-size: 1.1rem;
-            line-height: 1.6;
-        }
-
-        .correct-text {
-            color: var(--correct-word);
-            font-weight: 700;
-        }
-
-        .practice-text {
-            color: var(--danger);
-            font-weight: 700;
-        }
-
-        .final-actions {
-            margin-top: 30px;
-            text-align: center;
-        }
-
-        /* Certificate Design */
+        /* Final elegant report card print container */
         .certificate-card {
             display: none;
-            border: 10px double #b45309;
-            padding: 50px 40px;
+            border: 12px double #b45309;
+            padding: 60px 40px;
             background: #ffffff;
             text-align: center;
             border-radius: 20px;
             box-shadow: inset 0 0 40px rgba(180, 83, 9, 0.08);
             margin-top: 35px;
         }
-        .cert-school { font-size: 2.2rem; font-weight: 800; color: #78350f; margin-bottom: 25px; }
-        .cert-score { font-size: 4.5rem; font-weight: 900; color: #b45309; margin: 25px 0; }
+
+        .cert-school { font-size: 3rem; font-weight: 800; color: #78350f; margin-bottom: 25px; }
+        .cert-score { font-size: 6.5rem; font-weight: 900; color: #b45309; margin: 25px 0; }
         
         @keyframes pulse {
             0% { opacity: 1; }
@@ -500,7 +477,7 @@
         
         <div id="selection-box-container" class="q-selection-box">
             <div class="q-header-controls">
-                <span style="font-weight: bold; color: #1e3a8a; font-size: 1.2rem;">
+                <span style="font-weight: bold; color: #1e3a8a; font-size: 1.4rem;">
                     Select Questions to Ask: <span id="source-badge"></span>
                 </span>
                 <div>
@@ -509,9 +486,10 @@
                 </div>
             </div>
             
-            <div class="q-scroll" id="questions-list"></div>
+            <div class="q-scroll" id="questions-list">
+                </div>
             
-            <div style="margin-top: 20px; font-size: 1.15rem; font-weight: 700; color: #475569;">
+            <div style="margin-top: 20px; font-size: 1.4rem; font-weight: 700; color: #475569;">
                 Selected: <span id="selected-counter" style="color: #2563eb;">0</span>
             </div>
             
@@ -520,48 +498,40 @@
     </div>
 
     <div id="assessment-panel" class="panel">
-        <h3 id="progress-text" style="text-align: center; color: #475569; font-size: 1.35rem;">Processing...</h3>
+        <h3 id="progress-text" style="text-align: center; color: #475569; font-size: 1.8rem;">Processing...</h3>
         <div class="sentence-box" id="target-sentence">Please wait...</div>
         <button id="mic-btn" class="btn-mic" onclick="startAssessmentListening()" disabled>🎤 Start Reading</button>
         <div class="status-msg" id="status-text">Ready to start.</div>
         <div class="score-display" id="current-score-view">100%</div>
     </div>
 
-    <div id="report-panel" class="report-panel">
-        <h2 class="section-title">Reading Report</h2>
-        <div id="report-content">
-            </div>
-        <div class="final-actions">
-            <button id="generate-cert-btn" class="btn-success" style="width: auto; padding: 18px 35px;" onclick="showFinalCertificate()">Generate Certificate</button>
-        </div>
-    </div>
-
     <div id="certificate-panel" class="certificate-card">
-        <div style="font-size: 3.5rem; margin-bottom: 15px;">🏆</div>
-        <h2 style="color: #78350f; font-family: Georgia, serif; margin-bottom: 10px; font-size: 2.4rem;">Certificate of Completion</h2>
+        <div style="font-size: 4rem; margin-bottom: 15px;">🏆</div>
+        <h2 style="color: #78350f; font-family: Georgia, serif; margin-bottom: 10px; font-size: 2.8rem;">Certificate of Completion</h2>
         <div class="cert-school">Children's Garden E.M. High School</div>
-        <div style="font-size: 1.4rem; line-height: 1.8; margin: 30px 0; color: #451a03;">
+        <div style="font-size: 1.8rem; line-height: 1.8; margin: 30px 0; color: #451a03;">
             This certifies that student <strong><span id="cert-name"></span></strong><br>
-            from <strong><span id="cert-class"></span></strong> has evaluated their performance in 
+            from <strong><span id="cert-class"></span></strong> has successfully evaluated their performance in 
             <strong><span id="cert-lang"></span></strong>.
         </div>
-        <div style="font-size: 1.1rem; text-transform: uppercase; color: #9a3412; font-weight: bold; letter-spacing: 1.5px;">Assessment Metrics</div>
+        <div style="font-size: 1.3rem; text-transform: uppercase; color: #9a3412; font-weight: bold; letter-spacing: 1.5px;">Assessment Metrics</div>
         <div class="cert-score" id="cert-final-score">0%</div>
-        <div style="color: #78350f; margin-bottom: 25px; font-weight: 700; font-size: 1.2rem;">
+        <div style="color: #78350f; margin-bottom: 25px; font-weight: 700; font-size: 1.5rem;">
             Total Questions: <span id="cert-q-count">0</span> | Time Taken: <span id="cert-time">0s</span>
         </div>
-        <div style="font-size: 1.8rem; font-weight: bold; color: #78350f; margin-top: 20px;">Congratulations! 🎉</div>
+        <div style="font-size: 2.2rem; font-weight: bold; color: #78350f; margin-top: 20px;">Congratulations! 🎉</div>
 
-        <button id="next-student-btn" class="btn-primary" style="margin-top: 35px; background-color: #9a3412; font-size: 1.3rem; padding: 16px 30px; border-radius: 12px;" onclick="resetToSetup()">
-            👤 Test Next Student
+        <button id="next-student-btn" class="btn-primary" style="margin-top: 35px; background-color: #9a3412; font-size: 1.6rem; padding: 20px 30px; border-radius: 12px;" onclick="resetToSetup()">
+            👤 Test Next Student / తదుపరి విద్యార్థి
         </button>
     </div>
 </div>
 
 <script>
+    // గూగుల్ షీట్స్ కనెక్ట్ చేయడానికి మీ వెబ్ యాప్ URL ఇక్కడ పేస్ట్ చేయాలి
     const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbx7S7hUa9_dCKjqW_gr6XQ9WAX7V9S6UC7H86yja_hWKZ1oJ-DjMwAxa_x1VlEXM58/exec";
 
-    // Dynamic age-appropriate local fallback database
+    // ఆఫ్లైన్ బ్యాకప్ డేటాబేస్ (ఇంటర్నెట్ లేనప్పుడు లేదా క్లౌడ్ కనెక్ట్ అవ్వనప్పుడు ఇది పనిచేస్తుంది)
     const OFFLINE_DATABASE = {
         Nursery_Eng: ["A Apple", "B Ball", "C Cat", "D Dog", "E Elephant"],
         Nursery_Tel: ["అమ్మ", "ఆవు", "ఇల్లు", "ఈల", "ఉడత"],
@@ -578,7 +548,7 @@
         "1st Class_Hin": ["सूरज पूर्व से निकलता है।", "हमें सदा सच बोलना चाहिए।", "यह मेरी पाठशाला है।"],
         "1st Class_Numbers": ["100 One Hundred", "200 Two Hundred", "300 Three Hundred", "400 Four Hundred"],
         "2nd Class_Eng": ["Keep your surroundings clean and green.", "Honesty is the best moral policy.", "Birds fly high in the cloudless sky."],
-        "2nd Class_Tel": ["పెద్దలను గౌరవించడం మన कर्తవ్యం.", "పుస్తకాలు మంచి జ్ఞానాన్ని ఇస్తాయి.", "గాంధీజీ దేశానికి తండ్రి."],
+        "2nd Class_Tel": ["పెద్దలను గౌరవించడం మన కర్తవ్యం.", "పుస్తకాలు మంచి జ్ఞానాన్ని ఇస్తాయి.", "గాంధీజీ దేశానికి తండ్రి."],
         "2nd Class_Hin": ["सफलता की कुंजी कठिन परिश्रम है।", "पेड़-पौधे हमारे सच्चे मित्र हैं।", "भारत एक महान और पवित्र देश है।"],
         "2nd Class_Numbers": ["1000 One Thousand", "2000 Two Thousand", "3000 Three Thousand"],
         "3rd Class_Eng": ["Healthy food keeps our body fit and active.", "Always wash your hands before eating.", "Reading improves our reading comprehension."],
@@ -587,11 +557,11 @@
         "3rd Class_Numbers": ["5000 Five Thousand", "10000 Ten Thousand"],
         "4th Class_Eng": ["Global warming is a serious problem for our earth.", "We must practice daily to achieve high accuracy.", "The school library has a collection of historical books."],
         "4th Class_Tel": ["వృక్షో రక్షతి రక్షితః అనగా చెట్లను రక్షించాల్సింది మనమే.", "చదువుతో పాటు మంచి సంస్కారం కూడా అలవర్చుకోవాలి.", "వ్యవసాయం మన దేశానికి వెన్నెముక వంటిది."],
-        "4th Class_Hin": ["पुस्तकालय ज्ञान का असीम महासागर होता है।", "हमे प्लास्टिक के उपयोग से बचना चाहिए।", "सत्य and अहम्सा ही मानव जीवन के सच्चे मार्ग हैं।"],
+        "4th Class_Hin": ["पुस्तकालय ज्ञान का असीम महासागर होता है।", "हमे प्लास्टिक के उपयोग से बचना चाहिए।", "सत्य and अहिंसा ही मानव जीवन के सच्चे मार्ग हैं।"],
         "4th Class_Numbers": ["25000 Twenty Five Thousand", "50000 Fifty Thousand"],
         "5th Class_Eng": ["Education empowers individuals to build a prosperous nation.", "Digital learning helps students understand concepts easily.", "Environmental protection is the responsibility of every citizen."],
         "5th Class_Tel": ["మాతృభాషను గౌరవించడం మన ప్రథమ బాధ్యత.", "సాంకేతిక పరిజ్ఞానం ద్వారా సమాచారాన్ని సులభంగా తెలుసుకోవచ్చు.", "పరిశుభ్రత దైవత్వంతో సమానమని పెద్దలు చెప్తారు."],
-        "5th Class_Hin": ["सच्चा मित्र वही है जो विपत्ति के समय काम आता है।", "विज्ञान वरदान भी है और विनाशकारी अभिशाप भी।", "योग और प्राणायाम मानसिक शांति का सबसे सुलभ साधन है।"],
+        "5th Class_Hin": ["सच्चा मित्र वही है जो विपत्ति के समय काम आता है।", "विज्ञान वरदान भी है and विनाशकारी अभिलाप भी।", "योग and प्राणायाम मानसिक शांति का सबसे सुलभ साधन है।"],
         "5th Class_Numbers": ["100000 One Lakh", "1000000 Ten Lakhs"]
     };
 
@@ -600,46 +570,56 @@
     let sentenceIndex = 0;
     let accumulatedScores = 0;
     
+    // వాయిస్ రికగ్నిషన్ వేరియబుల్స్
     let recognition = null;
     let isAssessmentActive = false;
     
     let startTime = null;
     let totalTimeTaken = "";
-    let reportData = []; // To save individual word mapping results dynamically
 
+    // బ్రౌజర్ వాయిస్ ఇంజిన్ చెక్ మరియు ఇనిషియలైజేషన్
     if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
         const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
         recognition = new SpeechRecognition();
-        recognition.continuous = true; 
+        
+        // ప్రాజెక్టర్ ఎన్విరాన్మెంట్ కోసం ఆటోమేటిక్ లూపింగ్ బగ్స్ లేకుండా కాన్ఫిగర్ చేసాం
+        recognition.continuous = false; 
         recognition.interimResults = false;
 
         recognition.onstart = () => {
             const btn = document.getElementById("mic-btn");
             btn.innerText = "🎙️ Mic is Live... Speak Now";
             btn.classList.add("listening");
-            btn.disabled = true; 
             document.getElementById("status-text").innerText = "Voice engine active. Read clearly...";
         };
 
         recognition.onresult = (event) => {
-            const lastResultIndex = event.results.length - 1;
-            const transcript = event.results[lastResultIndex][0].transcript;
+            const transcript = event.results[0][0].transcript;
             processReadingResult(transcript);
         };
 
-        recognition.onerror = (err) => { console.error("Speech Error:", err.error); };
-        
-        // Optimizing mic handler so it doesn't prompt for permission recursively
+        recognition.onerror = (err) => {
+            console.error("Speech Error captured:", err.error);
+            if (err.error === 'no-speech') {
+                document.getElementById("status-text").innerText = "No speech detected. Click button to try again.";
+            } else if (err.error === 'not-allowed') {
+                showToast("Microphone access blocked! Enable site permission settings.", "error");
+            }
+            resetMicButtonUi();
+        };
+
         recognition.onend = () => {
+            resetMicButtonUi();
+            // ఒకవేళ అసెస్మెంట్ రన్ అవుతూ ఉండి ఎర్రర్ వస్తే తప్ప ఆటోమేటిగ్గా రీస్టార్ట్ అవ్వదు
             if (isAssessmentActive) {
-                // Keep the same session active if assessment is still running
-                try { recognition.start(); } catch(e) { console.log(e); }
-            } else {
-                resetMicButtonUi();
+                // Safe execution state check
             }
         };
+    } else {
+        alert("Speech Recognition API is not supported in this browser. Please use Google Chrome.");
     }
 
+    // టోస్ట్ నోటిఫికేషన్ మెసేజ్ అలర్ట్ చూపించే ఫంక్షన్
     function showToast(message, type = "error") {
         const banner = document.getElementById("notice-banner");
         banner.innerText = message;
@@ -656,13 +636,14 @@
         setTimeout(() => { banner.style.display = "none"; }, 5000);
     }
 
+    // మైక్రోఫోన్ బటన్ గ్రాఫిక్స్ రీసెట్ ఫంక్షన్
     function resetMicButtonUi() {
         const btn = document.getElementById("mic-btn");
-        btn.disabled = false;
         btn.innerText = "🎤 Start Reading";
         btn.classList.remove("listening");
     }
 
+    // గూగుల్ షీట్స్ నుండి లైవ్ క్వశ్చన్స్ లోడ్ చేసే మెయిన్ ఫంక్షన్
     function fetchSheetQuestions() {
         const studentClass = document.getElementById("student-class").value;
         currentLanguage = document.getElementById("language").value;
@@ -672,8 +653,11 @@
         fetchBtn.disabled = true;
         
         document.getElementById("selection-box-container").style.display = "none";
+        
+        // గూగుల్ స్క్రిప్ట్ వెబ్ యాప్ కి API రిక్వెస్ట్ పంపుతుంది
         const fetchUrl = `${WEB_APP_URL}?class=${encodeURIComponent(studentClass)}&language=${encodeURIComponent(currentLanguage)}`;
         
+        // ఒకవేళ డెవలపర్ వెబ్ యాప్ URL మార్చకపోతే డైరెక్ట్ గా లోకల్ బ్యాకప్ లోడ్ అవుతుంది
         if (WEB_APP_URL === "YOUR_DEPLOYED_WEB_APP_URL_HERE") {
             loadLocalDatabaseFallback(studentClass, currentLanguage, "Web App URL is not pasted. Loaded Local Database.");
             fetchBtn.innerText = "Load Sheet Questions";
@@ -705,6 +689,7 @@
         });
     }
 
+    // లోకల్ ఆఫ్లైన్ డేటా లోడ్ చేసే బ్యాకప్ ఫంక్షన్
     function loadLocalDatabaseFallback(studentClass, language, noticeMsg) {
         showToast(noticeMsg, "success");
         var langKey = "Eng";
@@ -718,6 +703,7 @@
         renderQuestionSelection(pool, false);
     }
 
+    // క్వశ్చన్స్ అన్నింటినీ స్క్రీన్ పై చెక్ బాక్సులుగా డిస్ప్లే చేసే ఫంక్షన్
     function renderQuestionSelection(pool, isLiveCloud) {
         const listContainer = document.getElementById("questions-list");
         listContainer.innerHTML = "";
@@ -730,6 +716,7 @@
                 <label for="q-${index}">${sentence}</label>
             `;
             
+            // రో(Row) పైన ఎక్కడ క్లిక్ చేసినా టిక్ మార్క్ పడేలా ఈజీ సెలెక్షన్ లాజిక్
             itemDiv.addEventListener("click", function(e) {
                 if(e.target.tagName !== 'INPUT') {
                     const cb = itemDiv.querySelector("input[type='checkbox']");
@@ -741,6 +728,7 @@
             listContainer.appendChild(itemDiv);
         });
 
+        // క్లౌడ్ లోడ్ అయిందా లేదా ఆఫ్లైన్ లోడ్ అయిందా అని చూపే కలర్ బ్యాడ్జ్
         const badge = document.getElementById("source-badge");
         if(isLiveCloud) {
             badge.innerText = "Live Cloud Mode";
@@ -754,17 +742,22 @@
         updateSelectedCounter();
     }
 
+    // సెలెక్ట్ ఆల్ లేదా క్లియర్ ఆల్ బటన్ ఫంక్షన్
     function selectAllQuestions(checkedValue) {
         const checkboxes = document.querySelectorAll("#questions-list input[type='checkbox']");
-        checkboxes.forEach(cb => { cb.checked = checkedValue; });
+        checkboxes.forEach(cb => {
+            cb.checked = checkedValue;
+        });
         updateSelectedCounter();
     }
 
+    // ఎన్ని క్వశ్చన్స్ సెలెక్ట్ అయ్యాయో లెక్కించే కౌంటర్ ఫంక్షన్
     function updateSelectedCounter() {
         const count = document.querySelectorAll("#questions-list input[type='checkbox']:checked").length;
         document.getElementById("selected-counter").innerText = count;
     }
 
+    // అసెస్మెంట్ రౌండ్ ని స్టార్ట్ చేసే ఫంక్షన్
     function startSelectedAssessment() {
         const name = document.getElementById("student-name").value.trim();
         if (!name) {
@@ -772,22 +765,26 @@
             return;
         }
 
+        // టిక్ చేసిన క్వశ్చన్స్ ని మాత్రమే అర్రే లోకి తీసుకుంటుంది
         const checkboxes = document.querySelectorAll("#questions-list input[type='checkbox']:checked");
         currentSentences = [];
-        checkboxes.forEach(cb => { currentSentences.push(cb.value); });
+        checkboxes.forEach(cb => {
+            currentSentences.push(cb.value);
+        });
         
         if (currentSentences.length === 0) {
             showToast("Please select at least one question to ask!", "error");
             return;
         }
 
+        // మొదటి స్క్రీన్ దాచిపెట్టి, ఎగ్జామ్ స్క్రీన్ ఓపెన్ చేస్తుంది
         document.getElementById("setup-screen").style.display = "none";
         document.getElementById("assessment-panel").style.display = "block";
         
         sentenceIndex = 0;
         accumulatedScores = 0;
-        reportData = []; // Clear old analytics
 
+        // లాంగ్వేజ్ కి తగ్గట్టుగా వాయిస్ రికగ్నిషన్ మోడల్ ని సెట్ చేస్తుంది
         if(currentLanguage === "Telugu") recognition.lang = "te-IN";
         else if(currentLanguage === "Hindi") recognition.lang = "hi-IN";
         else recognition.lang = "en-US";
@@ -797,81 +794,93 @@
         displaySentence();
     }
 
+    // క్వశ్చన్ ని స్క్రీన్ పై పెద్ద అక్షరాలతో చూపే ఫంక్షన్
     function displaySentence() {
         document.getElementById("current-score-view").style.display = "none";
         document.getElementById("target-sentence").style.display = "block";
         document.getElementById("progress-text").innerText = `Question ${sentenceIndex + 1} of ${currentSentences.length}`;
-        document.getElementById("target-sentence").innerText = currentSentences[sentenceIndex];
         
-        if (isAssessmentActive) {
-            document.getElementById("status-text").innerText = "Read the next item now...";
-        } else {
-            document.getElementById("status-text").innerText = "Click 'Start Reading' once to begin the full test.";
-            resetMicButtonUi();
-        }
+        // వాక్యాన్ని రీసెట్ చేసి నార్మల్ టెక్స్ట్ రూపంలో స్క్రీన్ పై లోడ్ చేస్తుంది
+        document.getElementById("target-sentence").innerText = currentSentences[sentenceIndex];
+        document.getElementById("status-text").innerText = "Click 'Start Reading' and read the sentence out loud.";
+        resetMicButtonUi();
     }
 
+    // మైక్రోఫోన్ ని ఆన్ చేసే రన్ ఫంక్షన్
     function startAssessmentListening() {
         if (!recognition) return;
         isAssessmentActive = true;
-        recognition.start();
+        try {
+            recognition.start();
+        } catch(e) {
+            console.log("Recognition already active, skipping trigger safe.");
+        }
     }
 
+    // టెక్స్ట్ పోల్చడానికి విరామ చిహ్నాలు తీసివేసే క్లీనింగ్ ఫంక్షన్
     function cleanText(text) {
         return text.toString().toLowerCase()
-            .replace(/[.,\/#!$%\^&\*;:{}=\-_`~()।?]/g, "") 
-            .replace(/\s+/g, " ")                           
+            .replace(/[.,\/#!$%\^&\*;:{}=\-_`~()।?]/g, "") // పంక్చుయేషన్ మార్కులు క్లీన్ చేస్తుంది
+            .replace(/\s+/g, " ")                          // ఎక్స్ట్రా స్పేస్ లు తీసేస్తుంది
             .trim();
     }
 
+    // స్టూడెంట్ చదివిన వాయిస్ ని క్వశ్చన్ తో మ్యాచ్ చేసి కలర్ కోడింగ్ ఇచ్చే మెయిన్ ఇంజిన్ లాజిక్
     function processReadingResult(transcript) {
-        if (!isAssessmentActive) return;
-        
+        isAssessmentActive = false;
         const target = currentSentences[sentenceIndex];
+        
         const targetWords = cleanText(target).split(" ");
         const spokenWords = cleanText(transcript).split(" ");
 
-        let matchedIndices = [];
-        targetWords.forEach((word, index) => {
-            if (spokenWords.includes(word)) {
-                matchedIndices.push(index);
+        // ప్రాజెక్టర్ పై రిజల్ట్ ని విజువల్ గా కలర్ కోడింగ్ రూపంలో చూపించే ప్రాసెస్
+        const originalWords = target.split(" ");
+        let highlightedHtml = "";
+        let matches = 0;
+
+        originalWords.forEach(origWord => {
+            const cleanedOrig = cleanText(origWord);
+            if (spokenWords.includes(cleanedOrig)) {
+                matches++;
+                highlightedHtml += `<span class="w-correct">${origWord}</span> `;
+            } else {
+                highlightedHtml += `<span class="w-incorrect">${origWord}</span> `;
             }
         });
 
-        const score = Math.round((matchedIndices.length / targetWords.length) * 100);
+        // స్కోరింగ్ పర్సంటేజ్ క్యాలిక్యులేషన్
+        const score = Math.round((matches / targetWords.length) * 100);
         accumulatedScores += score;
 
-        // Push detailed tracking object for dashboard generation
-        reportData.push({
-            sentence: target,
-            studentSaid: transcript,
-            score: score,
-            targetWords: targetWords,
-            matchedIndices: matchedIndices
-        });
-
-        document.getElementById("target-sentence").style.display = "none";
+        // స్క్రీన్ పై కలర్డ్ టెక్స్ట్ మరియు స్కోర్ చూపిస్తుంది
+        const targetBox = document.getElementById("target-sentence");
+        targetBox.innerHTML = highlightedHtml;
+        
         const scoreView = document.getElementById("current-score-view");
         scoreView.innerText = `Score: ${score}%`;
         scoreView.style.display = "block";
-        document.getElementById("status-text").innerText = "Saving progress...";
-        
+        document.getElementById("status-text").innerText = `Spoken: "${transcript}"`;
+
+        try {
+            recognition.stop();
+        } catch(e){}
+
+        // 3 సెకన్లు రిజల్ట్ చూపించి ఆటోమేటిగ్గా తదుపరి క్వశ్చన్ కి వెళ్తుంది
         setTimeout(() => {
             sentenceIndex++;
             if (sentenceIndex < currentSentences.length) {
                 displaySentence();
             } else {
-                generateReportView();
+                finishAssessment();
             }
-        }, 2000);
+        }, 3000);
     }
 
-    // NEW: Intermediary Analysis Engine to display exact status from screenshot before certificate creation
-    function generateReportView() {
+    // అసెస్మెంట్ పూర్తయ్యాక రిపోర్ట్ కార్డ్ జనరేట్ చేసే ఫంక్షన్
+    function finishAssessment() {
         isAssessmentActive = false;
-        if (recognition) recognition.stop();
+        try { recognition.stop(); } catch(e){}
 
-        // Calculate metrics
         const endTime = new Date();
         const totalSeconds = Math.round((endTime - startTime) / 1000);
         const minutes = Math.floor(totalSeconds / 60);
@@ -879,47 +888,13 @@
         totalTimeTaken = minutes > 0 ? `${minutes}m ${seconds}s` : `${seconds}s`;
 
         document.getElementById("assessment-panel").style.display = "none";
-        document.getElementById("report-panel").style.display = "block";
         
-        const reportContent = document.getElementById("report-content");
-        reportContent.innerHTML = ""; // Clear template rows
-
-        reportData.forEach((data, index) => {
-            const section = document.createElement("div");
-            section.className = "report-section";
-            
-            let correctWords = [];
-            let practiceWords = [];
-
-            data.targetWords.forEach((word, i) => {
-                if (data.matchedIndices.includes(i)) {
-                    correctWords.push(word);
-                } else {
-                    practiceWords.push(word);
-                }
-            });
-
-            section.innerHTML = `
-                <div class="sentence-header">Sentence ${index + 1}: "${data.sentence}"</div>
-                <div class="report-details">
-                    <p><strong>Student Said:</strong> ${data.studentSaid || '<i style="color:#64748b;">(No speech captured)</i>'}</p>
-                    <p><strong>Score:</strong> ${data.score}%</p>
-                    <p><strong>Correct:</strong> <span class="correct-text">${correctWords.length > 0 ? correctWords.join(", ") : "None"}</span></p>
-                    <p><strong>Need Practice:</strong> <span class="practice-text">${practiceWords.length > 0 ? practiceWords.join(", ") : "None"}</span></p>
-                </div>
-            `;
-            reportContent.appendChild(section);
-        });
-    }
-
-    // Triggers when "Generate Certificate" action button is triggered from report view
-    function showFinalCertificate() {
-        document.getElementById("report-panel").style.display = "none";
-        
+        // సగటు ఫైనల్ మార్క్స్ లెక్కింపు
         const finalScore = Math.round(accumulatedScores / currentSentences.length);
         const name = document.getElementById("student-name").value.trim();
         const studentClass = document.getElementById("student-class").value;
         
+        // సర్టిఫికేట్ స్క్రీన్ పై డేటా ఫిల్లింగ్
         document.getElementById("cert-name").innerText = name;
         document.getElementById("cert-class").innerText = studentClass;
         document.getElementById("cert-lang").innerText = currentLanguage;
@@ -928,8 +903,11 @@
         document.getElementById("cert-time").innerText = totalTimeTaken;
         document.getElementById("certificate-panel").style.display = "block";
 
+        // తేదీ ఫార్మాటింగ్ (DD-MMM-YYYY)
         const today = new Date();
         const formattedDate = `${String(today.getDate()).padStart(2, '0')}-${today.toLocaleString('default', { month: 'short' })}-${today.getFullYear()}`;
+        
+        // గూగుల్ షీట్ కి పంపాల్సిన రిపోర్ట్ పేలోడ్ డేటా నిర్మాణం
         const scorePayload = {
             date: formattedDate,
             studentName: name,
@@ -940,6 +918,7 @@
             timeTaken: totalTimeTaken
         };
 
+        // ఒకవేళ లైవ్ వెబ్ యాప్ కనెక్ట్ అయి ఉంటే బ్యాక్ గ్రౌండ్ లో గూగుల్ షీట్ కి డేటా సేవ్ అవుతుంది
         if (WEB_APP_URL !== "YOUR_DEPLOYED_WEB_APP_URL_HERE") {
             fetch(WEB_APP_URL, {
                 method: "POST",
@@ -969,7 +948,6 @@
         sentenceIndex = 0;
         accumulatedScores = 0;
         isAssessmentActive = false;
-        reportData = [];
     }
 </script>
 
