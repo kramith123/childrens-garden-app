@@ -8,16 +8,20 @@
         :root {
             --primary: #1e40af;
             --primary-hover: #1d4ed8;
-            --bg: #e0f2fe; 
+            --bg: #e0f2fe; /* Light baby blue pastel background */
             --card: #ffffff;
             --text: #0f172a;
             --border: #cbd5e1;
             --success: #15803d;
+            --danger: #991b1b;
+            --correct-word: #15803d;
+            --incorrect-word: #991b1b;
             --font-main: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
         
         body {
             font-family: var(--font-main);
+            /* Bouncy, beautiful gradient background */
             background: linear-gradient(135deg, #e0f2fe 0%, #f0fdf4 50%, #fef9c3 100%);
             color: var(--text);
             margin: 0;
@@ -31,6 +35,7 @@
             overflow-x: hidden;
         }
 
+        /* Background Doodles & Watermarks Area */
         .bg-doodles {
             position: fixed;
             top: 0;
@@ -44,11 +49,12 @@
 
         .doodle {
             position: absolute;
-            opacity: 0.12; 
+            opacity: 0.12; /* Very soft watermarks so they don't distract */
             transform: rotate(0deg);
             transition: transform 0.5s ease;
         }
 
+        /* Positioning various doodles around the whitespace */
         .doodle-1 { top: 10%; left: 5%; width: 100px; height: 100px; }
         .doodle-2 { top: 15%; right: 8%; width: 120px; height: 120px; }
         .doodle-3 { bottom: 12%; left: 6%; width: 110px; height: 110px; }
@@ -56,23 +62,29 @@
         .doodle-5 { top: 48%; left: 3%; width: 80px; height: 80px; }
         .doodle-6 { top: 50%; right: 3%; width: 90px; height: 90px; }
 
+        /* Container Main Layout Adjustments */
         .container {
             width: 100%;
-            max-width: 960px; 
+            max-width: 960px; /* Enhanced size width */
             background: rgba(255, 255, 255, 0.96);
+            /* Slightly translucent to blend with background */
             padding: 50px 40px;
+            /* Spacious internal padding */
             border-radius: 24px;
+            /* Playful soft rounded corners */
             box-shadow: 0 20px 40px -10px rgba(15, 23, 42, 0.15), 0 10px 15px -3px rgba(15, 23, 42, 0.05);
-            border: 4px solid #ffffff; 
+            border: 4px solid #ffffff; /* Frame effect */
             box-sizing: border-box;
             position: relative;
-            z-index: 10; 
+            z-index: 10; /* Placed above watermarks */
             backdrop-filter: blur(8px);
             margin: 20px auto;
         }
 
+        /* Typography Scaled Up for Prominence and Legibility */
         .school-title {
             font-size: 2.2rem;
+            /* Larger bold school headline */
             font-weight: 800;
             text-transform: uppercase;
             letter-spacing: 1.5px;
@@ -84,10 +96,20 @@
         
         .app-title {
             font-size: 1.4rem;
+            /* Scaled subtitle */
             color: #475569;
             font-weight: 600;
             margin-bottom: 40px;
             text-align: center;
+        }
+
+        .section-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 30px;
+            text-align: left;
+            border-bottom: 3px solid var(--border);
+            padding-bottom: 15px;
         }
 
         .form-grid {
@@ -98,34 +120,43 @@
         }
 
         @media (max-width: 768px) {
-            .form-grid { grid-template-columns: 1fr; }
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
             .school-title { font-size: 1.8rem; }
             .app-title { font-size: 1.1rem; }
             .container { padding: 30px 20px; }
+            .form-group.full-width { grid-column: span 1; }
+            .btn-mic { font-size: 1.1rem; padding: 15px; }
+            .sentence-box { font-size: 2rem; padding: 30px 20px; }
+            .score-display { font-size: 3rem; }
+            .cert-school { font-size: 1.8rem; }
+            .cert-score { font-size: 3.5rem; }
         }
 
-        .form-group { margin-bottom: 5px; }
-        .form-group.full-width { grid-column: span 2; }
+        .form-group {
+            margin-bottom: 5px;
+        }
 
-        @media (max-width: 768px) {
-            .form-group.full-width { grid-column: span 1; }
+        .form-group.full-width {
+            grid-column: span 2;
         }
 
         label {
             display: block;
             margin-bottom: 10px;
             font-weight: 700;
-            font-size: 1.15rem; 
+            font-size: 1.15rem; /* Larger and clearer label size */
             color: #334155;
         }
 
         input, select {
             width: 100%;
-            padding: 14px 18px; 
+            padding: 14px 18px; /* Bigger input touchpoint padding */
             border: 2px solid var(--border);
             border-radius: 12px;
             box-sizing: border-box;
-            font-size: 1.15rem; 
+            font-size: 1.15rem; /* Scaled up font */
             background-color: #fcfcfc;
             font-weight: 500;
             color: #1e293b;
@@ -139,12 +170,13 @@
             box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.15);
         }
 
+        /* Large Kid-Friendly Action Buttons */
         button {
             width: 100%;
-            padding: 16px 20px; 
+            padding: 16px 20px; /* Substantial clickable areas */
             border: none;
             border-radius: 12px;
-            font-size: 1.2rem; 
+            font-size: 1.2rem; /* Easy-to-read scale */
             font-weight: bold;
             cursor: pointer;
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
@@ -152,9 +184,14 @@
             margin-top: 10px;
         }
 
-        button:active { transform: scale(0.98); }
+        button:active {
+            transform: scale(0.98);
+        }
 
-        .btn-primary { background-color: #2563eb; color: white; }
+        .btn-primary { 
+            background-color: #2563eb;
+            color: white; 
+        }
         .btn-primary:hover { 
             background-color: #1d4ed8;
             box-shadow: 0 8px 12px rgba(37, 99, 235, 0.25);
@@ -188,6 +225,7 @@
             animation: pulse 1.5s infinite; 
         }
         
+        /* Question Checklist Area */
         .q-selection-box {
             display: none;
             background: #f8fafc;
@@ -218,7 +256,9 @@
             font-weight: 600;
             box-shadow: none;
         }
-        .btn-link:hover { color: #1d4ed8; }
+        .btn-link:hover {
+            color: #1d4ed8;
+        }
 
         .q-scroll {
             max-height: 380px;
@@ -232,19 +272,21 @@
         .q-item {
             display: flex;
             align-items: center;
-            padding: 16px; 
+            padding: 16px; /* Expanded checklist row heights */
             border-bottom: 1px solid #f1f5f9;
-            font-size: 1.15rem; 
+            font-size: 1.15rem; /* Large checklist text */
             cursor: pointer;
             user-select: none;
             transition: background 0.15s ease;
         }
-        .q-item:hover { background-color: #f0fdf4; }
+        .q-item:hover {
+            background-color: #f0fdf4;
+        }
         .q-item:last-child { border-bottom: none; }
         .q-item input {
             width: auto;
             margin-right: 18px;
-            transform: scale(1.5); 
+            transform: scale(1.5); /* Big, easy checkboxes */
             cursor: pointer;
         }
         .q-item label {
@@ -266,10 +308,17 @@
         .badge-live { background-color: #dcfce7; color: #166534; }
         .badge-offline { background-color: #fee2e2; color: #991b1b; }
         
-        .panel { display: none; margin-top: 30px; border-top: 3px solid var(--border); padding-top: 30px; }
+        .panel { 
+            display: none;
+            margin-top: 30px; 
+            border-top: 3px solid var(--border); 
+            padding-top: 30px; 
+        }
         
+        /* High-Visibility Target Box */
         .sentence-box {
             font-size: 2.6rem;
+            /* Hugely legible sentence presentation for youngsters */
             font-weight: 800;
             padding: 50px 30px;
             background: #f1f5f9;
@@ -294,13 +343,14 @@
 
         .score-display { 
             text-align: center;
-            font-size: 4rem; 
+            font-size: 4rem; /* Prominent score viewing */
             font-weight: 900;
             color: var(--success); 
             display: none; 
             margin: 25px 0; 
         }
         
+        /* Floating Notifications Area */
         .notification-banner {
             display: none;
             background-color: #fee2e2;
@@ -314,6 +364,51 @@
             font-size: 1.1rem;
         }
 
+        /* Reading Report Section Styling */
+        .report-panel {
+            display: none;
+            margin-top: 35px;
+            text-align: left;
+        }
+
+        .report-section {
+            background-color: var(--card);
+            border: 2px solid var(--border);
+            border-radius: 16px;
+            padding: 25px;
+            margin-bottom: 25px;
+            position: relative;
+        }
+
+        .sentence-header {
+            font-size: 1.4rem;
+            font-weight: 800;
+            margin-bottom: 15px;
+            color: #1e3a8a;
+        }
+
+        .report-details p {
+            margin: 8px 0;
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+
+        .correct-text {
+            color: var(--correct-word);
+            font-weight: 700;
+        }
+
+        .practice-text {
+            color: var(--danger);
+            font-weight: 700;
+        }
+
+        .final-actions {
+            margin-top: 30px;
+            text-align: center;
+        }
+
+        /* Certificate Design */
         .certificate-card {
             display: none;
             border: 10px double #b45309;
@@ -432,6 +527,15 @@
         <div class="score-display" id="current-score-view">100%</div>
     </div>
 
+    <div id="report-panel" class="report-panel">
+        <h2 class="section-title">Reading Report</h2>
+        <div id="report-content">
+            </div>
+        <div class="final-actions">
+            <button id="generate-cert-btn" class="btn-success" style="width: auto; padding: 18px 35px;" onclick="showFinalCertificate()">Generate Certificate</button>
+        </div>
+    </div>
+
     <div id="certificate-panel" class="certificate-card">
         <div style="font-size: 3.5rem; margin-bottom: 15px;">🏆</div>
         <h2 style="color: #78350f; font-family: Georgia, serif; margin-bottom: 10px; font-size: 2.4rem;">Certificate of Completion</h2>
@@ -457,6 +561,7 @@
 <script>
     const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbx7S7hUa9_dCKjqW_gr6XQ9WAX7V9S6UC7H86yja_hWKZ1oJ-DjMwAxa_x1VlEXM58/exec";
 
+    // Dynamic age-appropriate local fallback database
     const OFFLINE_DATABASE = {
         Nursery_Eng: ["A Apple", "B Ball", "C Cat", "D Dog", "E Elephant"],
         Nursery_Tel: ["అమ్మ", "ఆవు", "ఇల్లు", "ఈల", "ఉడత"],
@@ -469,11 +574,11 @@
         UKG_Tel: ["బలపము", "రథము", "లత", "వనము"],
         UKG_Hindi: ["उल्लू", "ऊनी", "ऋषि", "एक"],
         "1st Class_Eng": ["The sun is very bright.", "The boy runs fast.", "I read my text books daily.", "I drink sweet milk."],
-        "1st Class_Tel": ["అమ్మ మనకు దైవము.", "చెట్లు మనకు నీడను ఇస్తాయి.", "పిల్లలు చక్కగా చదవాలి."],
+        "1st Class_Tel": ["అమ్మ మనకు దైవము.", "チェట్లు మనకు నీడను ఇస్తాయి.", "పిల్లలు చక్కగా చదవాలి."],
         "1st Class_Hin": ["सूरज पूर्व से निकलता है।", "हमें सदा सच बोलना चाहिए।", "यह मेरी पाठशाला है।"],
         "1st Class_Numbers": ["100 One Hundred", "200 Two Hundred", "300 Three Hundred", "400 Four Hundred"],
         "2nd Class_Eng": ["Keep your surroundings clean and green.", "Honesty is the best moral policy.", "Birds fly high in the cloudless sky."],
-        "2nd Class_Tel": ["పెద్దలను గౌరవించడం మన కర్తవ్యం.", "పుస్తకాలు మంచి జ్ఞానాన్ని ఇస్తాయి.", "గాంధీజీ దేశానికి తండ్రి."],
+        "2nd Class_Tel": ["పెద్దలను గౌరవించడం మన कर्తవ్యం.", "పుస్తకాలు మంచి జ్ఞానాన్ని ఇస్తాయి.", "గాంధీజీ దేశానికి తండ్రి."],
         "2nd Class_Hin": ["सफलता की कुंजी कठिन परिश्रम है।", "पेड़-पौधे हमारे सच्चे मित्र हैं।", "भारत एक महान और पवित्र देश है।"],
         "2nd Class_Numbers": ["1000 One Thousand", "2000 Two Thousand", "3000 Three Thousand"],
         "3rd Class_Eng": ["Healthy food keeps our body fit and active.", "Always wash your hands before eating.", "Reading improves our reading comprehension."],
@@ -482,7 +587,7 @@
         "3rd Class_Numbers": ["5000 Five Thousand", "10000 Ten Thousand"],
         "4th Class_Eng": ["Global warming is a serious problem for our earth.", "We must practice daily to achieve high accuracy.", "The school library has a collection of historical books."],
         "4th Class_Tel": ["వృక్షో రక్షతి రక్షితః అనగా చెట్లను రక్షించాల్సింది మనమే.", "చదువుతో పాటు మంచి సంస్కారం కూడా అలవర్చుకోవాలి.", "వ్యవసాయం మన దేశానికి వెన్నెముక వంటిది."],
-        "4th Class_Hin": ["पुस्तकालय ज्ञान का असीम महासागर होता है।", "हमे प्लास्टिक के उपयोग से बचना चाहिए।", "सत्य and अहिंसा ही मानव जीवन के सच्चे मार्ग हैं।"],
+        "4th Class_Hin": ["पुस्तकालय ज्ञान का असीम महासागर होता है।", "हमे प्लास्टिक के उपयोग से बचना चाहिए।", "सत्य and अहम्सा ही मानव जीवन के सच्चे मार्ग हैं।"],
         "4th Class_Numbers": ["25000 Twenty Five Thousand", "50000 Fifty Thousand"],
         "5th Class_Eng": ["Education empowers individuals to build a prosperous nation.", "Digital learning helps students understand concepts easily.", "Environmental protection is the responsibility of every citizen."],
         "5th Class_Tel": ["మాతృభాషను గౌరవించడం మన ప్రథమ బాధ్యత.", "సాంకేతిక పరిజ్ఞానం ద్వారా సమాచారాన్ని సులభంగా తెలుసుకోవచ్చు.", "పరిశుభ్రత దైవత్వంతో సమానమని పెద్దలు చెప్తారు."],
@@ -497,17 +602,15 @@
     
     let recognition = null;
     let isAssessmentActive = false;
-    let isProcessingResult = false; 
     
     let startTime = null;
     let totalTimeTaken = "";
+    let reportData = []; // To save individual word mapping results dynamically
 
     if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
         const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
         recognition = new SpeechRecognition();
-        
-        // Changing continuous to false prevents the mic from looping context infinitely
-        recognition.continuous = false; 
+        recognition.continuous = true; 
         recognition.interimResults = false;
 
         recognition.onstart = () => {
@@ -519,23 +622,21 @@
         };
 
         recognition.onresult = (event) => {
-            if (isProcessingResult) return; 
-            isProcessingResult = true;
-            
-            const transcript = event.results[0][0].transcript;
+            const lastResultIndex = event.results.length - 1;
+            const transcript = event.results[lastResultIndex][0].transcript;
             processReadingResult(transcript);
         };
 
-        recognition.onerror = (err) => { 
-            console.error(err.error); 
-            if (err.error === 'no-speech') {
-                document.getElementById("status-text").innerText = "No speech detected. Try clicking the microphone again.";
+        recognition.onerror = (err) => { console.error("Speech Error:", err.error); };
+        
+        // Optimizing mic handler so it doesn't prompt for permission recursively
+        recognition.onend = () => {
+            if (isAssessmentActive) {
+                // Keep the same session active if assessment is still running
+                try { recognition.start(); } catch(e) { console.log(e); }
+            } else {
                 resetMicButtonUi();
             }
-        };
-
-        recognition.onend = () => {
-            resetMicButtonUi();
         };
     }
 
@@ -685,6 +786,7 @@
         
         sentenceIndex = 0;
         accumulatedScores = 0;
+        reportData = []; // Clear old analytics
 
         if(currentLanguage === "Telugu") recognition.lang = "te-IN";
         else if(currentLanguage === "Hindi") recognition.lang = "hi-IN";
@@ -696,23 +798,23 @@
     }
 
     function displaySentence() {
-        isProcessingResult = false; 
         document.getElementById("current-score-view").style.display = "none";
         document.getElementById("target-sentence").style.display = "block";
         document.getElementById("progress-text").innerText = `Question ${sentenceIndex + 1} of ${currentSentences.length}`;
         document.getElementById("target-sentence").innerText = currentSentences[sentenceIndex];
-        document.getElementById("status-text").innerText = "Click 'Start Reading' and read the sentence out loud.";
-        resetMicButtonUi();
+        
+        if (isAssessmentActive) {
+            document.getElementById("status-text").innerText = "Read the next item now...";
+        } else {
+            document.getElementById("status-text").innerText = "Click 'Start Reading' once to begin the full test.";
+            resetMicButtonUi();
+        }
     }
 
     function startAssessmentListening() {
         if (!recognition) return;
         isAssessmentActive = true;
-        try {
-            recognition.start();
-        } catch(e) {
-            console.log("Recognition already active or starting", e);
-        }
+        recognition.start();
     }
 
     function cleanText(text) {
@@ -723,41 +825,53 @@
     }
 
     function processReadingResult(transcript) {
+        if (!isAssessmentActive) return;
+        
         const target = currentSentences[sentenceIndex];
         const targetWords = cleanText(target).split(" ");
         const spokenWords = cleanText(transcript).split(" ");
 
-        let matches = 0;
-        targetWords.forEach(word => {
-            if (spokenWords.includes(word)) matches++;
+        let matchedIndices = [];
+        targetWords.forEach((word, index) => {
+            if (spokenWords.includes(word)) {
+                matchedIndices.push(index);
+            }
         });
-        const score = Math.round((matches / targetWords.length) * 100);
+
+        const score = Math.round((matchedIndices.length / targetWords.length) * 100);
         accumulatedScores += score;
+
+        // Push detailed tracking object for dashboard generation
+        reportData.push({
+            sentence: target,
+            studentSaid: transcript,
+            score: score,
+            targetWords: targetWords,
+            matchedIndices: matchedIndices
+        });
 
         document.getElementById("target-sentence").style.display = "none";
         const scoreView = document.getElementById("current-score-view");
         scoreView.innerText = `Score: ${score}%`;
         scoreView.style.display = "block";
         document.getElementById("status-text").innerText = "Saving progress...";
-
-        // Explicitly stop the active recognition instance before changing screens
-        isAssessmentActive = false;
-        try { recognition.stop(); } catch(e){}
-
+        
         setTimeout(() => {
             sentenceIndex++;
             if (sentenceIndex < currentSentences.length) {
                 displaySentence();
             } else {
-                finishAssessment();
+                generateReportView();
             }
         }, 2000);
     }
 
-    function finishAssessment() {
+    // NEW: Intermediary Analysis Engine to display exact status from screenshot before certificate creation
+    function generateReportView() {
         isAssessmentActive = false;
-        try { recognition.stop(); } catch(e){}
+        if (recognition) recognition.stop();
 
+        // Calculate metrics
         const endTime = new Date();
         const totalSeconds = Math.round((endTime - startTime) / 1000);
         const minutes = Math.floor(totalSeconds / 60);
@@ -765,6 +879,42 @@
         totalTimeTaken = minutes > 0 ? `${minutes}m ${seconds}s` : `${seconds}s`;
 
         document.getElementById("assessment-panel").style.display = "none";
+        document.getElementById("report-panel").style.display = "block";
+        
+        const reportContent = document.getElementById("report-content");
+        reportContent.innerHTML = ""; // Clear template rows
+
+        reportData.forEach((data, index) => {
+            const section = document.createElement("div");
+            section.className = "report-section";
+            
+            let correctWords = [];
+            let practiceWords = [];
+
+            data.targetWords.forEach((word, i) => {
+                if (data.matchedIndices.includes(i)) {
+                    correctWords.push(word);
+                } else {
+                    practiceWords.push(word);
+                }
+            });
+
+            section.innerHTML = `
+                <div class="sentence-header">Sentence ${index + 1}: "${data.sentence}"</div>
+                <div class="report-details">
+                    <p><strong>Student Said:</strong> ${data.studentSaid || '<i style="color:#64748b;">(No speech captured)</i>'}</p>
+                    <p><strong>Score:</strong> ${data.score}%</p>
+                    <p><strong>Correct:</strong> <span class="correct-text">${correctWords.length > 0 ? correctWords.join(", ") : "None"}</span></p>
+                    <p><strong>Need Practice:</strong> <span class="practice-text">${practiceWords.length > 0 ? practiceWords.join(", ") : "None"}</span></p>
+                </div>
+            `;
+            reportContent.appendChild(section);
+        });
+    }
+
+    // Triggers when "Generate Certificate" action button is triggered from report view
+    function showFinalCertificate() {
+        document.getElementById("report-panel").style.display = "none";
         
         const finalScore = Math.round(accumulatedScores / currentSentences.length);
         const name = document.getElementById("student-name").value.trim();
@@ -800,20 +950,26 @@
         }
     }
 
+    // తదుపరి విద్యార్థి కోసం యాప్ మొత్తాన్ని రీసెట్ చేసే ఫంక్షన్
     function resetToSetup() {
+        // సర్టిఫికేట్ ప్యానల్ దాచిపెట్టి, మొదటి స్క్రీన్ చూపిస్తుంది
         document.getElementById("certificate-panel").style.display = "none";
         document.getElementById("setup-screen").style.display = "block";
         
+        // విద్యార్థి పేరును క్లియర్ చేసి ఫోకస్ చేస్తుంది
         const nameInput = document.getElementById("student-name");
         nameInput.value = "";
         nameInput.focus();
         
+        // పాత క్వశ్చన్ సెలెక్షన్ బాక్స్ ని దాచేస్తుంది
         document.getElementById("selection-box-container").style.display = "none";
+        
+        // స్టేట్ వేరియబుల్స్ అన్నింటినీ రీసెట్ చేస్తుంది
         currentSentences = [];
         sentenceIndex = 0;
         accumulatedScores = 0;
         isAssessmentActive = false;
-        isProcessingResult = false;
+        reportData = [];
     }
 </script>
 
