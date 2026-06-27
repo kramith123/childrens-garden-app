@@ -398,6 +398,30 @@
 
         .cert-school { font-size: 3rem; font-weight: 800; color: #78350f; margin-bottom: 25px; }
         .cert-score { font-size: 6.5rem; font-weight: 900; color: #b45309; margin: 25px 0; }
+
+        /* Error Summary Section Styles */
+        .error-log-container {
+            margin-top: 30px;
+            text-align: left;
+            background: #fff5f5;
+            border: 2px solid #feb2b2;
+            border-radius: 12px;
+            padding: 25px;
+        }
+        .error-log-title {
+            font-size: 1.8rem;
+            color: #991b1b;
+            font-weight: bold;
+            margin-bottom: 15px;
+            border-bottom: 2px solid #fca5a5;
+            padding-bottom: 10px;
+        }
+        .error-item {
+            font-size: 1.4rem;
+            margin-bottom: 12px;
+            line-height: 1.6;
+            color: #2d3748;
+        }
         
         @keyframes pulse {
             0% { opacity: 1; }
@@ -408,6 +432,7 @@
 </head>
 <body>
 
+<!-- Background Vector Graphics for Kids Theme Visual Aesthetics -->
 <div class="bg-doodles">
     <svg class="doodle doodle-1" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
         <path d="M17.5 19A3.5 3.5 0 0 0 21 15.5c0-2.79-2.54-4.5-5-4.5-.42 0-.83.05-1.24.15A7 7 0 0 0 3 11.5c0 3.62 3.1 6.5 7 6.5h7.5z"/>
@@ -441,8 +466,10 @@
     <div class="school-title">Children's Garden E.M. High School</div>
     <div class="app-title">Student Reading Assessment Engine</div>
 
+    <!-- Toast Notification Banner System Container -->
     <div id="notice-banner" class="notification-banner"></div>
 
+    <!-- మొదటి స్క్రీన్: క్వశ్చన్ సెటప్ మరియు సెలెక్షన్ రౌండ్ -->
     <div id="setup-screen">
         <div class="form-grid">
             <div class="form-group full-width">
@@ -475,6 +502,7 @@
         
         <button id="fetch-btn" class="btn-primary" onclick="fetchSheetQuestions()">Load Sheet Questions</button>
         
+        <!-- సెలెక్టెడ్ క్లాస్ క్వశ్చన్స్ లిస్ట్ కంటైనర్ బాక్స్ (ఆటోమేటిగ్గా కింద ఓపెన్ అవుతుంది) -->
         <div id="selection-box-container" class="q-selection-box">
             <div class="q-header-controls">
                 <span style="font-weight: bold; color: #1e3a8a; font-size: 1.4rem;">
@@ -487,7 +515,8 @@
             </div>
             
             <div class="q-scroll" id="questions-list">
-                </div>
+                <!-- Checkboxes dynamically rendered here -->
+            </div>
             
             <div style="margin-top: 20px; font-size: 1.4rem; font-weight: 700; color: #475569;">
                 Selected: <span id="selected-counter" style="color: #2563eb;">0</span>
@@ -497,6 +526,7 @@
         </div>
     </div>
 
+    <!-- రెండవ స్క్రీన్: లైవ్ రీడింగ్ అసెస్మెంట్ ప్యానెల్ -->
     <div id="assessment-panel" class="panel">
         <h3 id="progress-text" style="text-align: center; color: #475569; font-size: 1.8rem;">Processing...</h3>
         <div class="sentence-box" id="target-sentence">Please wait...</div>
@@ -505,6 +535,7 @@
         <div class="score-display" id="current-score-view">100%</div>
     </div>
 
+    <!-- మూడవ స్క్రీన్: స్టూడెంట్ ఫైనల్ మార్క్స్ మెమో / రిపోర్ట్ కార్డ్ (ఎర్రర్స్ లిస్ట్ తో సహా) -->
     <div id="certificate-panel" class="certificate-card">
         <div style="font-size: 4rem; margin-bottom: 15px;">🏆</div>
         <h2 style="color: #78350f; font-family: Georgia, serif; margin-bottom: 10px; font-size: 2.8rem;">Certificate of Completion</h2>
@@ -519,7 +550,14 @@
         <div style="color: #78350f; margin-bottom: 25px; font-weight: 700; font-size: 1.5rem;">
             Total Questions: <span id="cert-q-count">0</span> | Time Taken: <span id="cert-time">0s</span>
         </div>
-        <div style="font-size: 2.2rem; font-weight: bold; color: #78350f; margin-top: 20px;">Congratulations! 🎉</div>
+
+        <!-- ఎర్రర్స్ పేజీ / తప్పుగా చదివిన పదాల రివ్యూ సెక్షన్ -->
+        <div id="error-log-box" class="error-log-container" style="display: none;">
+            <div class="error-log-title">❌ Mistaken Words / తప్పుగా చదివిన పదాలు:</div>
+            <div id="error-list-details"></div>
+        </div>
+
+        <div style="font-size: 2.2rem; font-weight: bold; color: #78350f; margin-top: 30px;">Congratulations! 🎉</div>
 
         <button id="next-student-btn" class="btn-primary" style="margin-top: 35px; background-color: #9a3412; font-size: 1.6rem; padding: 20px 30px; border-radius: 12px;" onclick="resetToSetup()">
             👤 Test Next Student / తదుపరి విద్యార్థి
@@ -531,7 +569,7 @@
     // గూగుల్ షీట్స్ కనెక్ట్ చేయడానికి మీ వెబ్ యాప్ URL ఇక్కడ పేస్ట్ చేయాలి
     const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbx7S7hUa9_dCKjqW_gr6XQ9WAX7V9S6UC7H86yja_hWKZ1oJ-DjMwAxa_x1VlEXM58/exec";
 
-    // ఆఫ్లైన్ బ్యాకప్ డేటాబేస్ (ఇంటర్నెట్ లేనప్పుడు లేదా క్లౌడ్ కనెక్ట్ అవ్వనప్పుడు ఇది పనిచేస్తుంది)
+    // ఆఫ్లైన్ బ్యాకప్ డేటాబేస్
     const OFFLINE_DATABASE = {
         Nursery_Eng: ["A Apple", "B Ball", "C Cat", "D Dog", "E Elephant"],
         Nursery_Tel: ["అమ్మ", "ఆవు", "ఇల్లు", "ఈల", "ఉడత"],
@@ -544,11 +582,11 @@
         UKG_Tel: ["బలపము", "రథము", "లత", "వనము"],
         UKG_Hindi: ["उल्लू", "ऊनी", "ऋषि", "एक"],
         "1st Class_Eng": ["The sun is very bright.", "The boy runs fast.", "I read my text books daily.", "I drink sweet milk."],
-        "1st Class_Tel": ["అమ్మ మనకు దైవము.", "チェట్లు మనకు నీడను ఇస్తాయి.", "పిల్లలు చక్కగా చదవాలి."],
+        "1st Class_Tel": ["అమ్మ మనకు దైవము.", "చెట్లు మనకు నీడను ఇస్తాయి.", "పిల్లలు చక్కగా చదవాలి."],
         "1st Class_Hin": ["सूरज पूर्व से निकलता है।", "हमें सदा सच बोलना चाहिए।", "यह मेरी पाठशाला है।"],
         "1st Class_Numbers": ["100 One Hundred", "200 Two Hundred", "300 Three Hundred", "400 Four Hundred"],
         "2nd Class_Eng": ["Keep your surroundings clean and green.", "Honesty is the best moral policy.", "Birds fly high in the cloudless sky."],
-        "2nd Class_Tel": ["పెద్దలను గౌరవించడం మన కర్తవ్యం.", "పుస్తకాలు మంచి జ్ఞానాన్ని ఇస్తాయి.", "గాంధీజీ దేశానికి తండ్రి."],
+        "2nd Class_Tel": ["పెద్దలను గౌరవించడం మన Karnavyam.", "పుస్తకాలు మంచి జ్ఞానాన్ని ఇస్తాయి.", "గాంధీజీ దేశానికి తండ్రి."],
         "2nd Class_Hin": ["सफलता की कुंजी कठिन परिश्रम है।", "पेड़-पौधे हमारे सच्चे मित्र हैं।", "भारत एक महान और पवित्र देश है।"],
         "2nd Class_Numbers": ["1000 One Thousand", "2000 Two Thousand", "3000 Three Thousand"],
         "3rd Class_Eng": ["Healthy food keeps our body fit and active.", "Always wash your hands before eating.", "Reading improves our reading comprehension."],
@@ -557,11 +595,11 @@
         "3rd Class_Numbers": ["5000 Five Thousand", "10000 Ten Thousand"],
         "4th Class_Eng": ["Global warming is a serious problem for our earth.", "We must practice daily to achieve high accuracy.", "The school library has a collection of historical books."],
         "4th Class_Tel": ["వృక్షో రక్షతి రక్షితః అనగా చెట్లను రక్షించాల్సింది మనమే.", "చదువుతో పాటు మంచి సంస్కారం కూడా అలవర్చుకోవాలి.", "వ్యవసాయం మన దేశానికి వెన్నెముక వంటిది."],
-        "4th Class_Hin": ["पुस्तकालय ज्ञान का असीम महासागर होता है।", "हमे प्लास्टिक के उपयोग से बचना चाहिए।", "सत्य and अहिंसा ही मानव जीवन के सच्चे मार्ग हैं।"],
+        "4th Class_Hin": ["पुस्तकालय ज्ञान का असीम महासागर होता है।", "हमे प्लास्टिक के उपयोग से बचना चाहिए।", "सत्य और अहिंसा ही मानव जीवन के सच्चे मार्ग हैं।"],
         "4th Class_Numbers": ["25000 Twenty Five Thousand", "50000 Fifty Thousand"],
         "5th Class_Eng": ["Education empowers individuals to build a prosperous nation.", "Digital learning helps students understand concepts easily.", "Environmental protection is the responsibility of every citizen."],
         "5th Class_Tel": ["మాతృభాషను గౌరవించడం మన ప్రథమ బాధ్యత.", "సాంకేతిక పరిజ్ఞానం ద్వారా సమాచారాన్ని సులభంగా తెలుసుకోవచ్చు.", "పరిశుభ్రత దైవత్వంతో సమానమని పెద్దలు చెప్తారు."],
-        "5th Class_Hin": ["सच्चा मित्र वही है जो विपत्ति के समय काम आता है।", "विज्ञान वरदान भी है and विनाशकारी अभिलाप भी।", "योग and प्राणायाम मानसिक शांति का सबसे सुलभ साधन है।"],
+        "5th Class_Hin": ["सच्चा मित्र वही है जो विपत्ति के समय काम आता है।", "विज्ञान वरदान भी है और विनाशकारी अभिलाप भी।", "योग और प्राणायाम मानसिक शांति का सबसे सुलभ साधन है।"],
         "5th Class_Numbers": ["100000 One Lakh", "1000000 Ten Lakhs"]
     };
 
@@ -573,16 +611,18 @@
     // వాయిస్ రికగ్నిషన్ వేరియబుల్స్
     let recognition = null;
     let isAssessmentActive = false;
+    let autoMicLoop = false; // తదుపరి క్వశ్చన్ కి ఆటోమేటిక్ మైక్ ట్రిగ్గర్ కోసం
     
     let startTime = null;
     let totalTimeTaken = "";
 
-    // బ్రౌజర్ వాయిస్ ఇంజిన్ చెక్ మరియు ఇనిషియలైజేషన్
+    // తప్పుగా చదివిన పదాలను స్టోర్ చేసే గ్లోబల్ అర్రే
+    let wrongWordsLog = []; 
+
     if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
         const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
         recognition = new SpeechRecognition();
         
-        // ప్రాజెక్టర్ ఎన్విరాన్మెంట్ కోసం ఆటోమేటిక్ లూపింగ్ బగ్స్ లేకుండా కాన్ఫిగర్ చేసాం
         recognition.continuous = false; 
         recognition.interimResults = false;
 
@@ -601,25 +641,25 @@
         recognition.onerror = (err) => {
             console.error("Speech Error captured:", err.error);
             if (err.error === 'no-speech') {
-                document.getElementById("status-text").innerText = "No speech detected. Click button to try again.";
+                document.getElementById("status-text").innerText = "No speech detected.";
+                // ఒకవేళ ఆటో-లూప్ ఆన్ లో ఉంటే, నో-స్పీచ్ వచ్చినా 2 సెకన్లలో నెక్స్ట్ క్వశ్చన్ కి వెళ్తుంది
+                if(autoMicLoop) {
+                    processReadingResult(""); 
+                }
             } else if (err.error === 'not-allowed') {
                 showToast("Microphone access blocked! Enable site permission settings.", "error");
+                autoMicLoop = false;
             }
             resetMicButtonUi();
         };
 
         recognition.onend = () => {
             resetMicButtonUi();
-            // ఒకవేళ అసెస్మెంట్ రన్ అవుతూ ఉండి ఎర్రర్ వస్తే తప్ప ఆటోమేటిగ్గా రీస్టార్ట్ అవ్వదు
-            if (isAssessmentActive) {
-                // Safe execution state check
-            }
         };
     } else {
         alert("Speech Recognition API is not supported in this browser. Please use Google Chrome.");
     }
 
-    // టోస్ట్ నోటిఫికేషన్ మెసేజ్ అలర్ట్ చూపించే ఫంక్షన్
     function showToast(message, type = "error") {
         const banner = document.getElementById("notice-banner");
         banner.innerText = message;
@@ -636,14 +676,12 @@
         setTimeout(() => { banner.style.display = "none"; }, 5000);
     }
 
-    // మైక్రోఫోన్ బటన్ గ్రాఫిక్స్ రీసెట్ ఫంక్షన్
     function resetMicButtonUi() {
         const btn = document.getElementById("mic-btn");
         btn.innerText = "🎤 Start Reading";
         btn.classList.remove("listening");
     }
 
-    // గూగుల్ షీట్స్ నుండి లైవ్ క్వశ్చన్స్ లోడ్ చేసే మెయిన్ ఫంక్షన్
     function fetchSheetQuestions() {
         const studentClass = document.getElementById("student-class").value;
         currentLanguage = document.getElementById("language").value;
@@ -654,10 +692,8 @@
         
         document.getElementById("selection-box-container").style.display = "none";
         
-        // గూగుల్ స్క్రిప్ట్ వెబ్ యాప్ కి API రిక్వెస్ట్ పంపుతుంది
         const fetchUrl = `${WEB_APP_URL}?class=${encodeURIComponent(studentClass)}&language=${encodeURIComponent(currentLanguage)}`;
         
-        // ఒకవేళ డెవలపర్ వెబ్ యాప్ URL మార్చకపోతే డైరెక్ట్ గా లోకల్ బ్యాకప్ లోడ్ అవుతుంది
         if (WEB_APP_URL === "YOUR_DEPLOYED_WEB_APP_URL_HERE") {
             loadLocalDatabaseFallback(studentClass, currentLanguage, "Web App URL is not pasted. Loaded Local Database.");
             fetchBtn.innerText = "Load Sheet Questions";
@@ -689,7 +725,6 @@
         });
     }
 
-    // లోకల్ ఆఫ్లైన్ డేటా లోడ్ చేసే బ్యాకప్ ఫంక్షన్
     function loadLocalDatabaseFallback(studentClass, language, noticeMsg) {
         showToast(noticeMsg, "success");
         var langKey = "Eng";
@@ -703,7 +738,6 @@
         renderQuestionSelection(pool, false);
     }
 
-    // క్వశ్చన్స్ అన్నింటినీ స్క్రీన్ పై చెక్ బాక్సులుగా డిస్ప్లే చేసే ఫంక్షన్
     function renderQuestionSelection(pool, isLiveCloud) {
         const listContainer = document.getElementById("questions-list");
         listContainer.innerHTML = "";
@@ -716,7 +750,6 @@
                 <label for="q-${index}">${sentence}</label>
             `;
             
-            // రో(Row) పైన ఎక్కడ క్లిక్ చేసినా టిక్ మార్క్ పడేలా ఈజీ సెలెక్షన్ లాజిక్
             itemDiv.addEventListener("click", function(e) {
                 if(e.target.tagName !== 'INPUT') {
                     const cb = itemDiv.querySelector("input[type='checkbox']");
@@ -728,7 +761,6 @@
             listContainer.appendChild(itemDiv);
         });
 
-        // క్లౌడ్ లోడ్ అయిందా లేదా ఆఫ్లైన్ లోడ్ అయిందా అని చూపే కలర్ బ్యాడ్జ్
         const badge = document.getElementById("source-badge");
         if(isLiveCloud) {
             badge.innerText = "Live Cloud Mode";
@@ -742,7 +774,6 @@
         updateSelectedCounter();
     }
 
-    // సెలెక్ట్ ఆల్ లేదా క్లియర్ ఆల్ బటన్ ఫంక్షన్
     function selectAllQuestions(checkedValue) {
         const checkboxes = document.querySelectorAll("#questions-list input[type='checkbox']");
         checkboxes.forEach(cb => {
@@ -751,13 +782,11 @@
         updateSelectedCounter();
     }
 
-    // ఎన్ని క్వశ్చన్స్ సెలెక్ట్ అయ్యాయో లెక్కించే కౌంటర్ ఫంక్షన్
     function updateSelectedCounter() {
         const count = document.querySelectorAll("#questions-list input[type='checkbox']:checked").length;
         document.getElementById("selected-counter").innerText = count;
     }
 
-    // అసెస్మెంట్ రౌండ్ ని స్టార్ట్ చేసే ఫంక్షన్
     function startSelectedAssessment() {
         const name = document.getElementById("student-name").value.trim();
         if (!name) {
@@ -765,7 +794,6 @@
             return;
         }
 
-        // టిక్ చేసిన క్వశ్చన్స్ ని మాత్రమే అర్రే లోకి తీసుకుంటుంది
         const checkboxes = document.querySelectorAll("#questions-list input[type='checkbox']:checked");
         currentSentences = [];
         checkboxes.forEach(cb => {
@@ -777,14 +805,14 @@
             return;
         }
 
-        // మొదటి స్క్రీన్ దాచిపెట్టి, ఎగ్జామ్ స్క్రీన్ ఓపెన్ చేస్తుంది
         document.getElementById("setup-screen").style.display = "none";
         document.getElementById("assessment-panel").style.display = "block";
         
         sentenceIndex = 0;
         accumulatedScores = 0;
+        wrongWordsLog = []; // క్లియర్ లాగ్ ట్యాగ్
+        autoMicLoop = false; // ఫస్ట్ క్వశ్చన్ మాన్యువల్ గా స్టార్ట్ అవ్వాలి
 
-        // లాంగ్వేజ్ కి తగ్గట్టుగా వాయిస్ రికగ్నిషన్ మోడల్ ని సెట్ చేస్తుంది
         if(currentLanguage === "Telugu") recognition.lang = "te-IN";
         else if(currentLanguage === "Hindi") recognition.lang = "hi-IN";
         else recognition.lang = "en-US";
@@ -794,38 +822,41 @@
         displaySentence();
     }
 
-    // క్వశ్చన్ ని స్క్రీన్ పై పెద్ద అక్షరాలతో చూపే ఫంక్షన్
     function displaySentence() {
         document.getElementById("current-score-view").style.display = "none";
         document.getElementById("target-sentence").style.display = "block";
         document.getElementById("progress-text").innerText = `Question ${sentenceIndex + 1} of ${currentSentences.length}`;
         
-        // వాక్యాన్ని రీసెట్ చేసి నార్మల్ టెక్స్ట్ రూపంలో స్క్రీన్ పై లోడ్ చేస్తుంది
         document.getElementById("target-sentence").innerText = currentSentences[sentenceIndex];
         document.getElementById("status-text").innerText = "Click 'Start Reading' and read the sentence out loud.";
         resetMicButtonUi();
-    }
 
-    // మైక్రోఫోన్ ని ఆన్ చేసే రన్ ఫంక్షన్
-    function startAssessmentListening() {
-        if (!recognition) return;
-        isAssessmentActive = true;
-        try {
-            recognition.start();
-        } catch(e) {
-            console.log("Recognition already active, skipping trigger safe.");
+        // ఒకవేళ ఆటో-లూప్ ఆన్ లో ఉంటే, బటన్ క్లిక్ చేయకుండానే మైక్రోఫోన్ ఆటోమేటిగ్గా ఆన్ అవుతుంది
+        if (autoMicLoop) {
+            setTimeout(() => {
+                startAssessmentListening();
+            }, 800); 
         }
     }
 
-    // టెక్స్ట్ పోల్చడానికి విరామ చిహ్నాలు తీసివేసే క్లీనింగ్ ఫంక్షన్
+    function startAssessmentListening() {
+        if (!recognition) return;
+        isAssessmentActive = true;
+        autoMicLoop = true; // ఒకసారి రన్ అయ్యాక ఆటోమేటిక్ గా ట్రూ అవుతుంది
+        try {
+            recognition.start();
+        } catch(e) {
+            console.log("Safe Mic Re-trigger catch.");
+        }
+    }
+
     function cleanText(text) {
         return text.toString().toLowerCase()
-            .replace(/[.,\/#!$%\^&\*;:{}=\-_`~()।?]/g, "") // పంక్చుయేషన్ మార్కులు క్లీన్ చేస్తుంది
-            .replace(/\s+/g, " ")                          // ఎక్స్ట్రా స్పేస్ లు తీసేస్తుంది
+            .replace(/[.,\/#!$%\^&\*;:{}=\-_`~()।?]/g, "") 
+            .replace(/\s+/g, " ")                          
             .trim();
     }
 
-    // స్టూడెంట్ చదివిన వాయిస్ ని క్వశ్చన్ తో మ్యాచ్ చేసి కలర్ కోడింగ్ ఇచ్చే మెయిన్ ఇంజిన్ లాజిక్
     function processReadingResult(transcript) {
         isAssessmentActive = false;
         const target = currentSentences[sentenceIndex];
@@ -833,10 +864,10 @@
         const targetWords = cleanText(target).split(" ");
         const spokenWords = cleanText(transcript).split(" ");
 
-        // ప్రాజెక్టర్ పై రిజల్ట్ ని విజువల్ గా కలర్ కోడింగ్ రూపంలో చూపించే ప్రాసెస్
         const originalWords = target.split(" ");
         let highlightedHtml = "";
         let matches = 0;
+        let missedWordsInSentence = [];
 
         originalWords.forEach(origWord => {
             const cleanedOrig = cleanText(origWord);
@@ -845,21 +876,28 @@
                 highlightedHtml += `<span class="w-correct">${origWord}</span> `;
             } else {
                 highlightedHtml += `<span class="w-incorrect">${origWord}</span> `;
+                missedWordsInSentence.push(origWord); // తప్పు చదివిన పదాన్ని యాడ్ చేస్తుంది
             }
         });
 
-        // స్కోరింగ్ పర్సంటేజ్ క్యాలిక్యులేషన్
+        // ఒకవేళ ఈ వాక్యంలో తప్పులు ఉంటే వాటిని ఎర్రర్స్ లిస్ట్ లోకి పంపుతుంది
+        if(missedWordsInSentence.length > 0) {
+            wrongWordsLog.push({
+                sentence: target,
+                missed: missedWordsInSentence
+            });
+        }
+
         const score = Math.round((matches / targetWords.length) * 100);
         accumulatedScores += score;
 
-        // స్క్రీన్ పై కలర్డ్ టెక్స్ట్ మరియు స్కోర్ చూపిస్తుంది
         const targetBox = document.getElementById("target-sentence");
         targetBox.innerHTML = highlightedHtml;
         
         const scoreView = document.getElementById("current-score-view");
         scoreView.innerText = `Score: ${score}%`;
         scoreView.style.display = "block";
-        document.getElementById("status-text").innerText = `Spoken: "${transcript}"`;
+        document.getElementById("status-text").innerText = transcript ? `Spoken: "${transcript}"` : "No speech captured.";
 
         try {
             recognition.stop();
@@ -876,9 +914,9 @@
         }, 3000);
     }
 
-    // అసెస్మెంట్ పూర్తయ్యాక రిపోర్ట్ కార్డ్ జనరేట్ చేసే ఫంక్షన్
     function finishAssessment() {
         isAssessmentActive = false;
+        autoMicLoop = false; // లూప్ ముగిసింది
         try { recognition.stop(); } catch(e){}
 
         const endTime = new Date();
@@ -889,25 +927,40 @@
 
         document.getElementById("assessment-panel").style.display = "none";
         
-        // సగటు ఫైనల్ మార్క్స్ లెక్కింపు
         const finalScore = Math.round(accumulatedScores / currentSentences.length);
         const name = document.getElementById("student-name").value.trim();
         const studentClass = document.getElementById("student-class").value;
         
-        // సర్టిఫికేట్ స్క్రీన్ పై డేటా ఫిల్లింగ్
         document.getElementById("cert-name").innerText = name;
         document.getElementById("cert-class").innerText = studentClass;
         document.getElementById("cert-lang").innerText = currentLanguage;
         document.getElementById("cert-final-score").innerText = `${finalScore}%`;
         document.getElementById("cert-q-count").innerText = currentSentences.length;
         document.getElementById("cert-time").innerText = totalTimeTaken;
+
+        // ఎర్రర్స్ పేజీ బిల్డర్ లాజిక్
+        const errorBox = document.getElementById("error-log-box");
+        const errorDetails = document.getElementById("error-list-details");
+        errorDetails.innerHTML = ""; 
+
+        if(wrongWordsLog.length > 0) {
+            wrongWordsLog.forEach((item, idx) => {
+                const row = document.createElement("div");
+                row.className = "error-item";
+                row.innerHTML = `👉 <b>Line:</b> "${item.sentence}" <br> <span style="color:#b91c1c; margin-left:20px; font-weight:600;">Mistakes: ${item.missed.join(", ")}</span>`;
+                errorDetails.appendChild(row);
+            });
+            errorBox.style.display = "block"; // తప్పులు ఉంటే పేజీ చూపిస్తుంది
+        } else {
+            errorDetails.innerHTML = "<div class='error-item' style='color:#15803d; font-weight:bold;'>🎉 Excellent! No mistakes made. Perfect Reading!</div>";
+            errorBox.style.display = "block";
+        }
+
         document.getElementById("certificate-panel").style.display = "block";
 
-        // తేదీ ఫార్మాటింగ్ (DD-MMM-YYYY)
         const today = new Date();
         const formattedDate = `${String(today.getDate()).padStart(2, '0')}-${today.toLocaleString('default', { month: 'short' })}-${today.getFullYear()}`;
         
-        // గూగుల్ షీట్ కి పంపాల్సిన రిపోర్ట్ పేలోడ్ డేటా నిర్మాణం
         const scorePayload = {
             date: formattedDate,
             studentName: name,
@@ -918,7 +971,6 @@
             timeTaken: totalTimeTaken
         };
 
-        // ఒకవేళ లైవ్ వెబ్ యాప్ కనెక్ట్ అయి ఉంటే బ్యాక్ గ్రౌండ్ లో గూగుల్ షీట్ కి డేటా సేవ్ అవుతుంది
         if (WEB_APP_URL !== "YOUR_DEPLOYED_WEB_APP_URL_HERE") {
             fetch(WEB_APP_URL, {
                 method: "POST",
@@ -929,25 +981,23 @@
         }
     }
 
-    // తదుపరి విద్యార్థి కోసం యాప్ మొత్తాన్ని రీసెట్ చేసే ఫంక్షన్
     function resetToSetup() {
-        // సర్టిఫికేట్ ప్యానల్ దాచిపెట్టి, మొదటి స్క్రీన్ చూపిస్తుంది
         document.getElementById("certificate-panel").style.display = "none";
+        document.getElementById("error-log-box").style.display = "none";
         document.getElementById("setup-screen").style.display = "block";
         
-        // విద్యార్థి పేరును క్లియర్ చేసి ఫోకస్ చేస్తుంది
         const nameInput = document.getElementById("student-name");
         nameInput.value = "";
         nameInput.focus();
         
-        // పాత క్వశ్చన్ సెలెక్షన్ బాక్స్ ని దాచేస్తుంది
         document.getElementById("selection-box-container").style.display = "none";
         
-        // స్టేట్ వేరియబుల్స్ అన్నింటినీ రీసెట్ చేస్తుంది
         currentSentences = [];
         sentenceIndex = 0;
         accumulatedScores = 0;
         isAssessmentActive = false;
+        autoMicLoop = false;
+        wrongWordsLog = [];
     }
 </script>
 
