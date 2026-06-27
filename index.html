@@ -5,987 +5,153 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Children's Garden E.M. High School - Reading Assessment</title>
     <style>
-        :root {
-            --primary: #1e40af;
-            --primary-hover: #1d4ed8;
-            --bg: #e0f2fe; /* Light baby blue pastel background */
-            --card: #ffffff;
-            --text: #0f172a;
-            --border: #cbd5e1;
-            --success: #15803d;
-            --font-main: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-        
-        body {
-            font-family: var(--font-main);
-            /* Bouncy, beautiful gradient background */
-            background: linear-gradient(135deg, #e0f2fe 0%, #f0fdf4 50%, #fef9c3 100%);
-            color: var(--text);
-            margin: 0;
-            padding: 20px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            box-sizing: border-box;
-            position: relative;
-            overflow-x: hidden;
-        }
-
-        /* */
-        /* Background Doodles & Watermarks Area */
-        .bg-doodles {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 1;
-            overflow: hidden;
-        }
-
-        .doodle {
-            position: absolute;
-            opacity: 0.12; /* Very soft watermarks so they don't distract */
-            transform: rotate(0deg);
-            transition: transform 0.5s ease;
-        }
-
-        /* Positioning various doodles around the whitespace */
-        .doodle-1 { top: 10%; left: 5%; width: 100px; height: 100px; }
-        .doodle-2 { top: 15%; right: 8%; width: 120px; height: 120px; }
-        .doodle-3 { bottom: 12%; left: 6%; width: 110px; height: 110px; }
-        .doodle-4 { bottom: 10%; right: 7%; width: 130px; height: 130px; }
-        .doodle-5 { top: 48%; left: 3%; width: 80px; height: 80px; }
-        .doodle-6 { top: 50%; right: 3%; width: 90px; height: 90px; }
-
-        /* Container Main Layout Adjustments */
-        .container {
-            width: 100%;
-            max-width: 960px; /* Enhanced size width */
-            background: rgba(255, 255, 255, 0.96); /* Slightly translucent to blend with background */
-            padding: 50px 40px; /* Spacious internal padding */
-            border-radius: 24px; /* Playful soft rounded corners */
-            box-shadow: 0 20px 40px -10px rgba(15, 23, 42, 0.15), 0 10px 15px -3px rgba(15, 23, 42, 0.05);
-            border: 4px solid #ffffff; /* Frame effect */
-            box-sizing: border-box;
-            position: relative;
-            z-index: 10; /* Placed above watermarks */
-            backdrop-filter: blur(8px);
-            margin: 20px auto;
-        }
-
-        /* */
-        /* Typography Scaled Up for Prominence and Legibility */
-        .school-title {
-            font-size: 2.2rem; /* Larger bold school headline */
-            font-weight: 800;
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-            margin-bottom: 12px;
-            text-align: center;
-            color: #1e3a8a;
-            text-shadow: 1px 1px 2px rgba(30, 58, 138, 0.1);
-        }
-        
-        .app-title {
-            font-size: 1.4rem; /* Scaled subtitle */
-            color: #475569;
-            font-weight: 600;
-            margin-bottom: 40px;
-            text-align: center;
-        }
-
-        .form-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 24px;
-            margin-bottom: 30px;
-        }
-
-        @media (max-width: 768px) {
-            .form-grid {
-                grid-template-columns: 1fr;
-            }
-            .school-title { font-size: 1.8rem; }
-            .app-title { font-size: 1.1rem; }
-            .container { padding: 30px 20px; }
-        }
-
-        .form-group {
-            margin-bottom: 5px;
-        }
-
-        .form-group.full-width {
-            grid-column: span 2;
-        }
-
-        @media (max-width: 768px) {
-            .form-group.full-width {
-                grid-column: span 1;
-            }
-        }
-
-        label {
-            display: block;
-            margin-bottom: 10px;
-            font-weight: 700;
-            font-size: 1.15rem; /* Larger and clearer label size */
-            color: #334155;
-        }
-
-        input, select {
-            width: 100%;
-            padding: 14px 18px; /* Bigger input touchpoint padding */
-            border: 2px solid var(--border);
-            border-radius: 12px;
-            box-sizing: border-box;
-            font-size: 1.15rem; /* Scaled up font */
-            background-color: #fcfcfc;
-            font-weight: 500;
-            color: #1e293b;
-            transition: all 0.2s ease;
-        }
-
-        input:focus, select:focus {
-            outline: none;
-            border-color: #3b82f6;
-            background-color: #ffffff;
-            box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.15);
-        }
-
-        /* Large Kid-Friendly Action Buttons */
-        button {
-            width: 100%;
-            padding: 16px 20px; /* Substantial clickable areas */
-            border: none;
-            border-radius: 12px;
-            font-size: 1.2rem; /* Easy-to-read scale */
-            font-weight: bold;
-            cursor: pointer;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-            transition: all 0.2s ease;
-            margin-top: 10px;
-        }
-
-        button:active {
-            transform: scale(0.98);
-        }
-
-        .btn-primary { 
-            background-color: #2563eb; 
-            color: white; 
-        }
-        .btn-primary:hover { 
-            background-color: #1d4ed8; 
-            box-shadow: 0 8px 12px rgba(37, 99, 235, 0.25);
-        }
-
-        .btn-success { 
-            background-color: var(--success); 
-            color: white; 
-            margin-top: 25px; 
-            font-size: 1.25rem;
-        }
-        .btn-success:hover {
-            background-color: #15803d;
-            box-shadow: 0 8px 12px rgba(21, 128, 61, 0.25);
-        }
-
-        .btn-mic { 
-            background-color: #ef4444; 
-            color: white; 
-            margin-top: 25px; 
-            font-size: 1.4rem; 
-            padding: 20px; 
-            border-radius: 16px;
-        }
-        .btn-mic:hover {
-            background-color: #dc2626;
-            box-shadow: 0 8px 16px rgba(239, 68, 68, 0.3);
-        }
-        .btn-mic.listening { 
-            background-color: #16a34a; 
-            animation: pulse 1.5s infinite; 
-        }
-        
-        /* */
-        /* Question Checklist Area */
-        .q-selection-box {
-            display: none;
-            background: #f8fafc;
-            border: 2px solid #e2e8f0;
-            border-radius: 16px;
-            padding: 30px;
-            margin-top: 30px;
-        }
-
-        .q-header-controls {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-            font-size: 1.1rem;
-        }
-
-        .btn-link {
-            background: none;
-            border: none;
-            color: #2563eb;
-            text-decoration: underline;
-            padding: 0;
-            width: auto;
-            margin: 0;
-            cursor: pointer;
-            font-size: 1.05rem;
-            font-weight: 600;
-            box-shadow: none;
-        }
-        .btn-link:hover {
-            color: #1d4ed8;
-        }
-
-        .q-scroll {
-            max-height: 380px; 
-            overflow-y: auto;
-            border: 2px solid #e2e8f0;
-            background: #ffffff;
-            border-radius: 12px;
-            padding: 15px;
-        }
-
-        .q-item {
-            display: flex;
-            align-items: center;
-            padding: 16px; /* Expanded checklist row heights */
-            border-bottom: 1px solid #f1f5f9;
-            font-size: 1.15rem; /* Large checklist text */
-            cursor: pointer;
-            user-select: none;
-            transition: background 0.15s ease;
-        }
-        .q-item:hover {
-            background-color: #f0fdf4;
-        }
-        .q-item:last-child { border-bottom: none; }
-        .q-item input {
-            width: auto;
-            margin-right: 18px;
-            transform: scale(1.5); /* Big, easy checkboxes */
-            cursor: pointer;
-        }
-        .q-item label {
-            margin: 0;
-            cursor: pointer;
-            flex-grow: 1;
-            font-weight: 500;
-            font-size: 1.15rem;
-        }
-
-        .badge {
-            display: inline-block;
-            padding: 6px 12px;
-            border-radius: 20px;
-            font-size: 0.85rem;
-            font-weight: bold;
-            margin-left: 12px;
-        }
-        .badge-live { background-color: #dcfce7; color: #166534; }
-        .badge-offline { background-color: #fee2e2; color: #991b1b; }
-        
-        .panel { display: none; margin-top: 30px; border-top: 3px solid var(--border); padding-top: 30px; }
-        
-        /* High-Visibility Target Box */
-        .sentence-box {
-            font-size: 2.6rem; /* Hugely legible sentence presentation for youngsters */
-            font-weight: 800;
-            padding: 50px 30px;
-            background: #f1f5f9;
-            border-radius: 20px;
-            text-align: center;
-            margin: 30px 0;
-            min-height: 100px;
-            line-height: 1.5;
-            color: #0f172a;
-            border: 3px dashed #cbd5e1;
-            box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
-        }
-
-        .status-msg { 
-            text-align: center; 
-            font-weight: bold; 
-            margin: 20px 0; 
-            height: 30px; 
-            color: #475569; 
-            font-size: 1.25rem; 
-        }
-
-        .score-display { 
-            text-align: center; 
-            font-size: 4rem; /* Prominent score viewing */
-            font-weight: 900; 
-            color: var(--success); 
-            display: none; 
-            margin: 25px 0; 
-        }
-        
-        /* Floating Notifications Area */
-        .notification-banner {
-            display: none;
-            background-color: #fee2e2;
-            border: 2px solid #fca5a5;
-            color: #991b1b;
-            padding: 16px;
-            border-radius: 12px;
-            margin-bottom: 30px;
-            font-weight: 600;
-            text-align: center;
-            font-size: 1.1rem;
-        }
-
-        /* Certificate Design */
-        .certificate-card {
-            display: none;
-            border: 10px double #b45309;
-            padding: 50px 40px;
-            background: #ffffff;
-            text-align: center;
-            border-radius: 20px;
-            box-shadow: inset 0 0 40px rgba(180, 83, 9, 0.08);
-            margin-top: 35px;
-        }
-        .cert-school { font-size: 2.2rem; font-weight: 800; color: #78350f; margin-bottom: 25px; }
-        .cert-score { font-size: 4.5rem; font-weight: 900; color: #b45309; margin: 25px 0; }
-        
-        @keyframes pulse {
-            0% { opacity: 1; }
-            50% { opacity: 0.6; }
-            100% { opacity: 1; }
-        }
+        :root { --primary: #1e40af; --bg: #e0f2fe; --success: #15803d; --font-main: 'Segoe UI', Tahoma, sans-serif; }
+        body { font-family: var(--font-main); background: linear-gradient(135deg, #e0f2fe 0%, #f0fdf4 50%, #fef9c3 100%); margin: 0; padding: 20px; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
+        .container { width: 100%; max-width: 960px; background: rgba(255, 255, 255, 0.96); padding: 40px; border-radius: 24px; box-shadow: 0 20px 40px rgba(0,0,0,0.15); }
+        .school-title { font-size: 2rem; font-weight: 800; text-align: center; color: #1e3a8a; margin-bottom: 20px; }
+        .form-group { margin-bottom: 15px; }
+        label { font-weight: bold; display: block; margin-bottom: 5px; }
+        select, input { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 8px; margin-bottom: 10px; }
+        .panel { display: none; margin-top: 20px; }
+        button { width: 100%; padding: 16px; border: none; border-radius: 12px; font-size: 1.2rem; font-weight: bold; cursor: pointer; transition: 0.2s; margin-top: 10px; }
+        .btn-primary { background-color: #2563eb; color: white; }
+        .btn-success { background-color: var(--success); color: white; }
+        .sentence-box { font-size: 2.2rem; font-weight: bold; padding: 40px; background: #f1f5f9; border-radius: 20px; text-align: center; margin: 20px 0; border: 3px dashed #cbd5e1; }
+        .feedback-item { border-bottom: 1px solid #ddd; padding: 10px 0; }
+        .error-list { color: #b91c1c; font-weight: bold; }
+        .success-list { color: #15803d; font-weight: bold; }
     </style>
 </head>
 <body>
 
-<!-- Watermark Elements to decorate side whitespace areas -->
-<div class="bg-doodles">
-    <!-- Cloud Doodle -->
-    <svg class="doodle doodle-1" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M17.5 19A3.5 3.5 0 0 0 21 15.5c0-2.79-2.54-4.5-5-4.5-.42 0-.83.05-1.24.15A7 7 0 0 0 3 11.5c0 3.62 3.1 6.5 7 6.5h7.5z"/>
-    </svg>
-    <!-- Book Doodle -->
-    <svg class="doodle doodle-2" viewBox="0 0 24 24" fill="none" stroke="#e11d48" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/>
-        <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
-    </svg>
-    <!-- Sun Doodle -->
-    <svg class="doodle doodle-3" viewBox="0 0 24 24" fill="none" stroke="#ca8a04" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
-        <circle cx="12" cy="12" r="4"/>
-        <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/>
-    </svg>
-    <!-- Graduation Cap Doodle -->
-    <svg class="doodle doodle-4" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M22 10v6M2 10l10-5 10 5-10 5z"/>
-        <path d="M6 12v5c0 2 2 3 6 3s6-1 6-3v-5"/>
-    </svg>
-    <!-- ABC / Pencil Doodle Placeholder (Simple Pencil SVG) -->
-    <svg class="doodle doodle-5" viewBox="0 0 24 24" fill="none" stroke="#7c3aed" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M12 20h9"/>
-        <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/>
-    </svg>
-    <!-- Trophy Doodle -->
-    <svg class="doodle doodle-6" viewBox="0 0 24 24" fill="none" stroke="#ea580c" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/>
-        <path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/>
-        <path d="M4 22h16"/>
-        <path d="M10 14.66V17c0 .55-.45 1-1 1H4v2h16v-2h-5c-.55 0-1-.45-1-1v-2.34"/>
-        <path d="M12 2a6 6 0 0 1 6 6v3.5a6 6 0 0 1-6 6 6 6 0 0 1-6-6V8a6 6 0 0 1 6-6z"/>
-    </svg>
-</div>
-
-<!-- -->
 <div class="container">
     <div class="school-title">Children's Garden E.M. High School</div>
-    <div class="app-title">Student Reading Assessment Engine</div>
-
-    <!-- Alert Notifications banner inside UI instead of native window alerts -->
-    <div id="notice-banner" class="notification-banner"></div>
-
-    <!-- Configuration Setup Screen -->
+    
     <div id="setup-screen">
-        <div class="form-grid">
-            <div class="form-group full-width">
-                <label for="student-name">Student Name</label>
-                <input type="text" id="student-name" placeholder="Enter student's full name">
-            </div>
-            <div class="form-group">
-                <label for="student-class">Select Class</label>
-                <select id="student-class">
-                    <option value="Nursery">Nursery</option>
-                    <option value="LKG">LKG</option>
-                    <option value="UKG">UKG</option>
-                    <option value="1st Class">1st Class</option>
-                    <option value="2nd Class">2nd Class</option>
-                    <option value="3rd Class">3rd Class</option>
-                    <option value="4th Class">4th Class</option>
-                    <option value="5th Class">5th Class</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label for="language">Select Subject / Language</label>
-                <select id="language">
-                    <option value="English">English</option>
-                    <option value="Telugu">Telugu</option>
-                    <option value="Hindi">Hindi</option>
-                    <option value="Numbers">Numbers</option>
-                </select>
-            </div>
+        <div class="form-group">
+            <label>Student Name</label>
+            <input type="text" id="student-name" placeholder="Enter student name">
         </div>
-        
-        <button id="fetch-btn" class="btn-primary" onclick="fetchSheetQuestions()">Load Sheet Questions</button>
-        
-        <!-- Checklist container with custom "select/clear all" triggers -->
-        <div id="selection-box-container" class="q-selection-box">
-            <div class="q-header-controls">
-                <span style="font-weight: bold; color: #1e3a8a; font-size: 1.2rem;">
-                    Select Questions to Ask: <span id="source-badge"></span>
-                </span>
-                <div>
-                    <button class="btn-link" onclick="selectAllQuestions(true)">Select All</button> | 
-                    <button class="btn-link" onclick="selectAllQuestions(false)">Clear All</button>
-                </div>
-            </div>
-            
-            <div class="q-scroll" id="questions-list"></div>
-            
-            <div style="margin-top: 20px; font-size: 1.15rem; font-weight: 700; color: #475569;">
-                Selected: <span id="selected-counter" style="color: #2563eb;">0</span>
-            </div>
-            
-            <button id="start-btn" class="btn-success" onclick="startSelectedAssessment()">Start Test with Selected</button>
+        <div class="form-group">
+            <label>Class</label>
+            <select id="student-class">
+                <option>Nursery</option>
+                <option>1st Class</option>
+                <option>2nd Class</option>
+            </select>
         </div>
+        <div class="form-group">
+            <label>Subject/Language</label>
+            <select id="language">
+                <option>English</option>
+                <option>Telugu</option>
+                <option>Hindi</option>
+            </select>
+        </div>
+        <button class="btn-primary" onclick="startTest()">Load & Start Test</button>
     </div>
 
-    <!-- Active Sentence Evaluation Screen -->
     <div id="assessment-panel" class="panel">
-        <h3 id="progress-text" style="text-align: center; color: #475569; font-size: 1.35rem;">Processing...</h3>
-        <div class="sentence-box" id="target-sentence">Please wait...</div>
-        <button id="mic-btn" class="btn-mic" onclick="startAssessmentListening()" disabled>🎤 Start Reading</button>
-        <div class="status-msg" id="status-text">Ready to start.</div>
-        <div class="score-display" id="current-score-view">100%</div>
+        <div class="sentence-box" id="target-sentence"></div>
+        <button id="mic-btn" class="btn-primary" onclick="startAssessmentListening()">🎤 Start Reading</button>
+        <p id="status-text" style="text-align: center; font-weight:bold; margin-top:10px;"></p>
     </div>
 
-    <!-- Dynamic Graduation Certificate View -->
-	<div id="feedback-panel" class="panel">
+    <div id="feedback-panel" class="panel">
+        <h2>Reading Report</h2>
+        <div id="feedback-content"></div>
+        <button class="btn-success" onclick="showCertificate()">Generate Certificate</button>
+    </div>
 
-	<h2>Reading Assessment Report</h2>
-
-	<div id="feedback-content"></div>
-
-	<br>
-
-	<button class="btn-success"
-	onclick="showCertificate()">
-
-	Generate Certificate
-
-	</button>
-
-	</div>
-    <div id="certificate-panel" class="certificate-card">
-        <div style="font-size: 3.5rem; margin-bottom: 15px;">🏆</div>
-        <h2 style="color: #78350f; font-family: Georgia, serif; margin-bottom: 10px; font-size: 2.4rem;">Certificate of Completion</h2>
-        <div class="cert-school">Children's Garden E.M. High School</div>
-        <div style="font-size: 1.4rem; line-height: 1.8; margin: 30px 0; color: #451a03;">
-            This certifies that student <strong><span id="cert-name"></span></strong><br>
-            from <strong><span id="cert-class"></span></strong> has evaluated their performance in 
-            <strong><span id="cert-lang"></span></strong>.
-        </div>
-        <div style="font-size: 1.1rem; text-transform: uppercase; color: #9a3412; font-weight: bold; letter-spacing: 1.5px;">Assessment Metrics</div>
-        <div class="cert-score" id="cert-final-score">0%</div>
-        <div style="color: #78350f; margin-bottom: 25px; font-weight: 700; font-size: 1.2rem;">
-            Total Questions: <span id="cert-q-count">0</span> | Time Taken: <span id="cert-time">0s</span>
-        </div>
-        <div style="font-size: 1.8rem; font-weight: bold; color: #78350f; margin-top: 20px;">Congratulations! 🎉</div>
-
-        <!-- తదుపరి విద్యార్థి కోసం రీసెట్ బటన్ -->
-        <button id="next-student-btn" class="btn-primary" style="margin-top: 35px; background-color: #9a3412; font-size: 1.3rem; padding: 16px 30px; border-radius: 12px;" onclick="resetToSetup()">
-            👤 Test Next Student / తదుపరి విద్యార్థి
-        </button>
+    <div id="certificate-panel" class="panel" style="text-align: center;">
+        <h1>🏆 Assessment Complete!</h1>
+        <h2 id="cert-name"></h2>
+        <button class="btn-primary" onclick="location.reload()">Test Next Student</button>
     </div>
 </div>
 
 <script>
-    // ⚠️ PASTE YOUR GOOGLE SHEET WEB APP WEB URL HERE when deployed:
-    // ఇక్కడ మీ గూగుల్ యాప్స్ స్క్రిప్ట్ డిప్లాయ్మెంట్ వెబ్ యాప్ URL ని పేస్ట్ చేయండి:
-    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbx7S7hUa9_dCKjqW_gr6XQ9WAX7V9S6UC7H86yja_hWKZ1oJ-DjMwAxa_x1VlEXM58/exec";
-
-    // Dynamic age-appropriate local fallback database to ensure user is never blocked
-    const OFFLINE_DATABASE = {
-        Nursery_Eng: ["A Apple", "B Ball", "C Cat", "D Dog", "E Elephant"],
-        Nursery_Tel: ["అమ్మ", "ఆవు", "ఇల్లు", "ఈల", "ఉడత"],
-        Nursery_Numbers: ["One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten"],
-        LKG_Eng: ["Red Apple", "Blue Balloon", "Green Tree", "Cat sits on mat"],
-        LKG_Tel: ["కమలం", "ఖడ్గం", "గంట", "ఘటము"],
-        LKG_Numbers: ["10 Ten", "20 Twenty", "30 Thirty", "40 Forty", "50 Fifty"],
-        LKG_Hindi: ["अ अनार", "आम", "इमली", "ईख"],
-        UKG_Eng: ["The sun is hot.", "I see a blue bird.", "The dog is big.", "This is my pencil."],
-        UKG_Tel: ["బలపము", "రథము", "లత", "వనము"],
-        UKG_Hindi: ["उल्लू", "ऊनी", "ऋषि", "एक"],
-        "1st Class_Eng": ["The sun is very bright.", "The boy runs fast.", "I read my text books daily.", "I drink sweet milk."],
-        "1st Class_Tel": ["అమ్మ మనకు దైవము.", "చెట్లు మనకు నీడను ఇస్తాయి.", "పిల్లలు చక్కగా చదవాలి."],
-        "1st Class_Hin": ["सूरज पूर्व से निकलता है।", "हमें सदा सच बोलना चाहिए।", "यह मेरी पाठशाला है।"],
-        "1st Class_Numbers": ["100 One Hundred", "200 Two Hundred", "300 Three Hundred", "400 Four Hundred"],
-        "2nd Class_Eng": ["Keep your surroundings clean and green.", "Honesty is the best moral policy.", "Birds fly high in the cloudless sky."],
-        "2nd Class_Tel": ["పెద్దలను గౌరవించడం మన కర్తవ్యం.", "పుస్తకాలు మంచి జ్ఞానాన్ని ఇస్తాయి.", "గాంధీజీ దేశానికి తండ్రి."],
-        "2nd Class_Hin": ["सफलता की कुंजी कठिन परिश्रम है।", "पेड़-पौधे हमारे सच्चे मित्र हैं।", "भारत एक महान और पवित्र देश है।"],
-        "2nd Class_Numbers": ["1000 One Thousand", "2000 Two Thousand", "3000 Three Thousand"],
-        "3rd Class_Eng": ["Healthy food keeps our body fit and active.", "Always wash your hands before eating.", "Reading improves our reading comprehension."],
-        "3rd Class_Tel": ["దేశ భాషలందు తెలుగు లెస్స.", "స్వచ్ఛమైన గాలి మన ఆరోగ్యానికి ఎంతో ముఖ్యం.", "మొక్కలు నాటడం ద్వారా పర్యావరణాన్ని రక్షించవచ్చు."],
-        "3rd Class_Hin": ["समय बहुत मूल्यवान है, इसका सदुपयोग करें।", "नियमित व्यायाम से हमारा शरीर स्वस्थ रहता है।", "विद्यार्थियों को अनुशासन का पालन करना चाहिए।"],
-        "3rd Class_Numbers": ["5000 Five Thousand", "10000 Ten Thousand"],
-        "4th Class_Eng": ["Global warming is a serious problem for our earth.", "We must practice daily to achieve high accuracy.", "The school library has a collection of historical books."],
-        "4th Class_Tel": ["వృక్షో రక్షతి రక్షితః అనగా చెట్లను రక్షించాల్సింది మనమే.", "చదువుతో పాటు మంచి సంస్కారం కూడా అలవర్చుకోవాలి.", "వ్యవసాయం మన దేశానికి వెన్నెముక వంటిది."],
-        "4th Class_Hin": ["पुस्तकालय ज्ञान का असीम महासागर होता है।", "हमे प्लास्टिक के उपयोग से बचना चाहिए।", "सत्य and अहिंसा ही मानव जीवन के सच्चे मार्ग हैं।"],
-        "4th Class_Numbers": ["25000 Twenty Five Thousand", "50000 Fifty Thousand"],
-        "5th Class_Eng": ["Education empowers individuals to build a prosperous nation.", "Digital learning helps students understand concepts easily.", "Environmental protection is the responsibility of every citizen."],
-        "5th Class_Tel": ["మాతృభాషను గౌరవించడం మన ప్రథమ బాధ్యత.", "సాంకేతిక పరిజ్ఞానం ద్వారా సమాచారాన్ని సులభంగా తెలుసుకోవచ్చు.", "పరిశుభ్రత దైవత్వంతో సమానమని పెద్దలు చెప్తారు."],
-        "5th Class_Hin": ["सच्चा मित्र वही है जो विपत्ति के समय काम आता है।", "विज्ञान वरदान भी है और विनाशकारी अभिशाप भी।", "योग और प्राणायाम मानसिक शांति का सबसे सुलभ साधन है।"],
-        "5th Class_Numbers": ["100000 One Lakh", "1000000 Ten Lakhs"]
-    };
-
-    let currentLanguage = "English";
-    let currentSentences = [];
+    let currentSentences = ["the cat sits", "i like school", "apple is red"];
     let sentenceIndex = 0;
-    let accumulatedScores = 0;
-	// Reading Report
-	let readingReport = [];
-	let wrongWords = [];
-	let correctWords = [];
-    
-    let recognition = null;
-    let isAssessmentActive = false;
-    
-    let startTime = null;
-    let totalTimeTaken = "";
+    let readingReport = [];
+    let isListening = false;
+    let recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
 
-    /* */
-    if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
-        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-        recognition = new SpeechRecognition();
-        recognition.continuous = true; 
-        recognition.interimResults = false;
+    recognition.continuous = false;
+    recognition.interimResults = false;
 
-        recognition.onstart = () => {
-            const btn = document.getElementById("mic-btn");
-            btn.innerText = "🎙️ Mic is Live... Speak Now";
-            btn.classList.add("listening");
-            btn.disabled = true; 
-            document.getElementById("status-text").innerText = "Voice engine active. Read clearly...";
-        };
-
-        recognition.onresult = (event) => {
-            const lastResultIndex = event.results.length - 1;
-            const transcript = event.results[lastResultIndex][0].transcript;
-            processReadingResult(transcript);
-        };
-
-        recognition.onerror = (err) => { console.error(err.error); };
-
-        recognition.onend = () => {
-            if (isAssessmentActive) recognition.start();
-            else resetMicButtonUi();
-        };
-    }
-
-    function showToast(message, type = "error") {
-        const banner = document.getElementById("notice-banner");
-        banner.innerText = message;
-        banner.style.display = "block";
-        if(type === "success") {
-            banner.style.backgroundColor = "#dcfce7";
-            banner.style.borderColor = "#bbf7d0";
-            banner.style.color = "#15803d";
-        } else {
-            banner.style.backgroundColor = "#fee2e2";
-            banner.style.borderColor = "#fca5a5";
-            banner.style.color = "#991b1b";
-        }
-        setTimeout(() => {
-            banner.style.display = "none";
-        }, 5000);
-    }
-
-    function resetMicButtonUi() {
-        const btn = document.getElementById("mic-btn");
-        btn.disabled = false;
-        btn.innerText = "🎤 Start Reading";
-        btn.classList.remove("listening");
-    }
-
-    /* */
-    function fetchSheetQuestions() {
-        const studentClass = document.getElementById("student-class").value;
-        currentLanguage = document.getElementById("language").value;
-        const fetchBtn = document.getElementById("fetch-btn");
-        
-        fetchBtn.innerText = "Loading Database...";
-        fetchBtn.disabled = true;
-        
-        document.getElementById("selection-box-container").style.display = "none";
-
-        const fetchUrl = `${WEB_APP_URL}?class=${encodeURIComponent(studentClass)}&language=${encodeURIComponent(currentLanguage)}`;
-        
-        if (WEB_APP_URL === "YOUR_DEPLOYED_WEB_APP_URL_HERE") {
-            loadLocalDatabaseFallback(studentClass, currentLanguage, "Web App URL is not pasted. Loaded Local Database.");
-            fetchBtn.innerText = "Load Sheet Questions";
-            fetchBtn.disabled = false;
-            return;
-        }
-
-        fetch(fetchUrl)
-        .then(response => response.json())
-        .then(res => {
-            fetchBtn.innerText = "Load Sheet Questions";
-            fetchBtn.disabled = false;
-
-            if(res.status === "success") {
-                const pool = res.data;
-                if(pool.length === 0) {
-                    loadLocalDatabaseFallback(studentClass, currentLanguage, "Sheet contains no rows. Loaded Local Database.");
-                } else {
-                    renderQuestionSelection(pool, true);
-                }
-            } else {
-                loadLocalDatabaseFallback(studentClass, currentLanguage, "Sheet Tab not found: " + res.message);
-            }
-        })
-        .catch(err => {
-            fetchBtn.innerText = "Load Sheet Questions";
-            fetchBtn.disabled = false;
-            loadLocalDatabaseFallback(studentClass, currentLanguage, "Cannot connect to URL. Loaded Local Database.");
-        });
-    }
-
-    function loadLocalDatabaseFallback(studentClass, language, noticeMsg) {
-        showToast(noticeMsg, "success");
-        
-        var langKey = "Eng";
-        if (language === "Telugu") langKey = "Tel";
-        if (language === "Hindi") langKey = "Hin";
-        if (language === "Numbers") langKey = "Numbers";
-        
-        var lookupKey = `${studentClass}_${langKey}`;
-        var pool = OFFLINE_DATABASE[lookupKey] || OFFLINE_DATABASE["Nursery_Eng"];
-        
-        renderQuestionSelection(pool, false);
-    }
-
-    /* */
-    function renderQuestionSelection(pool, isLiveCloud) {
-        const listContainer = document.getElementById("questions-list");
-        listContainer.innerHTML = "";
-
-        pool.forEach((sentence, index) => {
-            const itemDiv = document.createElement("div");
-            itemDiv.className = "q-item";
-            itemDiv.innerHTML = `
-                <input type="checkbox" id="q-${index}" value="${sentence.replace(/"/g, '&quot;')}" onchange="updateSelectedCounter()">
-                <label for="q-${index}">${sentence}</label>
-            `;
-            
-            itemDiv.addEventListener("click", function(e) {
-                if(e.target.tagName !== 'INPUT') {
-                    const cb = itemDiv.querySelector("input[type='checkbox']");
-                    cb.checked = !cb.checked;
-                    updateSelectedCounter();
-                }
-            });
-
-            listContainer.appendChild(itemDiv);
-        });
-
-        const badge = document.getElementById("source-badge");
-        if(isLiveCloud) {
-            badge.innerText = "Live Cloud Mode";
-            badge.className = "badge badge-live";
-        } else {
-            badge.innerText = "Offline Mode";
-            badge.className = "badge badge-offline";
-        }
-
-        document.getElementById("selection-box-container").style.display = "block";
-        updateSelectedCounter();
-    }
-
-    function selectAllQuestions(checkedValue) {
-        const checkboxes = document.querySelectorAll("#questions-list input[type='checkbox']");
-        checkboxes.forEach(cb => {
-            cb.checked = checkedValue;
-        });
-        updateSelectedCounter();
-    }
-
-    function updateSelectedCounter() {
-        const count = document.querySelectorAll("#questions-list input[type='checkbox']:checked").length;
-        document.getElementById("selected-counter").innerText = count;
-    }
-
-    /* */
-    function startSelectedAssessment() {
-        const name = document.getElementById("student-name").value.trim();
-        if (!name) {
-            showToast("Please type a student name first.", "error");
-            return;
-        }
-
-        const checkboxes = document.querySelectorAll("#questions-list input[type='checkbox']:checked");
-        currentSentences = [];
-        checkboxes.forEach(cb => {
-            currentSentences.push(cb.value);
-        });
-
-        if (currentSentences.length === 0) {
-            showToast("Please select at least one question to ask!", "error");
-            return;
-        }
-
+    function startTest() {
         document.getElementById("setup-screen").style.display = "none";
         document.getElementById("assessment-panel").style.display = "block";
-        
-        sentenceIndex = 0;
-        accumulatedScores = 0;
-
-        if(currentLanguage === "Telugu") recognition.lang = "te-IN";
-        else if(currentLanguage === "Hindi") recognition.lang = "hi-IN";
-        else recognition.lang = "en-US";
-
-        startTime = new Date();
-        document.getElementById("mic-btn").disabled = false;
         displaySentence();
     }
 
     function displaySentence() {
-        document.getElementById("current-score-view").style.display = "none";
-        document.getElementById("target-sentence").style.display = "block";
-        document.getElementById("progress-text").innerText = `Question ${sentenceIndex + 1} of ${currentSentences.length}`;
         document.getElementById("target-sentence").innerText = currentSentences[sentenceIndex];
-        
-        if (isAssessmentActive) {
-            document.getElementById("status-text").innerText = "Read the next item now...";
-        } else {
-            document.getElementById("status-text").innerText = "Click 'Start Reading' once to begin the full test.";
-            resetMicButtonUi();
-        }
+        document.getElementById("status-text").innerText = "Ready to read.";
     }
 
     function startAssessmentListening() {
-        if (!recognition) return;
-        isAssessmentActive = true;
-        recognition.start();
-    }
-
-    function cleanText(text) {
-        return text.toString().toLowerCase()
-            .replace(/[.,\/#!$%\^&\*;:{}=\-_`~()।?]/g, "") 
-            .replace(/\s+/g, " ")                           
-            .trim();
-    }
-
-    function processReadingResult(transcript) {
-        if (!isAssessmentActive) return;
-
-        const target = currentSentences[sentenceIndex];
-        const targetWords = cleanText(target).split(" ");
-        const spokenWords = cleanText(transcript).split(" ");
-		let wrong = [];
-		let correct = [];
-
-		targetWords.forEach(word => {
-
-		if(spokenWords.includes(word)){
-
-        correct.push(word);
-
-		}else{
-
-        wrong.push(word);
-
-    }
-
-});
-
-        let matches = 0;
-        targetWords.forEach(word => {
-            if (spokenWords.includes(word)) matches++;
-        });
-
-        const score = Math.round((matches / targetWords.length) * 100);
-        accumulatedScores += score;
-		readingReport.push({
-
-		sentence: target,
-
-		spoken: transcript,
-
-		score: score,
-
-		wrongWords: wrong,
-
-		correctWords: correct
-
-});
-
-        document.getElementById("target-sentence").style.display = "none";
-        const scoreView = document.getElementById("current-score-view");
-        scoreView.innerText = `Score: ${score}%`;
-        scoreView.style.display = "block";
-        document.getElementById("status-text").innerText = "Saving progress...";
-
-        setTimeout(() => {
-            sentenceIndex++;
-            if (sentenceIndex < currentSentences.length) {
-                displaySentence();
-            } else {
-                finishAssessment();
-				function showCertificate(){
-
-		document.getElementById("feedback-panel").style.display="none";
-
-		document.getElementById("certificate-panel").style.display="block";
-
-}
+        if (!isListening) {
+            try {
+                recognition.start();
+                isListening = true;
+                document.getElementById("status-text").innerText = "Listening...";
+            } catch (e) {
+                console.error(e);
             }
-        }, 2000);
-    }
-
-    /* */
-    function finishAssessment() {
-        isAssessmentActive = false;
-        if (recognition) recognition.stop();
-
-        const endTime = new Date();
-        const totalSeconds = Math.round((endTime - startTime) / 1000);
-        const minutes = Math.floor(totalSeconds / 60);
-        const seconds = totalSeconds % 60;
-        totalTimeTaken = minutes > 0 ? `${minutes}m ${seconds}s` : `${seconds}s`;
-
-        document.getElementById("assessment-panel").style.display = "none";
-		document.getElementById("feedback-panel").style.display="block";
-
-		let html="";
-
-		readingReport.forEach((item,index)=>{
-
-		html+=`
-		<hr>
-
-		<h3>Sentence ${index+1}</h3>
-
-		<b>Original :</b>
-
-		${item.sentence}
-
-		<br><br>
-
-		<b>Student Said :</b>
-
-		${item.spoken}
-
-		<br><br>
-
-		<b>Marks :</b>
-
-		${item.score}%
-
-		<br><br>
-
-		<b style="color:green">
-
-		Correct Words
-
-		</b>
-
-		<br>
-
-		${item.correctWords.join(", ")}
-
-		<br><br>
-
-		<b style="color:red">
-
-		Wrong Words
-
-		</b>
-
-		<br>
-
-		${item.wrongWords.join(", ")}
-
-		<br><br>
-
-`;
-
-});
-
-document.getElementById("feedback-content").innerHTML=html;
-
-return;
-        
-        const finalScore = Math.round(accumulatedScores / currentSentences.length);
-        const name = document.getElementById("student-name").value.trim();
-        const studentClass = document.getElementById("student-class").value;
-        
-        document.getElementById("cert-name").innerText = name;
-        document.getElementById("cert-class").innerText = studentClass;
-        document.getElementById("cert-lang").innerText = currentLanguage;
-        document.getElementById("cert-final-score").innerText = `${finalScore}%`;
-        document.getElementById("cert-q-count").innerText = currentSentences.length;
-        document.getElementById("cert-time").innerText = totalTimeTaken;
-        document.getElementById("certificate-panel").style.display = "block";
-
-        const today = new Date();
-        const formattedDate = `${String(today.getDate()).padStart(2, '0')}-${today.toLocaleString('default', { month: 'short' })}-${today.getFullYear()}`;
-
-        const scorePayload = {
-            date: formattedDate,
-            studentName: name,
-            studentClass: studentClass,
-            language: currentLanguage,
-            questions: currentSentences.length,
-            score: `${finalScore}%`,
-            timeTaken: totalTimeTaken
-        };
-
-        if (WEB_APP_URL !== "YOUR_DEPLOYED_WEB_APP_URL_HERE") {
-            fetch(WEB_APP_URL, {
-                method: "POST",
-                mode: "no-cors", 
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(scorePayload)
-            }).catch(err => console.error("Write error:", err));
         }
     }
 
-    // తదుపరి విద్యార్థి కోసం యాప్ మొత్తాన్ని రీసెట్ చేసే ఫంక్షన్
-    function resetToSetup() {
-        // సర్టిఫికేట్ ప్యానల్ దాచిపెట్టి, మొదటి స్క్రీన్ చూపిస్తుంది
-        document.getElementById("certificate-panel").style.display = "none";
-        document.getElementById("setup-screen").style.display = "block";
+    recognition.onresult = (event) => {
+        isListening = false;
+        const transcript = event.results[0][0].transcript.toLowerCase();
+        processReadingResult(transcript);
+    };
+
+    recognition.onend = () => {
+        isListening = false;
+    };
+
+    function processReadingResult(transcript) {
+        const target = currentSentences[sentenceIndex].toLowerCase();
+        const targetWords = target.split(" ");
+        const spokenWords = transcript.toLowerCase().split(" ");
         
-        // విద్యార్థి పేరును క్లియర్ చేసి ఫోకస్ చేస్తుంది
-        const nameInput = document.getElementById("student-name");
-        nameInput.value = "";
-        nameInput.focus();
-        
-        // పాత క్వశ్చన్ సెలెక్షన్ బాక్స్ ని దాచేస్తుంది
-        document.getElementById("selection-box-container").style.display = "none";
-        
-        // స్టేట్ వేరియబుల్స్ అన్నింటినీ రీసెట్ చేస్తుంది
-        currentSentences = [];
-        sentenceIndex = 0;
-        accumulatedScores = 0;
-        isAssessmentActive = false;
+        let wrong = targetWords.filter(w => !spokenWords.includes(w));
+        let correct = targetWords.filter(w => spokenWords.includes(w));
+        let score = Math.round((correct.length / targetWords.length) * 100);
+
+        readingReport.push({ sentence: target, spoken: transcript, score, wrong, correct });
+
+        sentenceIndex++;
+        if (sentenceIndex < currentSentences.length) {
+            displaySentence();
+        } else {
+            finishAssessment();
+        }
+    }
+
+    function finishAssessment() {
+        document.getElementById("assessment-panel").style.display = "none";
+        document.getElementById("feedback-panel").style.display = "block";
+
+        let html = readingReport.map((item, index) => `
+            <div class="feedback-item">
+                <h3>Sentence ${index + 1}: "${item.sentence}"</h3>
+                <p><b>Student Said:</b> ${item.spoken}</p>
+                <p><b>Score:</b> ${item.score}%</p>
+                <p class="success-list">Correct: ${item.correct.join(", ")}</p>
+                <p class="error-list">Need Practice: ${item.wrong.join(", ")}</p>
+            </div>
+        `).join("");
+        document.getElementById("feedback-content").innerHTML = html;
+    }
+
+    function showCertificate() {
+        document.getElementById("feedback-panel").style.display = "none";
+        document.getElementById("certificate-panel").style.display = "block";
+        document.getElementById("cert-name").innerText = "Student: " + document.getElementById("student-name").value;
     }
 </script>
 
