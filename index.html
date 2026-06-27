@@ -469,7 +469,7 @@
     <!-- Toast Notification Banner System Container -->
     <div id="notice-banner" class="notification-banner"></div>
 
-    <!-- మొదటి స్క్రీన్: క్వశ్చన్ సెటప్ మరియు సెలెక్షన్ రౌండ్ -->
+    <!-- మొదటి PPT స్క్రీన్: క్వశ్చన్ సెటప్ మరియు సెలెక్షన్ రౌండ్ -->
     <div id="setup-screen">
         <div class="form-grid">
             <div class="form-group full-width">
@@ -552,7 +552,7 @@
         </div>
 
         <!-- ఎర్రర్స్ పేజీ / తప్పుగా చదివిన పదాల రివ్యూ సెక్షన్ -->
-        <div id="error-log-box" class="error-log-container" style="display: none;">
+        <div id="error-log-box" class="error-log-container">
             <div class="error-log-title">❌ Mistaken Words / తప్పుగా చదివిన పదాలు:</div>
             <div id="error-list-details"></div>
         </div>
@@ -566,7 +566,6 @@
 </div>
 
 <script>
-    // గూగుల్ షీట్స్ కనెక్ట్ చేయడానికి మీ వెబ్ యాప్ URL ఇక్కడ పేస్ట్ చేయాలి
     const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbx7S7hUa9_dCKjqW_gr6XQ9WAX7V9S6UC7H86yja_hWKZ1oJ-DjMwAxa_x1VlEXM58/exec";
 
     // ఆఫ్లైన్ బ్యాకప్ డేటాబేస్
@@ -586,7 +585,7 @@
         "1st Class_Hin": ["सूरज पूर्व से निकलता है।", "हमें सदा सच बोलना चाहिए।", "यह मेरी पाठशाला है।"],
         "1st Class_Numbers": ["100 One Hundred", "200 Two Hundred", "300 Three Hundred", "400 Four Hundred"],
         "2nd Class_Eng": ["Keep your surroundings clean and green.", "Honesty is the best moral policy.", "Birds fly high in the cloudless sky."],
-        "2nd Class_Tel": ["పెద్దలను గౌరవించడం మన Karnavyam.", "పుస్తకాలు మంచి జ్ఞానాన్ని ఇస్తాయి.", "గాంధీజీ దేశానికి తండ్రి."],
+        "2nd Class_Tel": ["పెద్దలను గౌరవించడం మన కర్తవ్యం.", "పుస్తకాలు మంచి జ్ఞానాన్ని ఇస్తాయి.", "గాంధీజీ దేశానికి తండ్రి."],
         "2nd Class_Hin": ["सफलता की कुंजी कठिन परिश्रम है।", "पेड़-पौधे हमारे सच्चे मित्र हैं।", "भारत एक महान और पवित्र देश है।"],
         "2nd Class_Numbers": ["1000 One Thousand", "2000 Two Thousand", "3000 Three Thousand"],
         "3rd Class_Eng": ["Healthy food keeps our body fit and active.", "Always wash your hands before eating.", "Reading improves our reading comprehension."],
@@ -599,7 +598,7 @@
         "4th Class_Numbers": ["25000 Twenty Five Thousand", "50000 Fifty Thousand"],
         "5th Class_Eng": ["Education empowers individuals to build a prosperous nation.", "Digital learning helps students understand concepts easily.", "Environmental protection is the responsibility of every citizen."],
         "5th Class_Tel": ["మాతృభాషను గౌరవించడం మన ప్రథమ బాధ్యత.", "సాంకేతిక పరిజ్ఞానం ద్వారా సమాచారాన్ని సులభంగా తెలుసుకోవచ్చు.", "పరిశుభ్రత దైవత్వంతో సమానమని పెద్దలు చెప్తారు."],
-        "5th Class_Hin": ["सच्चा मित्र वही है जो विपत्ति के समय काम आता है।", "विज्ञान वरदान भी है और विनाशकारी अभिलाप भी।", "योग और प्राणायाम मानसिक शांति का सबसे सुलभ साधन है।"],
+        "5th Class_Hin": ["सच्चा मित्र वही है जो विपत्ति के समय काम आता है।", "विज्ञान वरदान भी है और विनाशকারী अभिलाप भी।", "योग और प्राणायाम मानसिक शांति का सबसे सुलभ साधन है।"],
         "5th Class_Numbers": ["100000 One Lakh", "1000000 Ten Lakhs"]
     };
 
@@ -611,7 +610,7 @@
     // వాయిస్ రికగ్నిషన్ వేరియబుల్స్
     let recognition = null;
     let isAssessmentActive = false;
-    let autoMicLoop = false; // తదుపరి క్వశ్చన్ కి ఆటోమేటిక్ మైక్ ట్రిగ్గర్ కోసం
+    let autoMicLoop = false; 
     
     let startTime = null;
     let totalTimeTaken = "";
@@ -642,9 +641,8 @@
             console.error("Speech Error captured:", err.error);
             if (err.error === 'no-speech') {
                 document.getElementById("status-text").innerText = "No speech detected.";
-                // ఒకవేళ ఆటో-లూప్ ఆన్ లో ఉంటే, నో-స్పీచ్ వచ్చినా 2 సెకన్లలో నెక్స్ట్ క్వశ్చన్ కి వెళ్తుంది
                 if(autoMicLoop) {
-                    processReadingResult(""); 
+                    processReadingResult(""); // ఆటోమెటిక్ గా రన్ అవ్వడానికి బ్లాంక్ వాల్యూ పంపుతుంది
                 }
             } else if (err.error === 'not-allowed') {
                 showToast("Microphone access blocked! Enable site permission settings.", "error");
@@ -810,8 +808,8 @@
         
         sentenceIndex = 0;
         accumulatedScores = 0;
-        wrongWordsLog = []; // క్లియర్ లాగ్ ట్యాగ్
-        autoMicLoop = false; // ఫస్ట్ క్వశ్చన్ మాన్యువల్ గా స్టార్ట్ అవ్వాలి
+        wrongWordsLog = []; 
+        autoMicLoop = false; // ఫస్ట్ క్వశ్చన్ మాన్యువల్ గా క్లిక్ చేయాలి
 
         if(currentLanguage === "Telugu") recognition.lang = "te-IN";
         else if(currentLanguage === "Hindi") recognition.lang = "hi-IN";
@@ -831,7 +829,7 @@
         document.getElementById("status-text").innerText = "Click 'Start Reading' and read the sentence out loud.";
         resetMicButtonUi();
 
-        // ఒకవేళ ఆటో-లూప్ ఆన్ లో ఉంటే, బటన్ క్లిక్ చేయకుండానే మైక్రోఫోన్ ఆటోమేటిగ్గా ఆన్ అవుతుంది
+        // ఆటో-లూప్ ఆన్ అయినప్పుడు బటన్ నొక్కే అవసరం లేకుండా ఇక్కడ నుండి డైరెక్ట్ గా మైక్ ఆన్ అవుతుంది
         if (autoMicLoop) {
             setTimeout(() => {
                 startAssessmentListening();
@@ -842,11 +840,11 @@
     function startAssessmentListening() {
         if (!recognition) return;
         isAssessmentActive = true;
-        autoMicLoop = true; // ఒకసారి రన్ అయ్యాక ఆటోమేటిక్ గా ట్రూ అవుతుంది
+        autoMicLoop = true; // ఒకసారి ఫస్ట్ బటన్ క్లిక్ చేసిన తర్వాత లూప్ ఆక్టివేట్ అవుతుంది
         try {
             recognition.start();
         } catch(e) {
-            console.log("Safe Mic Re-trigger catch.");
+            console.log("Recognition active safe fallback execution.");
         }
     }
 
@@ -876,11 +874,11 @@
                 highlightedHtml += `<span class="w-correct">${origWord}</span> `;
             } else {
                 highlightedHtml += `<span class="w-incorrect">${origWord}</span> `;
-                missedWordsInSentence.push(origWord); // తప్పు చదివిన పదాన్ని యాడ్ చేస్తుంది
+                missedWordsInSentence.push(origWord); 
             }
         });
 
-        // ఒకవేళ ఈ వాక్యంలో తప్పులు ఉంటే వాటిని ఎర్రర్స్ లిస్ట్ లోకి పంపుతుంది
+        // తప్పు చదివిన పదాలను గ్లోబల్ లిస్ట్ లోకి పుష్ చేస్తుంది
         if(missedWordsInSentence.length > 0) {
             wrongWordsLog.push({
                 sentence: target,
@@ -903,7 +901,7 @@
             recognition.stop();
         } catch(e){}
 
-        // 3 సెకన్లు రిజల్ట్ చూపించి ఆటోమేటిగ్గా తదుపరి క్వశ్చన్ కి వెళ్తుంది
+        // 3 సెకన్ల విరామం తర్వాత నెక్స్ట్ క్వశ్చన్ లేదా ఎండ్ పేజీ కి వెళ్తుంది
         setTimeout(() => {
             sentenceIndex++;
             if (sentenceIndex < currentSentences.length) {
@@ -916,7 +914,7 @@
 
     function finishAssessment() {
         isAssessmentActive = false;
-        autoMicLoop = false; // లూప్ ముగిసింది
+        autoMicLoop = false; 
         try { recognition.stop(); } catch(e){}
 
         const endTime = new Date();
@@ -938,24 +936,22 @@
         document.getElementById("cert-q-count").innerText = currentSentences.length;
         document.getElementById("cert-time").innerText = totalTimeTaken;
 
-        // ఎర్రర్స్ పేజీ బిల్డర్ లాజిక్
-        const errorBox = document.getElementById("error-log-box");
+        // ఎర్రర్స్ సమ్మరీ బిల్డర్ (కండిషన్ లేకుండా డైరెక్ట్ డిస్ప్లే లాజిక్)
         const errorDetails = document.getElementById("error-list-details");
         errorDetails.innerHTML = ""; 
 
         if(wrongWordsLog.length > 0) {
-            wrongWordsLog.forEach((item, idx) => {
+            wrongWordsLog.forEach((item) => {
                 const row = document.createElement("div");
                 row.className = "error-item";
                 row.innerHTML = `👉 <b>Line:</b> "${item.sentence}" <br> <span style="color:#b91c1c; margin-left:20px; font-weight:600;">Mistakes: ${item.missed.join(", ")}</span>`;
                 errorDetails.appendChild(row);
             });
-            errorBox.style.display = "block"; // తప్పులు ఉంటే పేజీ చూపిస్తుంది
         } else {
             errorDetails.innerHTML = "<div class='error-item' style='color:#15803d; font-weight:bold;'>🎉 Excellent! No mistakes made. Perfect Reading!</div>";
-            errorBox.style.display = "block";
         }
 
+        // సర్టిఫికేట్ పేజీని ఓపెన్ చేస్తుంది
         document.getElementById("certificate-panel").style.display = "block";
 
         const today = new Date();
@@ -983,7 +979,6 @@
 
     function resetToSetup() {
         document.getElementById("certificate-panel").style.display = "none";
-        document.getElementById("error-log-box").style.display = "none";
         document.getElementById("setup-screen").style.display = "block";
         
         const nameInput = document.getElementById("student-name");
