@@ -332,8 +332,8 @@
 </div>
 
 <script>
-// ⚠️ ఇక్కడ మీ కొత్త డిప్లాయ్మెంట్ వెబ్ యాప్ URL ని పేస్ట్ చేయండి:
-const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxk41qkBn-4BfSOdLUPwC7IIvGZngfaiFowSpo0-RoUmLbt2B3UqkbgWzJokOva8rKE/exec";
+// ⚠️ ఇక్కడ మీ గూగుల్ వెబ్ యాప్ URL ని పేస్ట్ చేయండి:
+const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxpg2AwITjjNK6VwWcirfQhZW7bRgS9YHtqrSkyAcaxidfbx0nJWGMqugTw5NXRsZiQ/exec";
 
 const OFFLINE_DATABASE = {
     Nursery_Eng: ["A Apple", "B Ball", "C Cat", "D Dog", "E Elephant"],
@@ -344,10 +344,10 @@ const OFFLINE_DATABASE = {
     LKG_Numbers: ["10 Ten", "20 Twenty"],
     LKG_Hindi: ["अ अनार", "आम"],
     UKG_Eng: ["The sun is hot.", "I see a blue bird."],
-    UKG_Tel: ["బలపము", "రథము", "లత"],
+    UKG_Tel: ["బలపము", "రథము", "防త"],
     UKG_Hindi: ["उल्लू", "ऊनी"],
     "1st Class_Eng": ["The sun is very bright.", "The boy runs fast."],
-    "1st Class_Tel": ["అమ్మ మనకు దైవము.", "చెట్లు మనకు నీడను ఇస్తాయి.", "ピッラル チャッカగా చదవాలి."],
+    "1st Class_Tel": ["అమ్మ మనకు దైవము.", "చెట్లు మనకు నీడను ఇస్తాయి.", "పిల్లలు చక్కగా చదవాలి."],
     "1st Class_Hin": ["सूरज पूर्व से निकलता है।"],
     "1st Class_Numbers": ["100 One Hundred"],
     "2nd Class_Eng": ["Keep your surroundings clean.", "Honesty is the best policy."],
@@ -369,7 +369,7 @@ let sentenceStartTime = null;
 let totalWordsReadSuccessfully = 0;
 let totalReadingTimeSeconds = 0;
 let wrongWordsLog = [];
-
+let testStartTimeGlobal = null;
 let permanentlyMatchedWordsSet = new Set();
 let isMicrophoneIntendedToBeActive = false; 
 
@@ -399,7 +399,6 @@ if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
         }
         let liveSpeech = finalTranscript || interimTranscript;
         if (!liveSpeech.trim()) return;
-        
         evaluateLiveText(liveSpeech);
     };
 
@@ -414,7 +413,6 @@ if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
         const btn = document.getElementById("mic-btn");
         btn.classList.remove("listening");
         btn.innerText = "🎤 Start Reading";
-        
         if (isAssessmentActive && isMicrophoneIntendedToBeActive && !autoNextTimeout) {
             triggerSafeSpeechRestart();
         }
@@ -482,11 +480,10 @@ function evaluateLiveText(speech) {
     let currentSentenceCorrectCount = 0;
     let isLastWordCorrect = false;
     const lastWordIdx = targetWords.length - 1;
-
     const liveWordsArray = speechClean.split(" ");
+
     targetWords.forEach((word, idx) => {
         const cleanedWord = cleanText(word);
-        
         if (cleanedWord !== "" && (speechClean.includes(cleanedWord) || liveWordsArray.some(lw => lw === cleanedWord) || permanentlyMatchedWordsSet.has(cleanedWord))) {
             scoreArray.push(1); 
             currentSentenceCorrectCount++;
@@ -528,16 +525,12 @@ function smartSentenceSplitter(rawQuestionsArray) {
     rawQuestionsArray.forEach(item => {
         if (!item) return;
         let splitByLines = item.toString().split(/[\r\n]+/);
-        
         splitByLines.forEach(line => {
             if(!line || !line.trim()) return;
-            
             let subSentences = line.split(/[\.\?।॥]/g);
             subSentences.forEach(sub => {
                 let cleanSub = sub.trim();
-                if (cleanSub.length > 1) {
-                    finalizedList.push(cleanSub);
-                }
+                if (cleanSub.length > 1) finalizedList.push(cleanSub);
             });
         });
     });
@@ -555,7 +548,6 @@ function fetchSheetQuestions() {
     fetchBtn.innerText = "⚡ Fetching from Google Sheets...";
     fetchBtn.disabled = true;
     
-    // 🔥 FIXED: URL పారామీటర్లను Code.gs కి తగ్గట్టుగా కరెక్ట్ చేశాం
     const finalUrl = `${WEB_APP_URL}?class=${encodeURIComponent(cls)}&language=${encodeURIComponent(lang)}`;
     
     const apiTimeout = setTimeout(() => {
@@ -572,11 +564,9 @@ function fetchSheetQuestions() {
             fetchBtn.innerText = "Load Sheet Questions";
             
             let rawList = [];
-           
             if (data && data.status === "success" && Array.isArray(data.data)) {
                 rawList = data.data;
             } else if (data && data.status === "error") {
-                // షీట్ ట్యాబ్ దొరకనప్పుడు వచ్చే ఎర్రర్ మెసేజ్ చూపిస్తుంది
                 alert("Error: " + data.message);
                 loadOfflineQuestions(cls, lang, data.message);
                 return;
@@ -586,9 +576,8 @@ function fetchSheetQuestions() {
             }
             
             if (rawList.length === 0) {
-                alert("గమనిక: ఈ షీట్ ట్యాబ్ లో ప్రశ్నలు ఏవీ లేవు (ఖాలీగా ఉంది)!");
+                alert("గమనిక: ఈ షీట్ ట్యాబ్ లో ప్రశ్నలు ఏవీ లేవు!");
             }
-
             let dynamicSentences = smartSentenceSplitter(rawList);
             buildQuestionsSelection(dynamicSentences, "Live Cloud Sheet");
         })
@@ -597,20 +586,16 @@ function fetchSheetQuestions() {
             fetchBtn.disabled = false;
             fetchBtn.innerText = "Load Sheet Questions";
             console.error("Fetch Error:", err);
-            loadOfflineQuestions(cls, lang, "Connection error / Script error. Loaded Offline Local Bank.");
+            loadOfflineQuestions(cls, lang, "Connection error. Loaded Offline Local Bank.");
         });
 }
 
 function loadOfflineQuestions(cls, lang, reasonMsg) {
     const key = `${cls}_${lang.substring(0,3)}`;
     let pool = OFFLINE_DATABASE[key] || OFFLINE_DATABASE[`${cls}_Eng`] || ["Sample reading line alpha", "Sample reading line beta"];
-    
     const banner = document.getElementById("notice-banner");
     banner.innerText = `ℹ️ ${reasonMsg}`;
     banner.style.display = "block";
-    banner.style.backgroundColor = "#fee2e2";
-    banner.style.color = "#991b1b";
-    
     let processedPool = smartSentenceSplitter(pool);
     buildQuestionsSelection(processedPool, "Offline Local Backup");
 }
@@ -618,9 +603,7 @@ function loadOfflineQuestions(cls, lang, reasonMsg) {
 function buildQuestionsSelection(array, sourceName) {
     const container = document.getElementById("selection-box-container");
     container.style.display = "block";
-    
-    const badge = document.getElementById("source-badge");
-    badge.innerText = sourceName;
+    document.getElementById("source-badge").innerText = sourceName;
     
     const listDiv = document.getElementById("questions-list");
     listDiv.innerHTML = "";
@@ -634,18 +617,15 @@ function buildQuestionsSelection(array, sourceName) {
                 updateSelectedCount();
             }
         };
-
         const checkbox = document.createElement("input");
         checkbox.type = "checkbox";
         checkbox.value = q.trim();
         checkbox.id = `q-chk-${idx}`;
         checkbox.checked = true; 
         checkbox.onchange = () => updateSelectedCount();
-
         const label = document.createElement("label");
         label.htmlFor = `q-chk-${idx}`;
         label.innerText = q.trim();
-
         item.appendChild(checkbox);
         item.appendChild(label);
         listDiv.appendChild(item);
@@ -664,16 +644,13 @@ function updateSelectedCount() {
     document.getElementById("selected-counter").innerText = checked.length;
 }
 
-// HTML లోపల పాత ఫంక్షన్ తీసేసి దీన్ని పెట్టండి
 function startSelectedAssessment() {
     const checked = document.querySelectorAll("#questions-list input[type='checkbox']:checked");
     if (checked.length === 0) {
         alert("Please pick at least 1 question item to evaluate.");
         return;
     }
-    
     currentSentences = Array.from(checked).map(c => c.value.trim());
-    
     document.getElementById("setup-screen").style.display = "none";
     document.getElementById("assessment-panel").style.display = "block";
     sentenceIndex = 0;
@@ -685,12 +662,8 @@ function startSelectedAssessment() {
     isAssessmentActive = true;
     isMicrophoneIntendedToBeActive = true; 
     permanentlyMatchedWordsSet.clear();
-    
     if (autoNextTimeout) { clearTimeout(autoNextTimeout); autoNextTimeout = null; }
-    
-    // 🔥 FIXED: Test Start Time ఇక్కడ క్యాప్చర్ అవుతుంది (Column G కోసం)
     testStartTimeGlobal = new Date(); 
-    
     setupSentenceDisplay();
 }
 
@@ -698,21 +671,14 @@ function setupSentenceDisplay() {
     if (autoNextTimeout) { clearTimeout(autoNextTimeout); autoNextTimeout = null; }
     permanentlyMatchedWordsSet.clear();
     sentenceStartTime = new Date();
-    
     const target = currentSentences[sentenceIndex];
     updateSentenceFontSize(target);
-    
     const targetWords = target.split(/\s+/).map(w => w.trim()).filter(Boolean);
     const initialScores = targetWords.map(() => 0);
     renderSentenceHTML(targetWords, initialScores);
-    
     document.getElementById("progress-text").innerText = `Question ${sentenceIndex + 1} of ${currentSentences.length}`;
     document.getElementById("status-text").innerText = "Mic active. Start reading now...";
     document.getElementById("current-score-view").style.display = "none";
-    
-    const micBtn = document.getElementById("mic-btn");
-    micBtn.disabled = false;
-    
     try { recognition.stop(); } catch(e){}
     setTimeout(() => {
         if(isAssessmentActive) {
@@ -738,7 +704,6 @@ function moveToNextSentence() {
     if (!isAssessmentActive) return;
     const target = currentSentences[sentenceIndex];
     const targetWords = target.split(/\s+/).map(w => w.trim()).filter(Boolean);
-    
     let correctCount = 0;
     let localWrong = [];
     targetWords.forEach((word) => {
@@ -752,17 +717,14 @@ function moveToNextSentence() {
     const sentenceAccuracy = targetWords.length ? (correctCount / targetWords.length) * 100 : 100;
     accumulatedScores += sentenceAccuracy;
     questionsAttempted++;
-    
     totalWordsReadSuccessfully += correctCount;
     if (sentenceStartTime) {
         const duration = (new Date() - sentenceStartTime) / 1000;
         totalReadingTimeSeconds += duration;
     }
-    
     if (localWrong.length > 0) {
         wrongWordsLog.push({ question: target, words: localWrong });
     }
-
     sentenceIndex++;
     if (sentenceIndex < currentSentences.length) {
         setupSentenceDisplay();
@@ -776,11 +738,9 @@ function finishAssessmentReport() {
     isMicrophoneIntendedToBeActive = false; 
     if (autoNextTimeout) { clearTimeout(autoNextTimeout); autoNextTimeout = null; }
     try { recognition.stop(); } catch(e){}
-    
     document.getElementById("assessment-panel").style.display = "none";
     document.getElementById("certificate-panel").style.display = "block";
     const finalScore = questionsAttempted ? Math.round(accumulatedScores / questionsAttempted) : 100;
-    
     const name = document.getElementById("student-name").value || "Anonymous Student";
     const studentClass = document.getElementById("student-class").value;
     
@@ -790,63 +750,53 @@ function finishAssessmentReport() {
     document.getElementById("cert-final-score").innerText = `${finalScore}%`;
     document.getElementById("cert-q-count").innerText = questionsAttempted;
     const totalMinutes = totalReadingTimeSeconds > 0 ? (totalReadingTimeSeconds / 60) : 0.01;
-    const wpmCalculated = Math.round(totalWordsReadSuccessfully / totalMinutes);
-    document.getElementById("cert-wpm").innerText = wpmCalculated;
+    document.getElementById("cert-wpm").innerText = Math.round(totalWordsReadSuccessfully / totalMinutes);
     document.getElementById("cert-time").innerText = `${Math.round(totalReadingTimeSeconds)}s`;
+    
     const detailsDiv = document.getElementById("error-list-details");
     detailsDiv.innerHTML = "";
     if (wrongWordsLog.length === 0) {
-        detailsDiv.innerHTML = "<div class='error-item' style='color: var(--success); font-weight:bold;'>Excellent! No reading errors logged. Perfect score. ⭐</div>";
+        detailsDiv.innerHTML = "<div class='error-item' style='color: var(--success); font-weight:bold;'>Excellent! No errors. ⭐</div>";
     } else {
         wrongWordsLog.forEach((log, idx) => {
             const row = document.createElement("div");
             row.className = "error-item";
-            row.innerHTML = `<strong>Line ${idx+1}:</strong> "${log.question}"<br><span style="color:#dc2626; font-weight:bold;">Missed/Wrong:</span> ${log.words.map(w => `<span style="background: #fed7d7; padding: 2px 6px; border-radius: 4px; margin-right: 4px;">${w}</span>`).join(" ")}`;
+            row.innerHTML = `<strong>Line ${idx+1}:</strong> "${log.question}"<br><span style="color:#dc2626; font-weight:bold;">Missed:</span> ${log.words.map(w => `<span style="background: #fed7d7; padding: 2px 6px; border-radius: 4px; margin-right: 4px;">${w}</span>`).join(" ")}`;
             detailsDiv.appendChild(row);
         });
     }
-    
     sendPayloadToGoogleSheet(name, studentClass, finalScore, Math.round(totalReadingTimeSeconds));
 }
 
-// 🚀 గూగుల్ షీట్ లోని కాలమ్స్ ఆర్డర్ (A నుండి H) ప్రకారం డేటాను పంపే కొత్త ఫంక్షన్:
-/ HTML లోపల పాత ఫంక్షన్ తీసేసి దీన్ని పెట్టండి
 function sendPayloadToGoogleSheet(name, studentClass, finalScore, totalTimeTaken) {
     const today = new Date();
-    // 📅 Date format: DD-MMM-YYYY
     const formattedDate = `${String(today.getDate()).padStart(2, '0')}-${today.toLocaleString('default', { month: 'short' })}-${today.getFullYear()}`;
-    
-    // ⏰ Starting Time format: HH:MM AM/PM
     let startTimeString = "N/A";
     if (testStartTimeGlobal) {
         startTimeString = testStartTimeGlobal.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true });
     }
-    
     const scorePayload = {
-        date: formattedDate,          // A: Date
-        studentName: name,            // B: Student Name
-        studentClass: studentClass,   // C: Class
-        language: currentLanguage,    // D: Language
-        questions: currentSentences.length, // E: Questions
-        score: `${finalScore}%`,      // F: Score
-        startingTime: startTimeString, // G: Starting Time
-        timeTaken: `${totalTimeTaken} Sec` // H: Time Taken (ఎన్ని సెకన్లు పట్టింది, e.g., "45 Sec")
+        date: formattedDate,
+        studentName: name,
+        studentClass: studentClass,
+        language: currentLanguage,
+        questions: currentSentences.length,
+        score: `${finalScore}%`,
+        startingTime: startTimeString,
+        timeTaken: `${totalTimeTaken} Sec`
     };
-    
-    if (WEB_APP_URL !== "YOUR_DEPLOYED_WEB_APP_URL_HERE") {
+    if (WEB_APP_URL) {
         fetch(WEB_APP_URL, {
             method: "POST",
             mode: "no-cors", 
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(scorePayload)
-        })
-        .then(() => console.log("Score saved successfully in Sheet!"))
-        .catch(err => console.error("Error saving score:", err));
+        }).catch(err => console.error("Error saving score:", err));
     }
 }
 
 function abortAssessment() {
-    if (confirm("Are you sure you want to stop and abort the current test?")) {
+    if (confirm("Are you sure you want to stop?")) {
         isAssessmentActive = false;
         isMicrophoneIntendedToBeActive = false;
         if (autoNextTimeout) clearTimeout(autoNextTimeout);
@@ -858,12 +808,10 @@ function abortAssessment() {
 function resetToSetup() {
     document.getElementById("certificate-panel").style.display = "none";
     document.getElementById("setup-screen").style.display = "block";
-    
     const nameInput = document.getElementById("student-name");
     nameInput.value = "";
     nameInput.focus();
     document.getElementById("selection-box-container").style.display = "none";
-    
     currentSentences = [];
     sentenceIndex = 0;
     accumulatedScores = 0;
@@ -877,5 +825,3 @@ function resetToSetup() {
     if (autoNextTimeout) { clearTimeout(autoNextTimeout); autoNextTimeout = null; }
 }
 </script>
-</body>
-</html>
