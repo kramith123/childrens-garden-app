@@ -34,22 +34,6 @@
             overflow-x: hidden;
         }
 
-        .bg-doodles {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 1;
-            overflow: hidden;
-        }
-
-        .doodle {
-            position: absolute;
-            opacity: 0.12; 
-        }
-
         .container {
             width: 98%;
             max-width: 1800px;
@@ -362,25 +346,13 @@ const OFFLINE_DATABASE = {
     UKG_Tel: ["బలపము", "రథము", "లత"],
     UKG_Hindi: ["उल्लू", "ऊनी"],
     "1st Class_Eng": ["The sun is very bright.", "The boy runs fast."],
-    "1st Class_Tel": ["అమ్మ మనకు దైవము.", "చెట్లు మనకు నీడను ఇస్తాయి.", "పిల్లలు చక్కగా చదవాలి."],
+    "1st Class_Tel": ["అమ్మ మనకు దైవము.", "チェట్లు మనకు నీడను ఇస్తాయి.", "పిల్లలు చక్కగా చదవాలి."],
     "1st Class_Hin": ["सूरज पूर्व से निकलता है।"],
     "1st Class_Numbers": ["100 One Hundred"],
     "2nd Class_Eng": ["Keep your surroundings clean.", "Honesty is the best policy."],
     "2nd Class_Tel": ["పెద్దలను గౌరవించడం మన కర్తవ్యం.", "పుస్తకాలు మంచి జ్ఞానాన్ని ఇస్తాయి."],
     "2nd Class_Hin": ["पेड़-पौधे हमारे सच्चे मित्र हैं।"],
-    "2nd Class_Numbers": ["1000 One Thousand"],
-    "3rd Class_Eng": ["Healthy food keeps our body fit."],
-    "3rd Class_Tel": ["దేశ భాషలందు తెలుగు లెస్స.", "మొక్కలు నాటడం ద్వారా పర్యావరణాన్ని రక్షించవచ్చు."],
-    "3rd Class_Hin": ["समय बहुत मूल्यवान है।"],
-    "3rd Class_Numbers": ["5000 Five Thousand"],
-    "4th Class_Eng": ["The school library has many books."],
-    "4th Class_Tel": ["వృక్షో రక్షతి రక్షితః అనగా చెట్లను రక్షించాల్సింది మనమే.", "చదువుతో పాటు మంచి సంస్కారం ఉండాలి."],
-    "4th Class_Hin": ["हमे प्लास्टिक के उपयोग से बचना चाहिए।"],
-    "4th Class_Numbers": ["25000 Twenty Five Thousand"],
-    "5th Class_Eng": ["Education empowers individuals."],
-    "5th Class_Tel": ["మాతృభాషను గౌరవించడం మన ప్రథమ బాధ్యత.", "పరిశుభ్రత దైవత్వంతో సమానమని చెప్తారు."],
-    "5th Class_Hin": ["सच्चा मित्र वही है जो विपत्ति में काम आए."],
-    "5th Class_Numbers": ["100000 One Lakh"]
+    "2nd Class_Numbers": ["1000 One Thousand"]
 };
 
 let currentLanguage = "English";
@@ -396,9 +368,9 @@ let sentenceStartTime = null;
 let totalWordsReadSuccessfully = 0;
 let totalReadingTimeSeconds = 0;
 let wrongWordsLog = [];
-let liveCorrectWordsSet = new Set();
 
-// మైక్ లాక్ అవ్వకుండా మెయింటైన్ చేసే పక్కా సిస్టమ్ స్టేట్
+// 🧠 పర్మనెంట్ లెడ్జర్ సిస్టమ్ - బ్రౌజర్ ఫ్లష్ చేసినా ఈ డేటా ఎప్పటికీ డిలీట్ అవ్వదు!
+let permanentlyMatchedWordsSet = new Set(); 
 let isMicrophoneIntendedToBeActive = false; 
 
 if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
@@ -433,7 +405,6 @@ if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
 
     recognition.onerror = (e) => {
         console.error("Speech Error:", e.error);
-        // ఎర్రర్ వచ్చినా టెక్నికల్ గా ఇంజన్ ఆగిపోకుండా బ్యాక్‌గ్రౌండ్ సేఫ్ గా గార్డ్ చేస్తుంది
         if (isAssessmentActive && isMicrophoneIntendedToBeActive && e.error !== 'aborted') {
             triggerSafeSpeechRestart();
         }
@@ -444,7 +415,6 @@ if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
         btn.classList.remove("listening");
         btn.innerText = "🎤 Start Reading";
         
-        // 22 లేదా 55 సెకన్ల వద్ద క్రోమ్ కట్ చేసినా.. ఈ కింద లైన్ వెంటనే దాన్ని మళ్లీ నిలబెడుతుంది
         if (isAssessmentActive && isMicrophoneIntendedToBeActive && !autoNextTimeout) {
             triggerSafeSpeechRestart();
         }
@@ -475,17 +445,18 @@ function setRecognitionLanguage() {
 function cleanText(text) {
     if (!text) return "";
     let low = text.toLowerCase().trim();
-    low = low.replace(/[\.,\-\/#!$%\^&\*;:{}=\-_`~()?।॥]/g, " ");
+    // పంక్చుయేషన్స్ తో పాటు అన్ని రకాల స్పెషల్ క్యారెక్టర్స్ ను క్లీన్ చేస్తుంది
+    low = low.replace(/[\.,\-\/#!$%\^&\*;:{}=\-_`~()?।॥\s]/g, " ");
     return low.replace(/\s+/g, " ").trim();
 }
 
 function updateSentenceFontSize(text) {
     const box = document.getElementById("target-sentence");
     const len = text.length;
-    if (len > 60) { box.style.fontSize = "2.8rem"; } 
-    else if (len > 35) { box.style.fontSize = "3.8rem"; } 
-    else if (len > 15) { box.style.fontSize = "4.6rem"; } 
-    else { box.style.fontSize = "5.5rem"; }
+    if (len > 120) { box.style.fontSize = "2.0rem"; box.style.lineHeight = "1.6"; }
+    else if (len > 60) { box.style.fontSize = "2.6rem"; } 
+    else if (len > 35) { box.style.fontSize = "3.5rem"; } 
+    else { box.style.fontSize = "4.5rem"; }
 }
 
 function renderSentenceHTML(wordsArray, scoreArray) {
@@ -512,17 +483,17 @@ function evaluateLiveText(speech) {
     let isLastWordCorrect = false;
     const lastWordIdx = targetWords.length - 1;
 
+    // స్పీచ్ స్ట్రింగ్ లోని విడి పదాల అరే
+    const liveWordsArray = speechClean.split(" ");
+
     targetWords.forEach((word, idx) => {
         const cleanedWord = cleanText(word);
         
-        if (cleanedWord !== "" && speechClean.includes(cleanedWord)) {
+        // గూగుల్ లైవ్ స్పీచ్ లో ఉన్నా లేదా మన పర్మనెంట్ మెమరీ లెడ్జర్ లో ఉన్నా అది కరెక్ట్ కింద లాక్ అవుతుంది!
+        if (cleanedWord !== "" && (speechClean.includes(cleanedWord) || liveWordsArray.some(lw => lw === cleanedWord) || permanentlyMatchedWordsSet.has(cleanedWord))) {
             scoreArray.push(1); 
             currentSentenceCorrectCount++;
-            liveCorrectWordsSet.add(cleanedWord);
-            if (idx === lastWordIdx) isLastWordCorrect = true;
-        } else if (liveCorrectWordsSet.has(cleanedWord)) {
-            scoreArray.push(1);
-            currentSentenceCorrectCount++;
+            permanentlyMatchedWordsSet.add(cleanedWord); // పర్మనెంట్ గా సేవ్ అవుతుంది
             if (idx === lastWordIdx) isLastWordCorrect = true;
         } else {
             scoreArray.push(0); 
@@ -536,15 +507,16 @@ function evaluateLiveText(speech) {
     view.innerText = `${accuracy}%`;
     view.style.display = "block";
 
-    // 🌟 క్లాష్ రాని పక్కా టైమర్ మరియు వర్డ్ రూటింగ్ లాజిక్ 🌟
+    // చివరి పదం పలకగానే ఏమాత్రం ఆలస్యం లేకుండా నెక్స్ట్ వాక్యానికి వెళ్తుంది
     if (isLastWordCorrect) {
         if (autoNextTimeout) { clearTimeout(autoNextTimeout); autoNextTimeout = null; }
         moveToNextSentence();
-    } else if (accuracy >= 50 || speechClean.split(/\s+/).length >= Math.max(1, targetWords.length - 1)) {
+    } else if (accuracy >= 65 || permanentlyMatchedWordsSet.size >= Math.max(1, targetWords.length - 2)) {
+        // విద్యార్థి చదవడం ఆపేస్తే 3 సెకన్లలో ఆటో అడ్వాన్స్
         if (!autoNextTimeout) {
-            document.getElementById("status-text").innerText = "⏱️ Line complete. Advancing in 3 seconds...";
+            document.getElementById("status-text").innerText = "⏱️ Paragraph ending. Moving next in 3 seconds...";
             autoNextTimeout = setTimeout(() => {
-                autoNextTimeout = null; // సేఫ్ క్లియరెన్స్
+                autoNextTimeout = null;
                 moveToNextSentence();
             }, 3000);
         }
@@ -555,6 +527,25 @@ function evaluateLiveText(speech) {
             document.getElementById("status-text").innerText = "Speech engine active. Read clearly...";
         }
     }
+}
+
+// 🛠️ పెద్ద పారాగ్రాఫ్‌లను చిన్న వాక్యాలుగా విడగొట్టే స్ప్లిట్టర్ ఫంక్షన్
+function smartSentenceSplitter(rawQuestionsArray) {
+    let finalizedList = [];
+    rawQuestionsArray.forEach(item => {
+        if (!item || !item.trim()) return;
+        
+        // బిందువులు (.), ప్రశ్నార్థకాలు (?), లేదా తెలుగు/హిందీ పూర్ణ విరామాలు (।/॥) ఆధారంగా విడగొడుతుంది
+        let subSentences = item.split(/[\.\?।॥]/g);
+        subSentences.forEach(sub => {
+            let cleanSub = sub.trim();
+            // కనీసం ఒక అక్షరమైనా ఉంటేనే యాడ్ చేస్తుంది
+            if (cleanSub.length > 1) {
+                finalizedList.push(cleanSub);
+            }
+        });
+    });
+    return finalizedList.length > 0 ? finalizedList : rawQuestionsArray;
 }
 
 function fetchSheetQuestions() {
@@ -580,13 +571,19 @@ function fetchSheetQuestions() {
             fetchBtn.disabled = false;
             fetchBtn.innerText = "Load Sheet Questions";
             
+            let rawList = [];
             if (data && data.status === "success" && Array.isArray(data.questions) && data.questions.length > 0) {
-                buildQuestionsSelection(data.questions, "Live Cloud Sheet");
+                rawList = data.questions;
             } else if (data && data.status === "success" && Array.isArray(data.data) && data.data.length > 0) {
-                buildQuestionsSelection(data.data, "Live Cloud Sheet");
+                rawList = data.data;
             } else {
                 loadOfflineQuestions(cls, lang, "No active sheet rows found. Loaded Offline Local Bank.");
+                return;
             }
+            
+            // షీట్ నుండి వచ్చిన పెద్ద పారాలను చిన్న వాక్యాలుగా మార్చి లోడ్ చేస్తుంది
+            let dynamicSentences = smartSentenceSplitter(rawList);
+            buildQuestionsSelection(dynamicSentences, "Live Cloud Sheet");
         })
         .catch(err => {
             clearTimeout(apiTimeout);
@@ -606,7 +603,8 @@ function loadOfflineQuestions(cls, lang, reasonMsg) {
     banner.style.backgroundColor = "#fee2e2";
     banner.style.color = "#991b1b";
     
-    buildQuestionsSelection(pool, "Offline Local Backup");
+    let processedPool = smartSentenceSplitter(pool);
+    buildQuestionsSelection(processedPool, "Offline Local Backup");
 }
 
 function buildQuestionsSelection(array, sourceName) {
@@ -678,7 +676,7 @@ function startSelectedAssessment() {
     wrongWordsLog = [];
     isAssessmentActive = true;
     isMicrophoneIntendedToBeActive = true; 
-    liveCorrectWordsSet.clear();
+    permanentlyMatchedWordsSet.clear();
     
     if (autoNextTimeout) { clearTimeout(autoNextTimeout); autoNextTimeout = null; }
     
@@ -688,7 +686,7 @@ function startSelectedAssessment() {
 
 function setupSentenceDisplay() {
     if (autoNextTimeout) { clearTimeout(autoNextTimeout); autoNextTimeout = null; }
-    liveCorrectWordsSet.clear();
+    permanentlyMatchedWordsSet.clear(); // కొత్త వాక్యానికి మెమరీ రీసెట్
     sentenceStartTime = new Date();
     
     const target = currentSentences[sentenceIndex];
@@ -705,7 +703,6 @@ function setupSentenceDisplay() {
     const micBtn = document.getElementById("mic-btn");
     micBtn.disabled = false;
     
-    // వాక్యం మారిన ప్రతిసారీ పాత స్పీచ్ ఇంజన్ ను పూర్తిగా షట్ డౌన్ చేసి మళ్లీ ఫ్రెష్ గా రన్ చేస్తాం
     try { recognition.stop(); } catch(e){}
     setTimeout(() => {
         if(isAssessmentActive) {
@@ -738,7 +735,7 @@ function moveToNextSentence() {
     
     targetWords.forEach((word) => {
         const cleanedWord = cleanText(word);
-        if (cleanedWord !== "" && liveCorrectWordsSet.has(cleanedWord)) {
+        if (cleanedWord !== "" && permanentlyMatchedWordsSet.has(cleanedWord)) {
             correctCount++;
         } else {
             localWrong.push(word);
@@ -769,7 +766,7 @@ function moveToNextSentence() {
 
 function finishAssessmentReport() {
     isAssessmentActive = false;
-    isMicrophoneIntendedToBeActive = false; // లూప్ నిలిపివేత
+    isMicrophoneIntendedToBeActive = false; 
     if (autoNextTimeout) { clearTimeout(autoNextTimeout); autoNextTimeout = null; }
     try { recognition.stop(); } catch(e){}
     
@@ -857,7 +854,7 @@ function resetToSetup() {
     wrongWordsLog = [];
     totalWordsReadSuccessfully = 0;
     totalReadingTimeSeconds = 0;
-    liveCorrectWordsSet.clear();
+    permanentlyMatchedWordsSet.clear();
     if (autoNextTimeout) { clearTimeout(autoNextTimeout); autoNextTimeout = null; }
 }
 </script>
