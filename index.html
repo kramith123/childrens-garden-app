@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -334,7 +333,7 @@
 
 <script>
 // ⚠️ ఇక్కడ మీ కొత్త డిప్లాయ్మెంట్ వెబ్ యాప్ URL ని పేస్ట్ చేయండి:
-const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzqH57NhYE-CKJEANGFSohjx1V0Pin8KjyDISFU1oJBpCHyB2y9vUopSODKFjlbGnzf/exec";
+const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbyaxTgBe_lIiOwu-7CQ0ixWrbKuGf7v5SUp1mJE7qYYaSUtWFY2gfX3Zf_6g28LUMe1/exec";
 
 const OFFLINE_DATABASE = {
     Nursery_Eng: ["A Apple", "B Ball", "C Cat", "D Dog", "E Elephant"],
@@ -652,6 +651,7 @@ function updateSelectedCount() {
     document.getElementById("selected-counter").innerText = checked.length;
 }
 
+// HTML లోపల పాత ఫంక్షన్ తీసేసి దీన్ని పెట్టండి
 function startSelectedAssessment() {
     const checked = document.querySelectorAll("#questions-list input[type='checkbox']:checked");
     if (checked.length === 0) {
@@ -675,7 +675,9 @@ function startSelectedAssessment() {
     
     if (autoNextTimeout) { clearTimeout(autoNextTimeout); autoNextTimeout = null; }
     
-    startTime = new Date(); // ⏰ Starting Time ఇక్కడ క్యాప్చర్ అవుతుంది
+    // 🔥 FIXED: Test Start Time ఇక్కడ క్యాప్చర్ అవుతుంది (Column G కోసం)
+    testStartTimeGlobal = new Date(); 
+    
     setupSentenceDisplay();
 }
 
@@ -795,24 +797,27 @@ function finishAssessmentReport() {
 }
 
 // 🚀 గూగుల్ షీట్ లోని కాలమ్స్ ఆర్డర్ (A నుండి H) ప్రకారం డేటాను పంపే కొత్త ఫంక్షన్:
+/ HTML లోపల పాత ఫంక్షన్ తీసేసి దీన్ని పెట్టండి
 function sendPayloadToGoogleSheet(name, studentClass, finalScore, totalTimeTaken) {
     const today = new Date();
+    // 📅 Date format: DD-MMM-YYYY
     const formattedDate = `${String(today.getDate()).padStart(2, '0')}-${today.toLocaleString('default', { month: 'short' })}-${today.getFullYear()}`;
     
+    // ⏰ Starting Time format: HH:MM AM/PM
     let startTimeString = "N/A";
-    if (startTime) {
-        startTimeString = startTime.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true });
+    if (testStartTimeGlobal) {
+        startTimeString = testStartTimeGlobal.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true });
     }
     
     const scorePayload = {
-        date: formattedDate,
-        studentName: name,
-        studentClass: studentClass,
-        language: currentLanguage,
-        questions: currentSentences.length,
-        score: `${finalScore}%`,
-        startingTime: startTimeString, // Column G
-        timeTaken: `${totalTimeTaken} Sec` // Column H
+        date: formattedDate,          // A: Date
+        studentName: name,            // B: Student Name
+        studentClass: studentClass,   // C: Class
+        language: currentLanguage,    // D: Language
+        questions: currentSentences.length, // E: Questions
+        score: `${finalScore}%`,      // F: Score
+        startingTime: startTimeString, // G: Starting Time
+        timeTaken: `${totalTimeTaken} Sec` // H: Time Taken (ఎన్ని సెకన్లు పట్టింది, e.g., "45 Sec")
     };
     
     if (WEB_APP_URL !== "YOUR_DEPLOYED_WEB_APP_URL_HERE") {
@@ -821,7 +826,9 @@ function sendPayloadToGoogleSheet(name, studentClass, finalScore, totalTimeTaken
             mode: "no-cors", 
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(scorePayload)
-        }).catch(err => console.error("Write error:", err));
+        })
+        .then(() => console.log("Score saved successfully in Sheet!"))
+        .catch(err => console.error("Error saving score:", err));
     }
 }
 
