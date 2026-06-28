@@ -48,54 +48,56 @@
         .doodle {
             position: absolute;
             opacity: 0.12; 
+            transform: rotate(0deg);
+            transition: transform 0.5s ease;
         }
 
         .container {
             width: 98%;
-            max-width: 1750px;
-            background: rgba(255, 255, 255, 0.97);
-            padding: 55px 45px;
-            border-radius: 28px;
-            box-shadow: 0 25px 50px -12px rgba(15, 23, 42, 0.18);
-            border: 5px solid #ffffff; 
+            max-width: 1800px;
+            background: rgba(255, 255, 255, 0.96);
+            padding: 40px;
+            border-radius: 24px;
+            box-shadow: 0 20px 40px -10px rgba(15, 23, 42, 0.15), 0 10px 15px -3px rgba(15, 23, 42, 0.05);
+            border: 4px solid #ffffff; 
             box-sizing: border-box;
             position: relative;
             z-index: 10; 
-            backdrop-filter: blur(10px);
+            backdrop-filter: blur(8px);
             margin: 10px auto;
         }
 
         .school-title {
-            font-size: 3.8rem;
-            font-weight: 900;
+            font-size: 3rem;
+            font-weight: 800;
             text-transform: uppercase;
-            letter-spacing: 2px;
-            margin-bottom: 15px;
+            letter-spacing: 1.5px;
+            margin-bottom: 12px;
             text-align: center;
             color: #1e3a8a;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+            text-shadow: 1px 1px 2px rgba(30, 58, 138, 0.1);
         }
         
         .app-title {
-            font-size: 2.2rem;
+            font-size: 1.8rem;
             color: #475569;
             font-weight: 600;
-            margin-bottom: 50px;
+            margin-bottom: 40px;
             text-align: center;
         }
 
         .form-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 30px;
-            margin-bottom: 35px;
+            gap: 24px;
+            margin-bottom: 30px;
         }
 
-        @media (max-width: 992px) {
+        @media (max-width: 768px) {
             .form-grid { grid-template-columns: 1fr; }
-            .school-title { font-size: 2.5rem; }
-            .app-title { font-size: 1.5rem; }
-            .container { padding: 35px 20px; }
+            .school-title { font-size: 1.8rem; }
+            .app-title { font-size: 1.1rem; }
+            .container { padding: 30px 20px; }
         }
 
         .form-group { margin-bottom: 5px; }
@@ -103,70 +105,70 @@
 
         label {
             display: block;
-            margin-bottom: 12px;
+            margin-bottom: 10px;
             font-weight: 700;
-            font-size: 1.6rem; 
+            font-size: 1.4rem; 
             color: #334155;
         }
 
         input, select {
             width: 100%;
-            padding: 20px 24px; 
-            border: 2.5px solid var(--border);
-            border-radius: 14px;
+            padding: 16px 20px; 
+            border: 2px solid var(--border);
+            border-radius: 12px;
             box-sizing: border-box;
-            font-size: 1.6rem; 
+            font-size: 1.4rem; 
             background-color: #fcfcfc;
             font-weight: 500;
             color: #1e293b;
+            transition: all 0.2s ease;
         }
 
         button {
             width: 100%;
-            padding: 24px 28px; 
+            padding: 20px 24px; 
             border: none;
-            border-radius: 14px;
-            font-size: 1.8rem; 
+            border-radius: 12px;
+            font-size: 1.5rem; 
             font-weight: bold;
             cursor: pointer;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
             transition: all 0.2s ease;
             margin-top: 10px;
         }
 
         .btn-primary { background-color: #2563eb; color: white; }
-        .btn-success { background-color: var(--success); color: white; margin-top: 30px; font-size: 2rem; padding: 26px 28px; }
+        .btn-success { background-color: var(--success); color: white; margin-top: 25px; font-size: 1.6rem; padding: 22px 24px; }
         
         .btn-mic {
             background-color: #ef4444;
             color: white;
-            margin-top: 30px;
-            font-size: 2.4rem; 
-            padding: 32px;
-            border-radius: 20px;
-            box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+            margin-top: 25px;
+            font-size: 2rem; 
+            padding: 26px;
+            border-radius: 16px;
         }
 
         .btn-mic.listening {
             background-color: #16a34a;
             animation: pulse 1.5s infinite;
-            box-shadow: 0 4px 15px rgba(22, 163, 74, 0.4);
         }
         
         .q-selection-box {
             display: none;
             background: #f8fafc;
             border: 2px solid #e2e8f0;
-            border-radius: 18px;
-            padding: 35px;
-            margin-top: 35px;
+            border-radius: 16px;
+            padding: 30px;
+            margin-top: 30px;
         }
 
         .q-header-controls {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 25px;
-            font-size: 1.5rem;
+            margin-bottom: 20px;
+            font-size: 1.3rem;
         }
 
         .btn-link {
@@ -178,36 +180,36 @@
             width: auto;
             margin: 0;
             cursor: pointer;
-            font-size: 1.4rem;
+            font-size: 1.25rem;
             font-weight: 600;
         }
 
         .q-scroll {
-            max-height: 480px;
+            max-height: 450px;
             overflow-y: auto;
             border: 2px solid #e2e8f0;
             background: #ffffff;
-            border-radius: 14px;
-            padding: 20px;
+            border-radius: 12px;
+            padding: 15px;
         }
 
         .q-item {
             display: flex;
             align-items: center;
-            padding: 20px; 
+            padding: 18px; 
             border-bottom: 1px solid #f1f5f9;
-            font-size: 1.6rem;
+            font-size: 1.4rem;
             cursor: pointer;
         }
 
         .q-item input {
             width: auto;
-            margin-right: 20px;
-            transform: scale(2.2); 
+            margin-right: 18px;
+            transform: scale(1.8); 
         }
 
-        .q-item label { margin: 0; cursor: pointer; flex-grow: 1; font-weight: 500; font-size: 1.6rem; }
-        .panel { display: none; margin-top: 35px; border-top: 3px solid var(--border); padding-top: 35px; }
+        .q-item label { margin: 0; cursor: pointer; flex-grow: 1; font-weight: 500; font-size: 1.4rem; }
+        .panel { display: none; margin-top: 30px; border-top: 3px solid var(--border); padding-top: 30px; }
         
         .sentence-box {
             display: flex;
@@ -215,15 +217,16 @@
             justify-content: center;
             align-items: center;
             text-align: center;
-            gap: 15px 30px; 
-            padding: 70px 45px;
+            gap: 15px 25px; 
+            padding: 50px 30px;
             background: #f1f5f9;
-            border-radius: 26px;
-            margin: 35px 0;
-            min-height: 200px;
+            border-radius: 20px;
+            margin: 30px 0;
+            min-height: 140px;
             color: #0f172a;
-            border: 5px dashed #cbd5e1;
-            white-space: normal; 
+            border: 4px dashed #cbd5e1;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
+            white-space: normal;
             word-break: break-word;
         }
 
@@ -235,22 +238,21 @@
             white-space: nowrap; 
         }
 
-        .w-correct { color: var(--correct-word); border-bottom: 8px solid var(--correct-word); }
-        .w-incorrect { color: var(--incorrect-word); border-bottom: 8px solid var(--incorrect-word); }
-        .w-normal { color: #0f172a; border-bottom: 8px solid transparent; }
+        .w-correct { color: var(--correct-word); border-bottom: 6px solid var(--correct-word); }
+        .w-incorrect { color: var(--incorrect-word); border-bottom: 6px solid var(--incorrect-word); }
+        .w-normal { color: #0f172a; border-bottom: 6px solid transparent; }
 
-        .status-msg { text-align: center; font-weight: bold; margin: 25px 0; height: 35px; color: #475569; font-size: 2rem; }
-        .score-display { text-align: center; font-size: 7rem; font-weight: 900; color: var(--success); display: none; margin: 30px 0; }
-        .notification-banner { display: none; background-color: #fee2e2; border: 2px solid #fca5a5; color: #991b1b; padding: 22px; border-radius: 14px; margin-bottom: 35px; font-size: 1.5rem; }
+        .status-msg { text-align: center; font-weight: bold; margin: 20px 0; height: 35px; color: #475569; font-size: 1.6rem; }
+        .score-display { text-align: center; font-size: 6rem; font-weight: 900; color: var(--success); display: none; margin: 25px 0; }
+        .notification-banner { display: none; background-color: #fee2e2; border: 2px solid #fca5a5; color: #991b1b; padding: 20px; border-radius: 12px; margin-bottom: 30px; font-size: 1.3rem; }
         
-        .certificate-card { border: 12px double #b45309; padding: 70px 50px; background: #ffffff; text-align: center; border-radius: 24px; margin-top: 40px; }
-        .cert-school { font-size: 3.5rem; font-weight: 800; color: #78350f; margin-bottom: 30px; }
-        .cert-score { font-size: 7.5rem; font-weight: 900; color: #b45309; margin: 30px 0; }
+        .certificate-card { border: 12px double #b45309; padding: 60px 40px; background: #ffffff; text-align: center; border-radius: 20px; margin-top: 35px; }
+        .cert-school { font-size: 3rem; font-weight: 800; color: #78350f; margin-bottom: 25px; }
+        .cert-score { font-size: 6.5rem; font-weight: 900; color: #b45309; margin: 25px 0; }
 
-        .error-log-container { margin-top: 40px; text-align: left; background: #fff5f5; border: 2px solid #fca5a5; border-radius: 14px; padding: 30px; }
-        .error-log-title { font-size: 2rem; color: #991b1b; font-weight: bold; margin-bottom: 20px; border-bottom: 2px solid #fca5a5; padding-bottom: 12px; }
-        .error-flex-box { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 12px; }
-        .error-badge { background: #fed7d7; color: #dc2626; padding: 8px 16px; border-radius: 10px; font-size: 1.5rem; font-weight: bold; border: 1px solid #fca5a5; }
+        .error-log-container { margin-top: 30px; text-align: left; background: #fff5f5; border: 2px solid #feb2b2; border-radius: 12px; padding: 25px; }
+        .error-log-title { font-size: 1.8rem; color: #991b1b; font-weight: bold; margin-bottom: 15px; border-bottom: 2px solid #fca5a5; padding-bottom: 10px; }
+        .error-item { font-size: 1.4rem; margin-bottom: 12px; line-height: 1.6; color: #2d3748; }
         
         @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.6; } 100% { opacity: 1; } }
     </style>
@@ -258,7 +260,8 @@
 <body>
 
 <div class="bg-doodles">
-    <svg class="doodle" style="top:10%; left:5%; width:40px; height:40px;" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="1"><path d="M17.5 19A3.5 3.5 0 0 0 21 15.5c0-2.79-2.54-4.5-5-4.5-.42 0-.83.05-1.24.15A7 7 0 0 0 3 11.5c0 3.62 3.1 6.5 7 6.5h7.5z"/></svg>
+    <svg class="doodle doodle-1" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="1"><path d="M17.5 19A3.5 3.5 0 0 0 21 15.5c0-2.79-2.54-4.5-5-4.5-.42 0-.83.05-1.24.15A7 7 0 0 0 3 11.5c0 3.62 3.1 6.5 7 6.5h7.5z"/></svg>
+    <svg class="doodle doodle-2" viewBox="0 0 24 24" fill="none" stroke="#e11d48" stroke-width="1"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
 </div>
 
 <div class="container">
@@ -274,7 +277,7 @@
                 <input type="text" id="student-name" placeholder="Enter student's full name">
             </div>
             <div class="form-group">
-                <label for="student-class">Select Class</label>
+                 <label for="student-class">Select Class</label>
                 <select id="student-class">
                     <option value="Nursery">Nursery</option>
                     <option value="LKG">LKG</option>
@@ -301,7 +304,7 @@
         
         <div id="selection-box-container" class="q-selection-box">
             <div class="q-header-controls">
-                <span style="font-weight: bold; color: #1e3a8a; font-size: 1.6rem;">
+                <span style="font-weight: bold; color: #1e3a8a; font-size: 1.4rem;">
                     Select Questions to Ask: <span id="source-badge"></span>
                 </span>
                 <div>
@@ -312,7 +315,7 @@
             
             <div class="q-scroll" id="questions-list"></div>
             
-            <div style="margin-top: 20px; font-size: 1.6rem; font-weight: 700; color: #475569;">
+            <div style="margin-top: 20px; font-size: 1.4rem; font-weight: 700; color: #475569;">
                 Selected: <span id="selected-counter" style="color: #2563eb;">0</span>
             </div>
             
@@ -321,39 +324,38 @@
     </div>
 
     <div id="assessment-panel" class="panel">
-        <div style="display:flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
-            <h3 id="progress-text" style="color: #475569; font-size: 2.2rem; margin:0;">Processing...</h3>
-            <button class="btn-primary" style="width:auto; margin:0; padding: 16px 32px; font-size:1.5rem; background-color:#f59e0b;" onclick="moveToNextSentence()">Skip / Next ➡️</button>
+        <div style="display:flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+            <h3 id="progress-text" style="color: #475569; font-size: 1.8rem; margin:0;">Processing...</h3>
+            <button class="btn-primary" style="width:auto; margin:0; padding: 10px 20px; font-size:1.1rem; background-color:#f59e0b;" onclick="moveToNextSentence()">Skip / Next ➡️</button>
         </div>
         <div class="sentence-box" id="target-sentence">Please wait...</div>
-        <button id="mic-btn" class="btn-mic" onclick="startAssessmentListening()">🎤 Start Reading</button>
+        <button id="mic-btn" class="btn-mic" onclick="startAssessmentListening()" disabled>🎤 Start Reading</button>
         <div class="status-msg" id="status-text">Ready to start.</div>
         <div class="score-display" id="current-score-view">100%</div>
-        <button class="btn-primary" style="background-color: #ef4444; max-width: 400px; margin: 30px auto; display: block; padding: 18px;" onclick="abortAssessment()">❌ Abort / Stop Test</button>
+        <button class="btn-primary" style="background-color: #ef4444; max-width: 300px; margin: 20px auto; display: block;" onclick="abortAssessment()">❌ Abort / Stop Test</button>
     </div>
 
     <div id="certificate-panel" class="certificate-card" style="display: none;">
-        <div style="font-size: 5rem; margin-bottom: 20px;">🏆</div>
-        <h2 style="color: #78350f; font-family: Georgia, serif; margin-bottom: 15px; font-size: 3.5rem;">Certificate of Completion</h2>
+        <div style="font-size: 4rem; margin-bottom: 15px;">🏆</div>
+        <h2 style="color: #78350f; font-family: Georgia, serif; margin-bottom: 10px; font-size: 2.8rem;">Certificate of Completion</h2>
         <div class="cert-school">Children's Garden E.M. High School</div>
-        <div style="font-size: 2.2rem; line-height: 1.8; margin: 35px 0; color: #451a03;">
+        <div style="font-size: 1.8rem; line-height: 1.8; margin: 30px 0; color: #451a03;">
             This certifies that student <strong><span id="cert-name"></span></strong><br>
             from <strong><span id="cert-class"></span></strong> has successfully evaluated their performance in 
             <strong><span id="cert-lang"></span></strong>.
         </div>
-        <div style="font-size: 1.5rem; text-transform: uppercase; color: #9a3412; font-weight: bold; letter-spacing: 1.5px;">Assessment Metrics</div>
+        <div style="font-size: 1.3rem; text-transform: uppercase; color: #9a3412; font-weight: bold; letter-spacing: 1.5px;">Assessment Metrics</div>
         <div class="cert-score" id="cert-final-score">0%</div>
-        <div style="color: #78350f; margin-bottom: 30px; font-weight: 700; font-size: 1.8rem;">
-            Total Questions: <span id="cert-q-count">0</span> | Reading Speed: <span id="cert-wpm" style="color: #2563eb; font-size: 2.2rem;">0</span> WPM | Time Taken: <span id="cert-time">0s</span>
+        <div style="color: #78350f; margin-bottom: 25px; font-weight: 700; font-size: 1.5rem;">
+            Total Questions: <span id="cert-q-count">0</span> | Reading Speed: <span id="cert-wpm" style="color: #2563eb; font-size: 1.8rem;">0</span> WPM | Time Taken: <span id="cert-time">0s</span>
         </div>
 
         <div id="error-log-box" class="error-log-container">
             <div class="error-log-title">❌ Mistaken Words / తప్పుగా చదివిన పదాలు:</div>
-            <div id="error-list-details" class="error-flex-box"></div>
+            <div id="error-list-details"></div>
         </div>
-        
-        <div style="font-size: 2.8rem; font-weight: bold; color: #78350f; margin-top: 35px;">Congratulations! 🎉</div>
-        <button id="next-student-btn" class="btn-primary" style="margin-top: 40px; background-color: #9a3412; font-size: 2rem; padding: 24px 40px; border-radius: 14px;" onclick="resetToSetup()">
+        <div style="font-size: 2.2rem; font-weight: bold; color: #78350f; margin-top: 30px;">Congratulations! 🎉</div>
+        <button id="next-student-btn" class="btn-primary" style="margin-top: 35px; background-color: #9a3412; font-size: 1.6rem; padding: 20px 30px; border-radius: 12px;" onclick="resetToSetup()">
             👤 Test Next Student / తదుపరి విద్యార్థి
         </button>
     </div>
@@ -374,11 +376,11 @@ const OFFLINE_DATABASE = {
     UKG_Tel: ["బలపము", "రథము", "లత"],
     UKG_Hindi: ["उल्लू", "ऊनी"],
     "1st Class_Eng": ["The sun is very bright.", "The boy runs fast."],
-    "1st Class_Tel": ["అమ్మ మనకు దైవము.", "చెట్లు మనకు నీడను ఇస్తాయి."],
+    "1st Class_Tel": ["అమ్మ మనకు దైవము.", "చెట్లు మనకు నీడను ఇస్తాయి.", "పిల్లలు చక్కగా చదవాలి."],
     "1st Class_Hin": ["सूरज पूर्व से निकलता है।"],
     "1st Class_Numbers": ["100 One Hundred"],
     "2nd Class_Eng": ["Keep your surroundings clean.", "Honesty is the best policy."],
-    "2nd Class_Tel": ["పెద్దలను గౌరవించడం మన కర్తవ్యం.", "పుస్తకాలు మంచి జ్ఞానాన్ని ఇస్తాయి."],
+    "2nd Class_Tel": ["పెద్దలను గౌరవించడం మన கர்తవ్యం.", "పుస్తకాలు మంచి జ్ఞానాన్ని ఇస్తాయి."],
     "2nd Class_Hin": ["पेड़-पौधे हमारे सच्चे मित्र हैं।"],
     "2nd Class_Numbers": ["1000 One Thousand"],
     "3rd Class_Eng": ["Healthy food keeps our body fit."],
@@ -390,7 +392,7 @@ const OFFLINE_DATABASE = {
     "4th Class_Hin": ["हमे प्लास्टिक के उपयोग से बचना चाहिए।"],
     "4th Class_Numbers": ["25000 Twenty Five Thousand"],
     "5th Class_Eng": ["Education empowers individuals."],
-    "5th Class_Tel": ["మాతృభాషను గౌరవించడం మన ప్రథమ బాధ్యత.", "పరిశుభ్రత దైవత్వంతో సమానమని చెప్తారు."],
+    "5th Class_Tel": ["మాతృభాషను గౌరవించడం మన ప్రథమ బాధ్యత.", "परिशुभ्रत दైవత్వంతో సమానమని చెప్తారు."],
     "5th Class_Hin": ["सच्चा मित्र वही है जो विपत्ति में काम आए."],
     "5th Class_Numbers": ["100000 One Lakh"]
 };
@@ -402,23 +404,23 @@ let accumulatedScores = 0;
 let questionsAttempted = 0;
 let recognition = null;
 let isAssessmentActive = false;
-let autoMicLoop = true; 
+let autoNextTimeout = null;
 let startTime = null;
 let sentenceStartTime = null;
 let totalWordsReadSuccessfully = 0;
 let totalReadingTimeSeconds = 0;
-let wrongWordsLog = []; 
+let wrongWordsLog = [];
 let liveCorrectWordsSet = new Set();
-let autoNextTimeout = null; 
+let forceLoopMic = true; // మైక్ కట్ అవ్వకుండా ఉంచే ఆటో లూప్ వేరియబుల్
 
 if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
     recognition = new SpeechRecognition();
     recognition.continuous = true;
     recognition.interimResults = true;
-    
+
     recognition.onstart = () => {
-        if(!sentenceStartTime) sentenceStartTime = new Date();
+        if (!sentenceStartTime) sentenceStartTime = new Date();
         const btn = document.getElementById("mic-btn");
         btn.innerText = "🎙️ Listening... Student is Reading";
         btn.classList.add("listening");
@@ -443,18 +445,28 @@ if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
 
     recognition.onerror = (e) => {
         console.error("Speech Error:", e.error);
+        // 'no-speech' లేదా టైమ్ అవుట్ వల్ల మైక్ ఆగిపోతే రీస్టార్ట్ చేస్తుంది
+        if (isAssessmentActive && forceLoopMic && e.error !== 'aborted') {
+            restartSpeechEngine();
+        }
     };
 
     recognition.onend = () => {
-        const btn = document.getElementById("mic-btn");
-        btn.classList.remove("listening");
-        btn.innerText = "🎤 Start Reading";
-        
-        if (isAssessmentActive && autoMicLoop) {
-            setRecognitionLanguage();
-            try { recognition.start(); } catch(err){}
+        // బ్రౌజర్ ఆటోమేటిక్‌గా 20-50 సెకన్ల వద్ద కట్ చేస్తే ఇక్కడ నుండి మైక్ మళ్లీ ఆన్ అవుతుంది
+        if (isAssessmentActive && forceLoopMic && !autoNextTimeout) {
+            restartSpeechEngine();
         }
     };
+}
+
+function restartSpeechEngine() {
+    try { recognition.stop(); } catch(e){}
+    setTimeout(() => {
+        if (isAssessmentActive && forceLoopMic && !autoNextTimeout) {
+            setRecognitionLanguage();
+            try { recognition.start(); } catch(e){}
+        }
+    }, 300);
 }
 
 function setRecognitionLanguage() {
@@ -478,10 +490,10 @@ function cleanText(text) {
 function updateSentenceFontSize(text) {
     const box = document.getElementById("target-sentence");
     const len = text.length;
-    if (len > 60) { box.style.fontSize = "3.5rem"; } 
-    else if (len > 35) { box.style.fontSize = "4.5rem"; } 
-    else if (len > 15) { box.style.fontSize = "5.5rem"; } 
-    else { box.style.fontSize = "6.5rem"; }
+    if (len > 60) { box.style.fontSize = "2.8rem"; } 
+    else if (len > 35) { box.style.fontSize = "3.8rem"; } 
+    else if (len > 15) { box.style.fontSize = "4.6rem"; } 
+    else { box.style.fontSize = "5.5rem"; }
 }
 
 function renderSentenceHTML(wordsArray, scoreArray) {
@@ -507,26 +519,21 @@ function evaluateLiveText(speech) {
     let currentSentenceCorrectCount = 0;
     let isLastWordCorrect = false;
 
-    // చివరి పదాన్ని గుర్తించడం కోసం
-    const lastWordInTarget = targetWords.length ? cleanText(targetWords[targetWords.length - 1]) : "";
+    // చివరి పదం ఇండెక్స్ ట్రాక్ చేయడానికి
+    const lastWordIdx = targetWords.length - 1;
 
     targetWords.forEach((word, idx) => {
         const cleanedWord = cleanText(word);
+        
         if (cleanedWord !== "" && speechClean.includes(cleanedWord)) {
             scoreArray.push(1); 
             currentSentenceCorrectCount++;
             liveCorrectWordsSet.add(cleanedWord);
-            
-            // ఒకవేళ ఇది చివరి పదం అయితే ట్రాక్ చేయడం
-            if (idx === targetWords.length - 1) {
-                isLastWordCorrect = true;
-            }
+            if (idx === lastWordIdx) isLastWordCorrect = true;
         } else if (liveCorrectWordsSet.has(cleanedWord)) {
             scoreArray.push(1);
             currentSentenceCorrectCount++;
-            if (idx === targetWords.length - 1) {
-                isLastWordCorrect = true;
-            }
+            if (idx === lastWordIdx) isLastWordCorrect = true;
         } else {
             scoreArray.push(0); 
         }
@@ -539,22 +546,22 @@ function evaluateLiveText(speech) {
     view.innerText = `${accuracy}%`;
     view.style.display = "block";
 
-    // 🌟 మీ సూపర్ స్మార్ట్ లాజిక్ ఇక్కడ అప్లై చేసాను 🌟
+    // 🌟 మీ అద్భుతమైన కొత్త లాజిక్ అప్లికేషన్ ఇక్కడ ఉంది 🌟
     if (isLastWordCorrect) {
-        // కండిషన్ 1: చివరి పదం అండర్‌లైన్ అవ్వగానే ఏమాత్రం ఆలస్యం లేకుండా వెంటనే నెక్స్ట్ కి వెళ్తుంది!
+        // కండిషన్ 1: చివరి పదం పలకగానే (అండర్‌లైన్ అవ్వగానే) ఏమాత్రం ఆలస్యం లేకుండా వెంటనే తదుపరి వాక్యానికి వెళ్తుంది!
         if (autoNextTimeout) clearTimeout(autoNextTimeout);
         autoNextTimeout = null;
         moveToNextSentence();
     } else if (accuracy >= 60 || speechClean.split(/\s+/).length >= Math.max(1, targetWords.length - 1)) {
-        // కండిషన్ 2: విద్యార్థి ఎక్కువ శాతం చదివాడు కానీ చివరి పదం మిస్ అయింది/తప్పు చదివాడు -> 3 సెకన్ల టైమర్ రన్ అవుతుంది
+        // కండిషన్ 2: విద్యార్థి చదవడం పూర్తి చేసాడు కానీ చివరి పదం మిస్టేక్ అయింది -> 3 సెకన్ల టైమర్ ఆన్ అవుతుంది
         if (!autoNextTimeout) {
-            document.getElementById("status-text").innerText = "Waiting 3 seconds to auto-advance... 🔄";
+            document.getElementById("status-text").innerText = "⏱️ Waiting 3 seconds to auto-advance...";
             autoNextTimeout = setTimeout(() => {
                 moveToNextSentence();
-            }, 3000);
+            }, 3000); // 3 సెకన్ల గ్యాప్
         }
     } else {
-        // ఇంకా చదవడం పూర్తి కాకపోతే టైమర్ రీసెట్ అవుతుంది
+        // విద్యార్థి ఇంకా చదువుతుంటే టైమర్ రీసెట్ అయి వెయిట్ చేస్తుంది
         if (autoNextTimeout) {
             clearTimeout(autoNextTimeout);
             autoNextTimeout = null;
@@ -566,7 +573,6 @@ function evaluateLiveText(speech) {
 function fetchSheetQuestions() {
     const banner = document.getElementById("notice-banner");
     banner.style.display = "none";
-    
     const cls = document.getElementById("student-class").value;
     const lang = document.getElementById("language").value;
     currentLanguage = lang;
@@ -576,7 +582,6 @@ function fetchSheetQuestions() {
     fetchBtn.disabled = true;
     
     const finalUrl = `${WEB_APP_URL}?class=${encodeURIComponent(cls)}&subject=${encodeURIComponent(lang)}&language=${encodeURIComponent(lang)}`;
-
     const apiTimeout = setTimeout(() => {
         loadOfflineQuestions(cls, lang, "Google Sheet timeout. Loaded Offline Local Bank.");
     }, 8000);
@@ -669,13 +674,15 @@ function updateSelectedCount() {
 
 function startSelectedAssessment() {
     const checked = document.querySelectorAll("#questions-list input[type='checkbox']:checked");
-    if (checked.length === 0) return;
+    if (checked.length === 0) {
+        alert("Please pick at least 1 question item to evaluate.");
+        return;
+    }
     
     currentSentences = Array.from(checked).map(c => c.value);
     
     document.getElementById("setup-screen").style.display = "none";
     document.getElementById("assessment-panel").style.display = "block";
-    
     sentenceIndex = 0;
     accumulatedScores = 0;
     questionsAttempted = 0;
@@ -683,7 +690,8 @@ function startSelectedAssessment() {
     totalReadingTimeSeconds = 0;
     wrongWordsLog = [];
     isAssessmentActive = true;
-    autoMicLoop = true;
+    forceLoopMic = true;
+    liveCorrectWordsSet.clear();
     if (autoNextTimeout) { clearTimeout(autoNextTimeout); autoNextTimeout = null; }
     
     startTime = new Date();
@@ -691,9 +699,9 @@ function startSelectedAssessment() {
 }
 
 function setupSentenceDisplay() {
+    if (autoNextTimeout) { clearTimeout(autoNextTimeout); autoNextTimeout = null; }
     liveCorrectWordsSet.clear();
     sentenceStartTime = new Date();
-    if (autoNextTimeout) { clearTimeout(autoNextTimeout); autoNextTimeout = null; }
     
     const target = currentSentences[sentenceIndex];
     updateSentenceFontSize(target);
@@ -703,16 +711,26 @@ function setupSentenceDisplay() {
     renderSentenceHTML(targetWords, initialScores);
     
     document.getElementById("progress-text").innerText = `Question ${sentenceIndex + 1} of ${currentSentences.length}`;
-    document.getElementById("status-text").innerText = "Mic looping active. Read fully...";
+    document.getElementById("status-text").innerText = "Mic active. Start reading now...";
     document.getElementById("current-score-view").style.display = "none";
+    
+    const micBtn = document.getElementById("mic-btn");
+    micBtn.disabled = false;
+    micBtn.innerText = "🎤 Start Reading";
+    micBtn.className = "btn-mic";
     
     setRecognitionLanguage();
     try { recognition.start(); } catch(e){}
 }
 
 function startAssessmentListening() {
+    if (!recognition) {
+        alert("Web Speech API is not compatible or supported on this computer browser. Try Chrome.");
+        return;
+    }
+    if (autoNextTimeout) { clearTimeout(autoNextTimeout); autoNextTimeout = null; }
     setRecognitionLanguage();
-    try { recognition.start(); } catch(e){}
+    try { recognition.start(); } catch(e) {}
 }
 
 function moveToNextSentence() {
@@ -722,16 +740,14 @@ function moveToNextSentence() {
     const targetWords = target.split(/\s+/).filter(Boolean);
     
     let correctCount = 0;
+    let localWrong = [];
     
     targetWords.forEach((word) => {
         const cleanedWord = cleanText(word);
         if (cleanedWord !== "" && liveCorrectWordsSet.has(cleanedWord)) {
             correctCount++;
-        } else if (cleanedWord !== "") {
-            const stripWord = word.replace(/[\.,\-\/#!$%\^&\*;:{}=\-_`~()?।॥]/g, "");
-            if(stripWord.trim() !== "" && !wrongWordsLog.includes(stripWord)) {
-                wrongWordsLog.push(stripWord);
-            }
+        } else {
+            localWrong.push(word);
         }
     });
 
@@ -741,7 +757,12 @@ function moveToNextSentence() {
     
     totalWordsReadSuccessfully += correctCount;
     if (sentenceStartTime) {
-        totalReadingTimeSeconds += (new Date() - sentenceStartTime) / 1000;
+        const duration = (new Date() - sentenceStartTime) / 1000;
+        totalReadingTimeSeconds += duration;
+    }
+    
+    if (localWrong.length > 0) {
+        wrongWordsLog.push({ question: target, words: localWrong });
     }
 
     sentenceIndex++;
@@ -753,14 +774,13 @@ function moveToNextSentence() {
 }
 
 function finishAssessmentReport() {
-    autoMicLoop = false;
     isAssessmentActive = false;
+    forceLoopMic = false;
     if (autoNextTimeout) { clearTimeout(autoNextTimeout); autoNextTimeout = null; }
     try { recognition.stop(); } catch(e){}
     
     document.getElementById("assessment-panel").style.display = "none";
     document.getElementById("certificate-panel").style.display = "block";
-    
     const finalScore = questionsAttempted ? Math.round(accumulatedScores / questionsAttempted) : 100;
     
     const name = document.getElementById("student-name").value || "Anonymous Student";
@@ -771,21 +791,21 @@ function finishAssessmentReport() {
     document.getElementById("cert-lang").innerText = currentLanguage;
     document.getElementById("cert-final-score").innerText = `${finalScore}%`;
     document.getElementById("cert-q-count").innerText = questionsAttempted;
-    
     const totalMinutes = totalReadingTimeSeconds > 0 ? (totalReadingTimeSeconds / 60) : 0.01;
-    document.getElementById("cert-wpm").innerText = Math.round(totalWordsReadSuccessfully / totalMinutes);
+    const wpmCalculated = Math.round(totalWordsReadSuccessfully / totalMinutes);
+    document.getElementById("cert-wpm").innerText = wpmCalculated;
     document.getElementById("cert-time").innerText = `${Math.round(totalReadingTimeSeconds)}s`;
     
     const detailsDiv = document.getElementById("error-list-details");
     detailsDiv.innerHTML = "";
     if (wrongWordsLog.length === 0) {
-        detailsDiv.innerHTML = "<div style='color: var(--success); font-weight:bold; font-size:1.6rem;'>Excellent! Perfect reading. No mistakes! ⭐</div>";
+        detailsDiv.innerHTML = "<div class='error-item' style='color: var(--success); font-weight:bold;'>Excellent! No reading errors logged. Perfect score. ⭐</div>";
     } else {
-        wrongWordsLog.forEach((word) => {
-            const badge = document.createElement("span");
-            badge.className = "error-badge";
-            badge.innerText = word;
-            detailsDiv.appendChild(badge);
+        wrongWordsLog.forEach((log, idx) => {
+            const row = document.createElement("div");
+            row.className = "error-item";
+            row.innerHTML = `<strong>Line ${idx+1}:</strong> "${log.question}"<br><span style="color:#dc2626; font-weight:bold;">Missed/Wrong:</span> ${log.words.map(w => `<span style="background: #fed7d7; padding: 2px 6px; border-radius: 4px; margin-right: 4px;">${w}</span>`).join(" ")}`;
+            detailsDiv.appendChild(row);
         });
     }
     
@@ -805,20 +825,21 @@ function sendPayloadToGoogleSheet(name, studentClass, finalScore, totalTimeTaken
         score: `${finalScore}%`,
         timeTaken: totalTimeTaken
     };
-
-    fetch(WEB_APP_URL, {
-        method: "POST",
-        mode: "no-cors", 
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(scorePayload)
-    }).catch(err => console.error(err));
+    if (WEB_APP_URL !== "YOUR_DEPLOYED_WEB_APP_URL_HERE") {
+        fetch(WEB_APP_URL, {
+            method: "POST",
+            mode: "no-cors", 
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(scorePayload)
+        }).catch(err => console.error("Write error:", err));
+    }
 }
 
 function abortAssessment() {
-    if (confirm("Are you sure you want to stop?")) {
-        autoMicLoop = false;
+    if (confirm("Are you sure you want to stop and abort the current test?")) {
         isAssessmentActive = false;
-        if (autoNextTimeout) { clearTimeout(autoNextTimeout); autoNextTimeout = null; }
+        forceLoopMic = false;
+        if (autoNextTimeout) clearTimeout(autoNextTimeout);
         try { recognition.stop(); } catch(e){}
         resetToSetup();
     }
@@ -831,7 +852,6 @@ function resetToSetup() {
     const nameInput = document.getElementById("student-name");
     nameInput.value = "";
     nameInput.focus();
-    
     document.getElementById("selection-box-container").style.display = "none";
     
     currentSentences = [];
@@ -839,7 +859,7 @@ function resetToSetup() {
     accumulatedScores = 0;
     questionsAttempted = 0;
     isAssessmentActive = false;
-    autoMicLoop = true;
+    forceLoopMic = false;
     wrongWordsLog = [];
     totalWordsReadSuccessfully = 0;
     totalReadingTimeSeconds = 0;
