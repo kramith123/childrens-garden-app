@@ -346,11 +346,11 @@ const OFFLINE_DATABASE = {
     UKG_Tel: ["బలపము", "రథము", "లత"],
     UKG_Hindi: ["उल्लू", "ऊनी"],
     "1st Class_Eng": ["The sun is very bright.", "The boy runs fast."],
-    "1st Class_Tel": ["అమ్మ మనకు దైవము.", "చెట్లు మనకు నీడను ఇస్తాయి.", "పిల్లలు చక్కగా చదవాలి."],
+    "1st Class_Tel": ["అమ్మ మనకు దైవము.", "チェట్లు మనకు నీడను ఇస్తాయి.", "పిల్లలు చక్కగా చదవాలి."],
     "1st Class_Hin": ["सूरज पूर्व से निकलता है।"],
     "1st Class_Numbers": ["100 One Hundred"],
     "2nd Class_Eng": ["Keep your surroundings clean.", "Honesty is the best policy."],
-    "2nd Class_Tel": ["పెద్దలను గౌరవించడం మన కర్తవ్యం.", "పుస్తకాలు మంచి జ్ఞానాన్ని ఇస్తాయి."],
+    "2nd Class_Tel": ["పెద్దలను గౌరవించడం మన കർతవ్యం.", "పుస్తకాలు మంచి జ్ఞానాన్ని ఇస్తాయి."],
     "2nd Class_Hin": ["पेड़-पौधे हमारे सच्चे मित्र हैं।"],
     "2nd Class_Numbers": ["1000 One Thousand"]
 };
@@ -441,11 +441,9 @@ function setRecognitionLanguage() {
     }
 }
 
-// 🛠️ డీప్ శానిటైజర్: కనిపించని అదృశ్య స్పేస్ లు, క్యారెక్టర్లను పూర్తిగా తుడిచిపెడుతుంది
 function cleanText(text) {
     if (!text) return "";
     let low = text.toString().toLowerCase().trim();
-    // అన్ని రకాల \r, \n, ట్యాబ్ లు మరియు స్పెషల్ క్యారెక్టర్లను స్పేస్ తో రీప్లేస్ చేస్తుంది
     low = low.replace(/[\r\n\t]/g, " ");
     low = low.replace(/[\.,\-\/#!$%\^&\*;:{}=\-_`~()?।॥]/g, " ");
     return low.replace(/\s+/g, " ").trim();
@@ -465,7 +463,7 @@ function renderSentenceHTML(wordsArray, scoreArray) {
     box.innerHTML = "";
     wordsArray.forEach((word, idx) => {
         const span = document.createElement("span");
-        span.innerText = word.trim(); // ఎక్స్‌ట్రా స్పేస్ లేకుండా రెండర్ చేస్తుంది
+        span.innerText = word.trim();
         if (scoreArray[idx] === 1) { span.className = "w-correct"; } 
         else if (scoreArray[idx] === -1) { span.className = "w-incorrect"; } 
         else { span.className = "w-normal"; }
@@ -476,7 +474,6 @@ function renderSentenceHTML(wordsArray, scoreArray) {
 function evaluateLiveText(speech) {
     if (!speech || !isAssessmentActive) return;
     const target = currentSentences[sentenceIndex];
-    // తెల్లటి ఖాళీలు లేకుండా పదాలను క్లీన్ గా అరే లోకి మారుస్తుంది
     const targetWords = target.split(/\s+/).map(w => w.trim()).filter(Boolean);
     const speechClean = cleanText(speech);
     
@@ -490,7 +487,11 @@ function evaluateLiveText(speech) {
     targetWords.forEach((word, idx) => {
         const cleanedWord = cleanText(word);
         
-        if (cleanedWord !== "" && (speechClean.includes(cleanedWord) || liveWordsArray.some(lw => lw === cleanedWord) || permanentlyMatchedWordsSet.has(cleanedWord))) {
+        // 🌟 SMALL WORDS AUTO-EXEMPTION MECHANISM
+        // ఇంగ్లీషులో 2 అంతకంటే తక్కువ అక్షరాలు ఉన్న చిన్న పదాలను ఆటో-కరెక్ట్ చేస్తుంది (చిన్న పొరపాట్లు స్కిప్ అవ్వకుండా)
+        let isSmallWordExempted = (currentLanguage === "English" && cleanedWord.length <= 2);
+
+        if (cleanedWord !== "" && (speechClean.includes(cleanedWord) || liveWordsArray.some(lw => lw === cleanedWord) || permanentlyMatchedWordsSet.has(cleanedWord) || isSmallWordExempted)) {
             scoreArray.push(1); 
             currentSentenceCorrectCount++;
             permanentlyMatchedWordsSet.add(cleanedWord); 
@@ -507,18 +508,12 @@ function evaluateLiveText(speech) {
     view.innerText = `${accuracy}%`;
     view.style.display = "block";
 
-    if (isLastWordCorrect) {
+    // 🔒 STRICT LOCK: చివరి పదం పలికినా లేదా కనీసం 90% పెద్ద పదాలు పూర్తయితేనే ఆటో-నెక్స్ట్ అవుతుంది!
+    if (isLastWordCorrect || accuracy >= 90) {
         if (autoNextTimeout) { clearTimeout(autoNextTimeout); autoNextTimeout = null; }
         moveToNextSentence();
-    } else if (accuracy >= 65 || permanentlyMatchedWordsSet.size >= Math.max(1, targetWords.length - 2)) {
-        if (!autoNextTimeout) {
-            document.getElementById("status-text").innerText = "⏱️ Line ending. Moving next in 3 seconds...";
-            autoNextTimeout = setTimeout(() => {
-                autoNextTimeout = null;
-                moveToNextSentence();
-            }, 3000);
-        }
     } else {
+        // విద్యార్థి సగం చదివి ఆగినప్పుడు టైమర్ ఆన్ అవ్వకుండా లాక్ చేసాము.
         if (autoNextTimeout) {
             clearTimeout(autoNextTimeout);
             autoNextTimeout = null;
@@ -531,7 +526,6 @@ function smartSentenceSplitter(rawQuestionsArray) {
     let finalizedList = [];
     rawQuestionsArray.forEach(item => {
         if (!item) return;
-        // క్యారేజ్ రిటర్న్స్ (\r\n) ఆధారంగా కూడా ముక్కలు చేస్తుంది
         let splitByLines = item.toString().split(/[\r\n]+/);
         
         splitByLines.forEach(line => {
@@ -735,7 +729,9 @@ function moveToNextSentence() {
     
     targetWords.forEach((word) => {
         const cleanedWord = cleanText(word);
-        if (cleanedWord !== "" && permanentlyMatchedWordsSet.has(cleanedWord)) {
+        let isSmallWordExempted = (currentLanguage === "English" && cleanedWord.length <= 2);
+        
+        if (cleanedWord !== "" && (permanentlyMatchedWordsSet.has(cleanedWord) || isSmallWordExempted)) {
             correctCount++;
         } else {
             localWrong.push(word);
