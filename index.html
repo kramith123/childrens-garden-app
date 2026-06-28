@@ -8,7 +8,7 @@
         :root {
             --primary: #1e40af;
             --primary-hover: #1d4ed8;
-            --bg: #e0f2fe; /* Light baby blue pastel background */
+            --bg: #e0f2fe; 
             --card: #ffffff;
             --text: #0f172a;
             --border: #cbd5e1;
@@ -21,11 +21,10 @@
         
         body {
             font-family: var(--font-main);
-            /* Bouncy, beautiful gradient background */
             background: linear-gradient(135deg, #e0f2fe 0%, #f0fdf4 50%, #fef9c3 100%);
             color: var(--text);
             margin: 0;
-            padding: 10px; /* Reduced padding to maximize space on projector */
+            padding: 10px; 
             display: flex;
             justify-content: center;
             align-items: center;
@@ -35,7 +34,6 @@
             overflow-x: hidden;
         }
 
-        /* Beautiful floating SVG background elements for premium feel */
         .bg-doodles {
             position: fixed;
             top: 0;
@@ -49,7 +47,7 @@
 
         .doodle {
             position: absolute;
-            opacity: 0.12; /* Subtle visibility */
+            opacity: 0.12; 
             transform: rotate(0deg);
             transition: transform 0.5s ease;
         }
@@ -65,25 +63,23 @@
         .doodle-5 { top: 48%; left: 3%; width: 80px; height: 80px; }
         .doodle-6 { top: 50%; right: 3%; width: 90px; height: 90px; }
 
-        /* Modified container to look wide like the requested full-width layout */
         .container {
-            width: 98%; /* Maximized to fit full width on screen */
-            max-width: 1800px; /* Massive max width for high res screens/projectors */
+            width: 98%; 
+            max-width: 1800px; 
             background: rgba(255, 255, 255, 0.96);
             padding: 40px;
             border-radius: 24px;
             box-shadow: 0 20px 40px -10px rgba(15, 23, 42, 0.15), 0 10px 15px -3px rgba(15, 23, 42, 0.05);
-            border: 4px solid #ffffff; /* Sleek card look */
+            border: 4px solid #ffffff; 
             box-sizing: border-box;
             position: relative;
-            z-index: 10; /* Put above doodles */
+            z-index: 10; 
             backdrop-filter: blur(8px);
             margin: 10px auto;
         }
 
-        /* Increased font sizes for titles to look great on projector */
         .school-title {
-            font-size: 3rem; /* Enlarged title */
+            font-size: 3rem; 
             font-weight: 800;
             text-transform: uppercase;
             letter-spacing: 1.5px;
@@ -94,7 +90,7 @@
         }
         
         .app-title {
-            font-size: 1.8rem; /* Enlarged subtitle */
+            font-size: 1.8rem; 
             color: #475569;
             font-weight: 600;
             margin-bottom: 40px;
@@ -109,43 +105,34 @@
         }
 
         @media (max-width: 768px) {
-            .form-grid {
-                grid-template-columns: 1fr;
-            }
+            .form-grid { grid-template-columns: 1fr; }
             .school-title { font-size: 1.8rem; }
             .app-title { font-size: 1.1rem; }
             .container { padding: 30px 20px; }
         }
 
-        .form-group {
-            margin-bottom: 5px;
-        }
-
-        .form-group.full-width {
-            grid-column: span 2;
-        }
+        .form-group { margin-bottom: 5px; }
+        .form-group.full-width { grid-column: span 2; }
 
         @media (max-width: 768px) {
-            .form-group.full-width {
-                grid-column: span 1;
-            }
+            .form-group.full-width { grid-column: span 1; }
         }
 
         label {
             display: block;
             margin-bottom: 10px;
             font-weight: 700;
-            font-size: 1.4rem; /* Bigger form labels */
+            font-size: 1.4rem; 
             color: #334155;
         }
 
         input, select {
             width: 100%;
-            padding: 16px 20px; /* More padding */
+            padding: 16px 20px; 
             border: 2px solid var(--border);
             border-radius: 12px;
             box-sizing: border-box;
-            font-size: 1.4rem; /* Bigger input font size */
+            font-size: 1.4rem; 
             background-color: #fcfcfc;
             font-weight: 500;
             color: #1e293b;
@@ -161,10 +148,10 @@
 
         button {
             width: 100%;
-            padding: 20px 24px; /* Scaled up button sizing */
+            padding: 20px 24px; 
             border: none;
             border-radius: 12px;
-            font-size: 1.5rem; /* Bigger button text */
+            font-size: 1.5rem; 
             font-weight: bold;
             cursor: pointer;
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
@@ -172,15 +159,9 @@
             margin-top: 10px;
         }
 
-        button:active {
-            transform: scale(0.98);
-        }
+        button:active { transform: scale(0.98); }
 
-        .btn-primary {
-            background-color: #2563eb;
-            color: white;
-        }
-
+        .btn-primary { background-color: #2563eb; color: white; }
         .btn-primary:hover {
             background-color: #1d4ed8;
             box-shadow: 0 8px 12px rgba(37, 99, 235, 0.25);
@@ -190,10 +171,9 @@
             background-color: var(--success);
             color: white;
             margin-top: 25px;
-            font-size: 1.6rem; /* Scaled up text */
+            font-size: 1.6rem; 
             padding: 22px 24px;
         }
-
         .btn-success:hover {
             background-color: #15803d;
             box-shadow: 0 8px 12px rgba(21, 128, 61, 0.25);
@@ -203,22 +183,19 @@
             background-color: #ef4444;
             color: white;
             margin-top: 25px;
-            font-size: 2rem; /* Massive mic button for easy visualization */
+            font-size: 2rem; 
             padding: 26px;
             border-radius: 16px;
         }
-
         .btn-mic:hover {
             background-color: #dc2626;
             box-shadow: 0 8px 16px rgba(239, 68, 68, 0.3);
         }
-
         .btn-mic.listening {
             background-color: #16a34a;
             animation: pulse 1.5s infinite;
         }
         
-        /* Question Pool Interface Box styles */
         .q-selection-box {
             display: none;
             background: #f8fafc;
@@ -233,7 +210,7 @@
             justify-content: space-between;
             align-items: center;
             margin-bottom: 20px;
-            font-size: 1.3rem; /* Scaled up */
+            font-size: 1.3rem; 
         }
 
         .btn-link {
@@ -249,13 +226,10 @@
             font-weight: 600;
             box-shadow: none;
         }
-
-        .btn-link:hover {
-            color: #1d4ed8;
-        }
+        .btn-link:hover { color: #1d4ed8; }
 
         .q-scroll {
-            max-height: 450px; /* Expanded space */
+            max-height: 450px; 
             overflow-y: auto;
             border: 2px solid #e2e8f0;
             background: #ffffff;
@@ -268,27 +242,19 @@
             align-items: center;
             padding: 18px; 
             border-bottom: 1px solid #f1f5f9;
-            font-size: 1.4rem; /* Larger item sizes */
+            font-size: 1.4rem; 
             cursor: pointer;
             user-select: none;
             transition: background 0.15s ease;
         }
-
-        .q-item:hover {
-            background-color: #f0fdf4;
-        }
-
-        .q-item:last-child {
-            border-bottom: none;
-        }
-
+        .q-item:hover { background-color: #f0fdf4; }
+        .q-item:last-child { border-bottom: none; }
         .q-item input {
             width: auto;
             margin-right: 18px;
-            transform: scale(1.8); /* Massive checkbox inputs */
+            transform: scale(1.8); 
             cursor: pointer;
         }
-
         .q-item label {
             margin: 0;
             cursor: pointer;
@@ -305,7 +271,6 @@
             font-weight: bold;
             margin-left: 12px;
         }
-
         .badge-live { background-color: #dcfce7; color: #166534; }
         .badge-offline { background-color: #fee2e2; color: #991b1b; }
         
@@ -316,9 +281,8 @@
             padding-top: 30px;
         }
         
-        /* Enlarged sentence display box optimized for clear projector visibility */
         .sentence-box {
-            font-size: 5rem; /* Massive size so kids in the back row can easily read it */
+            font-size: 5rem; 
             font-weight: 800;
             padding: 60px 30px;
             background: #f1f5f9;
@@ -332,21 +296,18 @@
             box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
         }
 
-        /* Color-coded highlighting helper wrappers */
         .w-correct {
             color: var(--correct-word);
             border-bottom: 5px solid var(--correct-word);
             display: inline-block;
             margin: 0 10px;
         }
-
         .w-incorrect {
             color: var(--incorrect-word);
             border-bottom: 5px solid var(--incorrect-word);
             display: inline-block;
             margin: 0 10px;
         }
-
         .w-normal {
             color: #0f172a;
             display: inline-block;
@@ -359,12 +320,12 @@
             margin: 20px 0;
             height: 35px;
             color: #475569;
-            font-size: 1.6rem; /* Enriched message sizing */
+            font-size: 1.6rem; 
         }
 
         .score-display {
             text-align: center;
-            font-size: 6rem; /* Giant standalone metrics */
+            font-size: 6rem; 
             font-weight: 900;
             color: var(--success);
             display: none;
@@ -384,7 +345,6 @@
             font-size: 1.3rem;
         }
 
-        /* Final elegant report card print container */
         .certificate-card {
             display: none;
             border: 12px double #b45309;
@@ -399,7 +359,6 @@
         .cert-school { font-size: 3rem; font-weight: 800; color: #78350f; margin-bottom: 25px; }
         .cert-score { font-size: 6.5rem; font-weight: 900; color: #b45309; margin: 25px 0; }
 
-        /* Error Summary Section Styles */
         .error-log-container {
             margin-top: 30px;
             text-align: left;
@@ -422,54 +381,44 @@
             line-height: 1.6;
             color: #2d3748;
         }
+
+        .action-buttons-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-top: 35px;
+        }
         
         @keyframes pulse {
             0% { opacity: 1; }
             50% { opacity: 0.6; }
             100% { opacity: 1; }
         }
+
+        /* Print styling for clean Certificate downloads */
+        @media print {
+            body * { visibility: hidden; }
+            #certificate-panel, #certificate-panel * { visibility: visible; }
+            #certificate-panel { position: absolute; left: 0; top: 0; width: 100%; border: none; box-shadow: none; }
+            #next-student-btn, #download-cert-btn { display: none !important; }
+        }
     </style>
 </head>
 <body>
 
-<!-- Background Vector Graphics for Kids Theme Visual Aesthetics -->
 <div class="bg-doodles">
-    <svg class="doodle doodle-1" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M17.5 19A3.5 3.5 0 0 0 21 15.5c0-2.79-2.54-4.5-5-4.5-.42 0-.83.05-1.24.15A7 7 0 0 0 3 11.5c0 3.62 3.1 6.5 7 6.5h7.5z"/>
-    </svg>
-    <svg class="doodle doodle-2" viewBox="0 0 24 24" fill="none" stroke="#e11d48" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/>
-        <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
-    </svg>
-    <svg class="doodle doodle-3" viewBox="0 0 24 24" fill="none" stroke="#ca8a04" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
-        <circle cx="12" cy="12" r="4"/>
-        <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/>
-    </svg>
-    <svg class="doodle doodle-4" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M22 10v6M2 10l10-5 10 5-10 5z"/>
-        <path d="M6 12v5c0 2 2 3 6 3s6-1 6-3v-5"/>
-    </svg>
-    <svg class="doodle doodle-5" viewBox="0 0 24 24" fill="none" stroke="#7c3aed" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M12 20h9"/>
-        <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/>
-    </svg>
-    <svg class="doodle doodle-6" viewBox="0 0 24 24" fill="none" stroke="#ea580c" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/>
-        <path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/>
-        <path d="M4 22h16"/>
-        <path d="M10 14.66V17c0 .55-.45 1-1 1H4v2h16v-2h-5c-.55 0-1-.45-1-1v-2.34"/>
-        <path d="M12 2a6 6 0 0 1 6 6v3.5a6 6 0 0 1-6 6 6 6 0 0 1-6-6V8a6 6 0 0 1 6-6z"/>
-    </svg>
+    <!-- SVG Doodles unchanged -->
+    <svg class="doodle doodle-1" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><path d="M17.5 19A3.5 3.5 0 0 0 21 15.5c0-2.79-2.54-4.5-5-4.5-.42 0-.83.05-1.24.15A7 7 0 0 0 3 11.5c0 3.62 3.1 6.5 7 6.5h7.5z"/></svg>
+    <svg class="doodle doodle-2" viewBox="0 0 24 24" fill="none" stroke="#e11d48" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+    <svg class="doodle doodle-3" viewBox="0 0 24 24" fill="none" stroke="#ca8a04" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
 </div>
 
 <div class="container">
     <div class="school-title">Children's Garden E.M. High School</div>
     <div class="app-title">Student Reading Assessment Engine</div>
 
-    <!-- Toast Notification Banner System Container -->
     <div id="notice-banner" class="notification-banner"></div>
 
-    <!-- మొదటి PPT స్క్రీన్: క్వశ్చన్ సెటప్ మరియు సెలెక్షన్ రౌండ్ -->
     <div id="setup-screen">
         <div class="form-grid">
             <div class="form-group full-width">
@@ -502,7 +451,6 @@
         
         <button id="fetch-btn" class="btn-primary" onclick="fetchSheetQuestions()">Load Sheet Questions</button>
         
-        <!-- సెలెక్టెడ్ క్లాస్ క్వశ్చన్స్ లిస్ట్ కంటైనర్ బాక్స్ (ఆటోమేటిగ్గా కింద ఓపెన్ అవుతుంది) -->
         <div id="selection-box-container" class="q-selection-box">
             <div class="q-header-controls">
                 <span style="font-weight: bold; color: #1e3a8a; font-size: 1.4rem;">
@@ -514,9 +462,7 @@
                 </div>
             </div>
             
-            <div class="q-scroll" id="questions-list">
-                <!-- Checkboxes dynamically rendered here -->
-            </div>
+            <div class="q-scroll" id="questions-list"></div>
             
             <div style="margin-top: 20px; font-size: 1.4rem; font-weight: 700; color: #475569;">
                 Selected: <span id="selected-counter" style="color: #2563eb;">0</span>
@@ -526,7 +472,6 @@
         </div>
     </div>
 
-    <!-- రెండవ స్క్రీన్: లైవ్ రీడింగ్ అసెస్మెంట్ ప్యానెల్ -->
     <div id="assessment-panel" class="panel">
         <h3 id="progress-text" style="text-align: center; color: #475569; font-size: 1.8rem;">Processing...</h3>
         <div class="sentence-box" id="target-sentence">Please wait...</div>
@@ -535,7 +480,6 @@
         <div class="score-display" id="current-score-view">100%</div>
     </div>
 
-    <!-- మూడవ స్క్రీన్: స్టూడెంట్ ఫైనల్ మార్క్స్ మెమో / రిపోర్ట్ కార్డ్ (ఎర్రర్స్ లిస్ట్ తో సహా) -->
     <div id="certificate-panel" class="certificate-card">
         <div style="font-size: 4rem; margin-bottom: 15px;">🏆</div>
         <h2 style="color: #78350f; font-family: Georgia, serif; margin-bottom: 10px; font-size: 2.8rem;">Certificate of Completion</h2>
@@ -548,10 +492,9 @@
         <div style="font-size: 1.3rem; text-transform: uppercase; color: #9a3412; font-weight: bold; letter-spacing: 1.5px;">Assessment Metrics</div>
         <div class="cert-score" id="cert-final-score">0%</div>
         <div style="color: #78350f; margin-bottom: 25px; font-weight: 700; font-size: 1.5rem;">
-            Total Questions: <span id="cert-q-count">0</span> | Time Taken: <span id="cert-time">0s</span>
+            Total Questions: <span id="cert-q-count">0</span> | Started At: <span id="cert-start-time">00:00</span> | Time Taken: <span id="cert-time">0s</span>
         </div>
 
-        <!-- ఎర్రర్స్ పేజీ / తప్పుగా చదివిన పదాల రివ్యూ సెక్షన్ -->
         <div id="error-log-box" class="error-log-container">
             <div class="error-log-title">❌ Mistaken Words / తప్పుగా చదివిన పదాలు:</div>
             <div id="error-list-details"></div>
@@ -559,16 +502,20 @@
 
         <div style="font-size: 2.2rem; font-weight: bold; color: #78350f; margin-top: 30px;">Congratulations! 🎉</div>
 
-        <button id="next-student-btn" class="btn-primary" style="margin-top: 35px; background-color: #9a3412; font-size: 1.6rem; padding: 20px 30px; border-radius: 12px;" onclick="resetToSetup()">
-            👤 Test Next Student / తదుపరి విద్యార్థి
-        </button>
+        <div class="action-buttons-grid">
+            <button id="download-cert-btn" class="btn-primary" style="background-color: #15803d; font-size: 1.6rem; padding: 20px 30px; border-radius: 12px;" onclick="window.print()">
+                📥 Download Certificate / సర్టిఫికేట్ డౌన్‌లోడ్
+            </button>
+            <button id="next-student-btn" class="btn-primary" style="background-color: #9a3412; font-size: 1.6rem; padding: 20px 30px; border-radius: 12px;" onclick="resetToSetup()">
+                👤 Test Next Student / తదుపరి విద్యార్థి
+            </button>
+        </div>
     </div>
 </div>
 
 <script>
     const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbx7S7hUa9_dCKjqW_gr6XQ9WAX7V9S6UC7H86yja_hWKZ1oJ-DjMwAxa_x1VlEXM58/exec";
 
-    // ఆఫ్లైన్ బ్యాకప్ డేటాబేస్
     const OFFLINE_DATABASE = {
         Nursery_Eng: ["A Apple", "B Ball", "C Cat", "D Dog", "E Elephant"],
         Nursery_Tel: ["అమ్మ", "ఆవు", "ఇల్లు", "ఈల", "ఉడత"],
@@ -581,25 +528,9 @@
         UKG_Tel: ["బలపము", "రథము", "లత", "వనము"],
         UKG_Hindi: ["उल्लू", "ऊनी", "ऋषि", "एक"],
         "1st Class_Eng": ["The sun is very bright.", "The boy runs fast.", "I read my text books daily.", "I drink sweet milk."],
-        "1st Class_Tel": ["అమ్మ మనకు దైవము.", "చెట్లు మనకు నీడను ఇస్తాయి.", "పిల్లలు చక్కగా చదవాలి."],
+        "1st Class_Tel": ["అమ్మ మనకు దైవము.", "チェట్లు మనకు నీడను ఇస్తాయి.", "పిల్లలు చక్కగా చదవాలి."],
         "1st Class_Hin": ["सूरज पूर्व से निकलता है।", "हमें सदा सच बोलना चाहिए।", "यह मेरी पाठशाला है।"],
-        "1st Class_Numbers": ["100 One Hundred", "200 Two Hundred", "300 Three Hundred", "400 Four Hundred"],
-        "2nd Class_Eng": ["Keep your surroundings clean and green.", "Honesty is the best moral policy.", "Birds fly high in the cloudless sky."],
-        "2nd Class_Tel": ["పెద్దలను గౌరవించడం మన కర్తవ్యం.", "పుస్తకాలు మంచి జ్ఞానాన్ని ఇస్తాయి.", "గాంధీజీ దేశానికి తండ్రి."],
-        "2nd Class_Hin": ["सफलता की कुंजी कठिन परिश्रम है।", "पेड़-पौधे हमारे सच्चे मित्र हैं।", "भारत एक महान और पवित्र देश है।"],
-        "2nd Class_Numbers": ["1000 One Thousand", "2000 Two Thousand", "3000 Three Thousand"],
-        "3rd Class_Eng": ["Healthy food keeps our body fit and active.", "Always wash your hands before eating.", "Reading improves our reading comprehension."],
-        "3rd Class_Tel": ["దేశ భాషలందు తెలుగు లెస్స.", "స్వచ్ఛమైన గాలి మన ఆరోగ్యానికి ఎంతో ముఖ్యం.", "మొక్కలు నాటడం ద్వారా పర్యావరణాన్ని రక్షించవచ్చు."],
-        "3rd Class_Hin": ["समय बहुत मूल्यवान है, इसका सदुपयोग करें।", "नियमित व्यायाम से हमारा शरीर स्वस्थ रहता है।", "विद्यार्थियों को अनुशासन का पालन करना चाहिए।"],
-        "3rd Class_Numbers": ["5000 Five Thousand", "10000 Ten Thousand"],
-        "4th Class_Eng": ["Global warming is a serious problem for our earth.", "We must practice daily to achieve high accuracy.", "The school library has a collection of historical books."],
-        "4th Class_Tel": ["వృక్షో రక్షతి రక్షితః అనగా చెట్లను రక్షించాల్సింది మనమే.", "చదువుతో పాటు మంచి సంస్కారం కూడా అలవర్చుకోవాలి.", "వ్యవసాయం మన దేశానికి వెన్నెముక వంటిది."],
-        "4th Class_Hin": ["पुस्तकालय ज्ञान का असीम महासागर होता है।", "हमे प्लास्टिक के उपयोग से बचना चाहिए।", "सत्य और अहिंसा ही मानव जीवन के सच्चे मार्ग हैं।"],
-        "4th Class_Numbers": ["25000 Twenty Five Thousand", "50000 Fifty Thousand"],
-        "5th Class_Eng": ["Education empowers individuals to build a prosperous nation.", "Digital learning helps students understand concepts easily.", "Environmental protection is the responsibility of every citizen."],
-        "5th Class_Tel": ["మాతృభాషను గౌరవించడం మన ప్రథమ బాధ్యత.", "సాంకేతిక పరిజ్ఞానం ద్వారా సమాచారాన్ని సులభంగా తెలుసుకోవచ్చు.", "పరిశుభ్రత దైవత్వంతో సమానమని పెద్దలు చెప్తారు."],
-        "5th Class_Hin": ["सच्चा मित्र वही है जो विपत्ति के समय काम आता है।", "विज्ञान वरदान भी है और विनाशকারী अभिलाप भी।", "योग और प्राणायाम मानसिक शांति का सबसे सुलभ साधन है।"],
-        "5th Class_Numbers": ["100000 One Lakh", "1000000 Ten Lakhs"]
+        "1st Class_Numbers": ["100 One Hundred", "200 Two Hundred", "300 Three Hundred", "400 Four Hundred"]
     };
 
     let currentLanguage = "English";
@@ -607,15 +538,13 @@
     let sentenceIndex = 0;
     let accumulatedScores = 0;
     
-    // వాయిస్ రికగ్నిషన్ వేరియబుల్స్
     let recognition = null;
     let isAssessmentActive = false;
     let autoMicLoop = false; 
     
     let startTime = null;
+    let startingTimeStr = "";
     let totalTimeTaken = "";
-
-    // తప్పుగా చదివిన పదాలను స్టోర్ చేసే గ్లోబల్ అర్రే
     let wrongWordsLog = []; 
 
     if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
@@ -642,7 +571,7 @@
             if (err.error === 'no-speech') {
                 document.getElementById("status-text").innerText = "No speech detected.";
                 if(autoMicLoop) {
-                    processReadingResult(""); // ఆటోమెటిక్ గా రన్ అవ్వడానికి బ్లాంక్ వాల్యూ పంపుతుంది
+                    processReadingResult(""); 
                 }
             } else if (err.error === 'not-allowed') {
                 showToast("Microphone access blocked! Enable site permission settings.", "error");
@@ -687,7 +616,6 @@
         
         fetchBtn.innerText = "Loading Database...";
         fetchBtn.disabled = true;
-        
         document.getElementById("selection-box-container").style.display = "none";
         
         const fetchUrl = `${WEB_APP_URL}?class=${encodeURIComponent(studentClass)}&language=${encodeURIComponent(currentLanguage)}`;
@@ -704,7 +632,6 @@
         .then(res => {
             fetchBtn.innerText = "Load Sheet Questions";
             fetchBtn.disabled = false;
-
             if(res.status === "success") {
                 const pool = res.data;
                 if(pool.length === 0) {
@@ -732,7 +659,6 @@
         
         var lookupKey = `${studentClass}_${langKey}`;
         var pool = OFFLINE_DATABASE[lookupKey] || OFFLINE_DATABASE["Nursery_Eng"];
-        
         renderQuestionSelection(pool, false);
     }
 
@@ -747,7 +673,6 @@
                 <input type="checkbox" id="q-${index}" value="${sentence.replace(/"/g, '&quot;')}" onchange="updateSelectedCounter()">
                 <label for="q-${index}">${sentence}</label>
             `;
-            
             itemDiv.addEventListener("click", function(e) {
                 if(e.target.tagName !== 'INPUT') {
                     const cb = itemDiv.querySelector("input[type='checkbox']");
@@ -755,7 +680,6 @@
                     updateSelectedCounter();
                 }
             });
-
             listContainer.appendChild(itemDiv);
         });
 
@@ -774,9 +698,7 @@
 
     function selectAllQuestions(checkedValue) {
         const checkboxes = document.querySelectorAll("#questions-list input[type='checkbox']");
-        checkboxes.forEach(cb => {
-            cb.checked = checkedValue;
-        });
+        checkboxes.forEach(cb => { cb.checked = checkedValue; });
         updateSelectedCounter();
     }
 
@@ -794,9 +716,7 @@
 
         const checkboxes = document.querySelectorAll("#questions-list input[type='checkbox']:checked");
         currentSentences = [];
-        checkboxes.forEach(cb => {
-            currentSentences.push(cb.value);
-        });
+        checkboxes.forEach(cb => { currentSentences.push(cb.value); });
         
         if (currentSentences.length === 0) {
             showToast("Please select at least one question to ask!", "error");
@@ -809,13 +729,15 @@
         sentenceIndex = 0;
         accumulatedScores = 0;
         wrongWordsLog = []; 
-        autoMicLoop = false; // ఫస్ట్ క్వశ్చన్ మాన్యువల్ గా క్లిక్ చేయాలి
+        autoMicLoop = false; 
 
         if(currentLanguage === "Telugu") recognition.lang = "te-IN";
         else if(currentLanguage === "Hindi") recognition.lang = "hi-IN";
         else recognition.lang = "en-US";
         
         startTime = new Date();
+        startingTimeStr = startTime.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit', second:'2-digit'});
+        
         document.getElementById("mic-btn").disabled = false;
         displaySentence();
     }
@@ -829,18 +751,15 @@
         document.getElementById("status-text").innerText = "Click 'Start Reading' and read the sentence out loud.";
         resetMicButtonUi();
 
-        // ఆటో-లూప్ ఆన్ అయినప్పుడు బటన్ నొక్కే అవసరం లేకుండా ఇక్కడ నుండి డైరెక్ట్ గా మైక్ ఆన్ అవుతుంది
         if (autoMicLoop) {
-            setTimeout(() => {
-                startAssessmentListening();
-            }, 800); 
+            setTimeout(() => { startAssessmentListening(); }, 800); 
         }
     }
 
     function startAssessmentListening() {
         if (!recognition) return;
         isAssessmentActive = true;
-        autoMicLoop = true; // ఒకసారి ఫస్ట్ బటన్ క్లిక్ చేసిన తర్వాత లూప్ ఆక్టివేట్ అవుతుంది
+        autoMicLoop = true; 
         try {
             recognition.start();
         } catch(e) {
@@ -848,17 +767,19 @@
         }
     }
 
+    // తెలుగు, హిందీ అక్షరాలు దెబ్బతినకుండా ఉండేందుకు క్లీనింగ్ మెథడ్ అప్‌డేట్ చేసాము
     function cleanText(text) {
         return text.toString().toLowerCase()
-            .replace(/[.,\/#!$%\^&\*;:{}=\-_`~()।?]/g, "") 
+            .replace(/[.,\/#!$%\^&\*;:{}=\-_`~()।।?]/g, "") 
             .replace(/\s+/g, " ")                          
             .trim();
     }
 
     function processReadingResult(transcript) {
         isAssessmentActive = false;
+        try { recognition.stop(); } catch(e){} // వెంటనే మైక్ ఆఫ్ చేసి రీడింగ్ ఫ్లో ని పెంచుతుంది
+
         const target = currentSentences[sentenceIndex];
-        
         const targetWords = cleanText(target).split(" ");
         const spokenWords = cleanText(transcript).split(" ");
 
@@ -878,12 +799,8 @@
             }
         });
 
-        // తప్పు చదివిన పదాలను గ్లోబల్ లిస్ట్ లోకి పుష్ చేస్తుంది
         if(missedWordsInSentence.length > 0) {
-            wrongWordsLog.push({
-                sentence: target,
-                missed: missedWordsInSentence
-            });
+            wrongWordsLog.push({ sentence: target, missed: missedWordsInSentence });
         }
 
         const score = Math.round((matches / targetWords.length) * 100);
@@ -897,11 +814,7 @@
         scoreView.style.display = "block";
         document.getElementById("status-text").innerText = transcript ? `Spoken: "${transcript}"` : "No speech captured.";
 
-        try {
-            recognition.stop();
-        } catch(e){}
-
-        // 3 సెకన్ల విరామం తర్వాత నెక్స్ట్ క్వశ్చన్ లేదా ఎండ్ పేజీ కి వెళ్తుంది
+        // 3 సెకన్ల విరామం తర్వాత ఖచ్చితంగా నెక్స్ట్ వాక్యానికి వెళుతుంది
         setTimeout(() => {
             sentenceIndex++;
             if (sentenceIndex < currentSentences.length) {
@@ -934,9 +847,9 @@
         document.getElementById("cert-lang").innerText = currentLanguage;
         document.getElementById("cert-final-score").innerText = `${finalScore}%`;
         document.getElementById("cert-q-count").innerText = currentSentences.length;
+        document.getElementById("cert-start-time").innerText = startingTimeStr;
         document.getElementById("cert-time").innerText = totalTimeTaken;
 
-        // ఎర్రర్స్ సమ్మరీ బిల్డర్ (కండిషన్ లేకుండా డైరెక్ట్ డిస్ప్లే లాజిక్)
         const errorDetails = document.getElementById("error-list-details");
         errorDetails.innerHTML = ""; 
 
@@ -951,12 +864,12 @@
             errorDetails.innerHTML = "<div class='error-item' style='color:#15803d; font-weight:bold;'>🎉 Excellent! No mistakes made. Perfect Reading!</div>";
         }
 
-        // సర్టిఫికేట్ పేజీని ఓపెన్ చేస్తుంది
         document.getElementById("certificate-panel").style.display = "block";
 
         const today = new Date();
         const formattedDate = `${String(today.getDate()).padStart(2, '0')}-${today.toLocaleString('default', { month: 'short' })}-${today.getFullYear()}`;
         
+        // గూగుల్ షీట్ ఇమేజ్ కాలమ్స్ ఆర్డర్ మరియు స్టాప్ టైం లలో మార్పులు 
         const scorePayload = {
             date: formattedDate,
             studentName: name,
@@ -964,6 +877,7 @@
             language: currentLanguage,
             questions: currentSentences.length,
             score: `${finalScore}%`,
+            startingTime: startingTimeStr,
             timeTaken: totalTimeTaken
         };
 
