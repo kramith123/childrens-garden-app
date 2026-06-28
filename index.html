@@ -388,17 +388,16 @@ if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
     };
 
     recognition.onresult = (event) => {
-        let interimTranscript = '';
-        let finalTranscript = '';
+        let liveSpeech = '';
+        
+        // లైవ్ లో వచ్చే Interim మరియు Final టెక్స్ట్ రెండింటినీ కలిపి వెంట వెంటనే తీసుకుంటుంది
         for (let i = event.resultIndex; i < event.results.length; ++i) {
-            if (event.results[i].isFinal) {
-                finalTranscript += event.results[i][0].transcript;
-            } else {
-                interimTranscript += event.results[i][0].transcript;
-            }
+            liveSpeech += event.results[i][0].transcript;
         }
-        let liveSpeech = finalTranscript || interimTranscript;
+        
         if (!liveSpeech.trim()) return;
+        
+        // బ్రౌజర్ ఆలోచించే లోపే ఇన్స్టంట్‌గా అండర్‌లైన్ చేయడానికి పంపుతుంది
         evaluateLiveText(liveSpeech);
     };
 
