@@ -8,7 +8,7 @@
         :root {
             --primary: #1e40af;
             --primary-hover: #1d4ed8;
-            --bg: #e0f2fe; /* Light baby blue pastel background */
+            --bg: #e0f2fe;
             --card: #ffffff;
             --text: #0f172a;
             --border: #cbd5e1;
@@ -21,11 +21,10 @@
         
         body {
             font-family: var(--font-main);
-            /* Bouncy, beautiful gradient background */
             background: linear-gradient(135deg, #e0f2fe 0%, #f0fdf4 50%, #fef9c3 100%);
             color: var(--text);
             margin: 0;
-            padding: 10px; /* Reduced padding to maximize space on projector */
+            padding: 10px;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -35,7 +34,6 @@
             overflow-x: hidden;
         }
 
-        /* Beautiful floating SVG background elements for premium feel */
         .bg-doodles {
             position: fixed;
             top: 0;
@@ -49,7 +47,7 @@
 
         .doodle {
             position: absolute;
-            opacity: 0.12; /* Subtle visibility */
+            opacity: 0.12;
             transform: rotate(0deg);
             transition: transform 0.5s ease;
         }
@@ -65,28 +63,23 @@
         .doodle-5 { top: 48%; left: 3%; width: 80px; height: 80px; }
         .doodle-6 { top: 50%; right: 3%; width: 90px; height: 90px; }
 
-        /* Modified container to look wide like the requested full-width layout */
         .container {
             width: 98%;
-            /* Maximized to fit full width on screen */
             max-width: 1800px;
-            /* Massive max width for high res screens/projectors */
             background: rgba(255, 255, 255, 0.96);
             padding: 40px;
             border-radius: 24px;
             box-shadow: 0 20px 40px -10px rgba(15, 23, 42, 0.15), 0 10px 15px -3px rgba(15, 23, 42, 0.05);
-            border: 4px solid #ffffff; /* Sleek card look */
+            border: 4px solid #ffffff;
             box-sizing: border-box;
             position: relative;
-            z-index: 10; /* Put above doodles */
+            z-index: 10;
             backdrop-filter: blur(8px);
             margin: 10px auto;
         }
 
-        /* Increased font sizes for titles to look great on projector */
         .school-title {
             font-size: 3rem;
-            /* Enlarged title */
             font-weight: 800;
             text-transform: uppercase;
             letter-spacing: 1.5px;
@@ -98,7 +91,6 @@
         
         .app-title {
             font-size: 1.8rem;
-            /* Enlarged subtitle */
             color: #475569;
             font-weight: 600;
             margin-bottom: 40px;
@@ -113,43 +105,31 @@
         }
 
         @media (max-width: 768px) {
-            .form-grid {
-                grid-template-columns: 1fr;
-            }
+            .form-grid { grid-template-columns: 1fr; }
             .school-title { font-size: 1.8rem; }
             .app-title { font-size: 1.1rem; }
             .container { padding: 30px 20px; }
         }
 
-        .form-group {
-            margin-bottom: 5px;
-        }
-
-        .form-group.full-width {
-            grid-column: span 2;
-        }
-
-        @media (max-width: 768px) {
-            .form-group.full-width {
-                grid-column: span 1;
-            }
-        }
+        .form-group { margin-bottom: 5px; }
+        .form-group.full-width { grid-column: span 2; }
+        @media (max-width: 768px) { .form-group.full-width { grid-column: span 1; } }
 
         label {
             display: block;
             margin-bottom: 10px;
             font-weight: 700;
-            font-size: 1.4rem; /* Bigger form labels */
+            font-size: 1.4rem;
             color: #334155;
         }
 
         input, select {
             width: 100%;
-            padding: 16px 20px; /* More padding */
+            padding: 16px 20px;
             border: 2px solid var(--border);
             border-radius: 12px;
             box-sizing: border-box;
-            font-size: 1.4rem; /* Bigger input font size */
+            font-size: 1.4rem;
             background-color: #fcfcfc;
             font-weight: 500;
             color: #1e293b;
@@ -165,10 +145,10 @@
 
         button {
             width: 100%;
-            padding: 20px 24px; /* Scaled up button sizing */
+            padding: 20px 24px;
             border: none;
             border-radius: 12px;
-            font-size: 1.5rem; /* Bigger button text */
+            font-size: 1.5rem;
             font-weight: bold;
             cursor: pointer;
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
@@ -176,53 +156,24 @@
             margin-top: 10px;
         }
 
-        button:active {
-            transform: scale(0.98);
-        }
-
-        .btn-primary {
-            background-color: #2563eb;
-            color: white;
-        }
-
-        .btn-primary:hover {
-            background-color: #1d4ed8;
-            box-shadow: 0 8px 12px rgba(37, 99, 235, 0.25);
-        }
-
-        .btn-success {
-            background-color: var(--success);
-            color: white;
-            margin-top: 25px;
-            font-size: 1.6rem; /* Scaled up text */
-            padding: 22px 24px;
-        }
-
-        .btn-success:hover {
-            background-color: #15803d;
-            box-shadow: 0 8px 12px rgba(21, 128, 61, 0.25);
-        }
-
+        button:active { transform: scale(0.98); }
+        .btn-primary { background-color: #2563eb; color: white; }
+        .btn-primary:hover { background-color: #1d4ed8; box-shadow: 0 8px 12px rgba(37, 99, 235, 0.25); }
+        .btn-success { background-color: var(--success); color: white; margin-top: 25px; font-size: 1.6rem; padding: 22px 24px; }
+        .btn-success:hover { background-color: #15803d; box-shadow: 0 8px 12px rgba(21, 128, 61, 0.25); }
+        
         .btn-mic {
             background-color: #ef4444;
             color: white;
             margin-top: 25px;
-            font-size: 2rem; /* Massive mic button for easy visualization */
+            font-size: 2rem;
             padding: 26px;
             border-radius: 16px;
         }
 
-        .btn-mic:hover {
-            background-color: #dc2626;
-            box-shadow: 0 8px 16px rgba(239, 68, 68, 0.3);
-        }
-
-        .btn-mic.listening {
-            background-color: #16a34a;
-            animation: pulse 1.5s infinite;
-        }
+        .btn-mic:hover { background-color: #dc2626; box-shadow: 0 8px 16px rgba(239, 68, 68, 0.3); }
+        .btn-mic.listening { background-color: #16a34a; animation: pulse 1.5s infinite; }
         
-        /* Question Pool Interface Box styles */
         .q-selection-box {
             display: none;
             background: #f8fafc;
@@ -237,7 +188,7 @@
             justify-content: space-between;
             align-items: center;
             margin-bottom: 20px;
-            font-size: 1.3rem; /* Scaled up */
+            font-size: 1.3rem;
         }
 
         .btn-link {
@@ -254,78 +205,33 @@
             box-shadow: none;
         }
 
-        .btn-link:hover {
-            color: #1d4ed8;
-        }
-
-        .q-scroll {
-            max-height: 450px;
-            /* Expanded space */
-            overflow-y: auto;
-            border: 2px solid #e2e8f0;
-            background: #ffffff;
-            border-radius: 12px;
-            padding: 15px;
-        }
-
+        .btn-link:hover { color: #1d4ed8; }
+        .q-scroll { max-height: 450px; overflow-y: auto; border: 2px solid #e2e8f0; background: #ffffff; border-radius: 12px; padding: 15px; }
+        
         .q-item {
             display: flex;
             align-items: center;
             padding: 18px; 
             border-bottom: 1px solid #f1f5f9;
             font-size: 1.4rem;
-            /* Larger item sizes */
             cursor: pointer;
             user-select: none;
             transition: background 0.15s ease;
         }
 
-        .q-item:hover {
-            background-color: #f0fdf4;
-        }
+        .q-item:hover { background-color: #f0fdf4; }
+        .q-item:last-child { border-bottom: none; }
+        .q-item input { width: auto; margin-right: 18px; transform: scale(1.8); cursor: pointer; }
+        .q-item label { margin: 0; cursor: pointer; flex-grow: 1; font-weight: 500; font-size: 1.4rem; }
 
-        .q-item:last-child {
-            border-bottom: none;
-        }
-
-        .q-item input {
-            width: auto;
-            margin-right: 18px;
-            transform: scale(1.8); /* Massive checkbox inputs */
-            cursor: pointer;
-        }
-
-        .q-item label {
-            margin: 0;
-            cursor: pointer;
-            flex-grow: 1;
-            font-weight: 500;
-            font-size: 1.4rem;
-        }
-
-        .badge {
-            display: inline-block;
-            padding: 6px 12px;
-            border-radius: 20px;
-            font-size: 1rem;
-            font-weight: bold;
-            margin-left: 12px;
-        }
-
+        .badge { display: inline-block; padding: 6px 12px; border-radius: 20px; font-size: 1rem; font-weight: bold; margin-left: 12px; }
         .badge-live { background-color: #dcfce7; color: #166534; }
         .badge-offline { background-color: #fee2e2; color: #991b1b; }
         
-        .panel {
-            display: none;
-            margin-top: 30px;
-            border-top: 3px solid var(--border);
-            padding-top: 30px;
-        }
+        .panel { display: none; margin-top: 30px; border-top: 3px solid var(--border); padding-top: 30px; }
         
-        /* Enlarged sentence display box optimized for clear projector visibility */
         .sentence-box {
             font-size: 5rem;
-            /* Massive size so kids in the back row can easily read it */
             font-weight: 800;
             padding: 60px 30px;
             background: #f1f5f9;
@@ -339,134 +245,34 @@
             box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
         }
 
-        /* Color-coded highlighting helper wrappers */
-        .w-correct {
-            color: var(--correct-word);
-            border-bottom: 5px solid var(--correct-word);
-            display: inline-block;
-            margin: 0 10px;
-        }
+        .w-correct { color: var(--correct-word); border-bottom: 5px solid var(--correct-word); display: inline-block; margin: 0 10px; }
+        .w-incorrect { color: var(--incorrect-word); border-bottom: 5px solid var(--incorrect-word); display: inline-block; margin: 0 10px; }
+        .w-normal { color: #0f172a; display: inline-block; margin: 0 10px; }
 
-        .w-incorrect {
-            color: var(--incorrect-word);
-            border-bottom: 5px solid var(--incorrect-word);
-            display: inline-block;
-            margin: 0 10px;
-        }
+        .status-msg { text-align: center; font-weight: bold; margin: 20px 0; height: 35px; color: #475569; font-size: 1.6rem; }
+        .score-display { text-align: center; font-size: 6rem; font-weight: 900; color: var(--success); display: none; margin: 25px 0; }
+        .notification-banner { display: none; background-color: #fee2e2; border: 2px solid #fca5a5; color: #991b1b; padding: 20px; border-radius: 12px; margin-bottom: 30px; font-weight: 600; text-align: center; font-size: 1.3rem; }
 
-        .w-normal {
-            color: #0f172a;
-            display: inline-block;
-            margin: 0 10px;
-        }
-
-        .status-msg {
-            text-align: center;
-            font-weight: bold;
-            margin: 20px 0;
-            height: 35px;
-            color: #475569;
-            font-size: 1.6rem;
-            /* Enriched message sizing */
-        }
-
-        .score-display {
-            text-align: center;
-            font-size: 6rem; /* Giant standalone metrics */
-            font-weight: 900;
-            color: var(--success);
-            display: none;
-            margin: 25px 0;
-        }
-        
-        .notification-banner {
-            display: none;
-            background-color: #fee2e2;
-            border: 2px solid #fca5a5;
-            color: #991b1b;
-            padding: 20px;
-            border-radius: 12px;
-            margin-bottom: 30px;
-            font-weight: 600;
-            text-align: center;
-            font-size: 1.3rem;
-        }
-
-        /* Final elegant report card print container */
-        .certificate-card {
-            display: none;
-            border: 12px double #b45309;
-            padding: 60px 40px;
-            background: #ffffff;
-            text-align: center;
-            border-radius: 20px;
-            box-shadow: inset 0 0 40px rgba(180, 83, 9, 0.08);
-            margin-top: 35px;
-        }
-
+        .certificate-card { display: none; border: 12px double #b45309; padding: 60px 40px; background: #ffffff; text-align: center; border-radius: 20px; box-shadow: inset 0 0 40px rgba(180, 83, 9, 0.08); margin-top: 35px; }
         .cert-school { font-size: 3rem; font-weight: 800; color: #78350f; margin-bottom: 25px; }
         .cert-score { font-size: 6.5rem; font-weight: 900; color: #b45309; margin: 25px 0; }
 
-        /* Error Summary Section Styles */
-        .error-log-container {
-            margin-top: 30px;
-            text-align: left;
-            background: #fff5f5;
-            border: 2px solid #feb2b2;
-            border-radius: 12px;
-            padding: 25px;
-        }
-        .error-log-title {
-            font-size: 1.8rem;
-            color: #991b1b;
-            font-weight: bold;
-            margin-bottom: 15px;
-            border-bottom: 2px solid #fca5a5;
-            padding-bottom: 10px;
-        }
-        .error-item {
-            font-size: 1.4rem;
-            margin-bottom: 12px;
-            line-height: 1.6;
-            color: #2d3748;
-        }
+        .error-log-container { margin-top: 30px; text-align: left; background: #fff5f5; border: 2px solid #feb2b2; border-radius: 12px; padding: 25px; }
+        .error-log-title { font-size: 1.8rem; color: #991b1b; font-weight: bold; margin-bottom: 15px; border-bottom: 2px solid #fca5a5; padding-bottom: 10px; }
+        .error-item { font-size: 1.4rem; margin-bottom: 12px; line-height: 1.6; color: #2d3748; }
         
-        @keyframes pulse {
-            0% { opacity: 1; }
-            50% { opacity: 0.6; }
-            100% { opacity: 1; }
-        }
+        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.6; } 100% { opacity: 1; } }
     </style>
 </head>
 <body>
 
 <div class="bg-doodles">
-    <svg class="doodle doodle-1" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M17.5 19A3.5 3.5 0 0 0 21 15.5c0-2.79-2.54-4.5-5-4.5-.42 0-.83.05-1.24.15A7 7 0 0 0 3 11.5c0 3.62 3.1 6.5 7 6.5h7.5z"/>
-    </svg>
-    <svg class="doodle doodle-2" viewBox="0 0 24 24" fill="none" stroke="#e11d48" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/>
-        <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
-    </svg>
-    <svg class="doodle doodle-3" viewBox="0 0 24 24" fill="none" stroke="#ca8a04" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
-        <circle cx="12" cy="12" r="4"/>
-        <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/>
-    </svg>
-    <svg class="doodle doodle-4" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M22 10v6M2 10l10-5 10 5-10 5z"/>
-        <path d="M6 12v5c0 2 2 3 6 3s6-1 6-3v-5"/>
-    </svg>
-    <svg class="doodle doodle-5" viewBox="0 0 24 24" fill="none" stroke="#7c3aed" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M12 20h9"/>
-        <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/>
-    </svg>
-    <svg class="doodle doodle-6" viewBox="0 0 24 24" fill="none" stroke="#ea580c" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/>
-        <path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/>
-        <path d="M4 22h16"/>
-        <path d="M10 14.66V17c0 .55-.45 1-1 1H4v2h16v-2h-5c-.55 0-1-.45-1-1v-2.34"/>
-        <path d="M12 2a6 6 0 0 1 6 6v3.5a6 6 0 0 1-6 6 6 6 0 0 1-6-6V8a6 6 0 0 1 6-6z"/>
-    </svg>
+    <svg class="doodle doodle-1" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="1"><path d="M17.5 19A3.5 3.5 0 0 0 21 15.5c0-2.79-2.54-4.5-5-4.5-.42 0-.83.05-1.24.15A7 7 0 0 0 3 11.5c0 3.62 3.1 6.5 7 6.5h7.5z"/></svg>
+    <svg class="doodle doodle-2" viewBox="0 0 24 24" fill="none" stroke="#e11d48" stroke-width="1"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+    <svg class="doodle doodle-3" viewBox="0 0 24 24" fill="none" stroke="#ca8a04" stroke-width="1"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+    <svg class="doodle doodle-4" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="1"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c0 2 2 3 6 3s6-1 6-3v-5"/></svg>
+    <svg class="doodle doodle-5" viewBox="0 0 24 24" fill="none" stroke="#7c3aed" stroke-width="1"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+    <svg class="doodle doodle-6" viewBox="0 0 24 24" fill="none" stroke="#ea580c" stroke-width="1"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.45 1-1 1H4v2h16v-2h-5c-.55 0-1-.45-1-1v-2.34"/><path d="M12 2a6 6 0 0 1 6 6v3.5a6 6 0 0 1-6 6 6 6 0 0 1-6-6V8a6 6 0 0 1 6-6z"/></svg>
 </div>
 
 <div class="container">
@@ -518,8 +324,7 @@
                 </div>
             </div>
             
-            <div class="q-scroll" id="questions-list">
-                </div>
+            <div class="q-scroll" id="questions-list"></div>
             
             <div style="margin-top: 20px; font-size: 1.4rem; font-weight: 700; color: #475569;">
                 Selected: <span id="selected-counter" style="color: #2563eb;">0</span>
@@ -569,7 +374,6 @@
 <script>
     const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbx7S7hUa9_dCKjqW_gr6XQ9WAX7V9S6UC7H86yja_hWKZ1oJ-DjMwAxa_x1VlEXM58/exec";
 
-    // ఆఫ్లైన్ బ్యాకప్ డేటాబేస్
     const OFFLINE_DATABASE = {
         Nursery_Eng: ["A Apple", "B Ball", "C Cat", "D Dog", "E Elephant"],
         Nursery_Tel: ["అమ్మ", "ఆవు", "ఇల్లు", "ఈల", "ఉడత"],
@@ -598,7 +402,7 @@
         "4th Class_Hin": ["पुस्तकालय ज्ञान का असीम महासागर होता है।", "हमे प्लास्टिक के उपयोग से बचना चाहिए।", "सत्य और अहिंसा ही मानव जीवन के सच्चे मार्ग हैं।"],
         "4th Class_Numbers": ["25000 Twenty Five Thousand", "50000 Fifty Thousand"],
         "5th Class_Eng": ["Education empowers individuals to build a prosperous nation.", "Digital learning helps students understand concepts easily.", "Environmental protection is the responsibility of every citizen."],
-        "5th Class_Tel": ["మాతృభాషను గౌరవించడం మన ప్రథమ బాధ్యత.", "సాంకేతిక పరిజ్ఞానం ద్వారా సమాచారాన్ని సులభంగా తెలుసుకోవచ్చు.", "పరిశుభ్రత దైవత్వంతో సమానమని పెద్దలు చెప్తారు."],
+        "5th Class_Tel": ["మాతృభాషను గౌరవించడం మన ప్రథమ బాధ్యత.", "సాंకేతిక పరిజ్ఞానం ద్వారా సమాచారాన్ని సులభంగా తెలుసుకోవచ్చు.", "పరిశుభ్రత దైవత్వంతో సమానమని పెద్దలు చెప్తారు."],
         "5th Class_Hin": ["सच्चा मित्र वही है जो विपत्ति के समय काम आता है।", "विज्ञान वरदान भी है और विनाशकारी अभिलाप भी।", "योग और प्राणायाम मानसिक शांति का सबसे सुलभ साधन है।"],
         "5th Class_Numbers": ["100000 One Lakh", "1000000 Ten Lakhs"]
     };
@@ -614,12 +418,13 @@
     let autoNextTimeout = null;
     let startTime = null;
     
-    // WPM Metrics Variables
     let sentenceStartTime = null;
     let totalWordsReadSuccessfully = 0;
     let totalReadingTimeSeconds = 0;
-
     let wrongWordsLog = [];
+
+    // ప్రస్తుత లైన్ లైవ్ స్కోర్ ట్రాక్ చేయడానికి ఆబ్జెక్ట్
+    let currentLiveMetrics = { tempScore: 0, tempMissed: [], matchedCount: 0 };
 
     if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
         const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -629,7 +434,7 @@
         recognition.interimResults = true;
 
         recognition.onstart = () => {
-            sentenceStartTime = new Date(); // Track start time for current sentence
+            sentenceStartTime = new Date();
             const btn = document.getElementById("mic-btn");
             btn.innerText = "🎙️ Listening... Student is Reading";
             btn.classList.add("listening");
@@ -651,7 +456,6 @@
             let liveSpeech = finalTranscript || interimTranscript;
             evaluateLiveText(liveSpeech);
 
-            // Smart End Detection Logic
             const target = currentSentences[sentenceIndex];
             const targetWords = cleanText(target).split(" ");
             const spokenWords = cleanText(liveSpeech).split(" ");
@@ -679,9 +483,7 @@
             resetMicButtonUi();
         };
 
-        recognition.onend = () => {
-            resetMicButtonUi();
-        };
+        recognition.onend = () => { resetMicButtonUi(); };
     } else {
         alert("Speech Recognition API is not supported in this browser. Please use Google Chrome.");
     }
@@ -811,13 +613,10 @@
     function startSelectedAssessment() {
         const checkboxes = document.querySelectorAll("#questions-list input[type='checkbox']:checked");
         currentSentences = [];
-        checkboxes.forEach(cb => {
-            currentSentences.push(cb.value);
-        });
+        checkboxes.forEach(cb => { currentSentences.push(cb.value); });
 
         if(currentSentences.length === 0) return;
 
-        // Reset metrics
         sentenceIndex = 0;
         accumulatedScores = 0;
         questionsAttempted = 0;
@@ -842,6 +641,9 @@
         const box = document.getElementById("target-sentence");
         box.innerHTML = "";
         
+        // లైవ్ మెట్రిక్స్ రీసెట్ చేయడం
+        currentLiveMetrics = { tempScore: 0, tempMissed: sentence.split(" "), matchedCount: 0 };
+
         const words = sentence.split(" ");
         words.forEach(w => {
             const span = document.createElement("span");
@@ -859,11 +661,7 @@
     function startAssessmentListening() {
         if(!isAssessmentActive || !recognition) return;
         clearTimeout(autoNextTimeout);
-        try {
-            recognition.start();
-        } catch(e) {
-            console.log("Recognition standard trigger catch:", e.message);
-        }
+        try { recognition.start(); } catch(e) { console.log(e.message); }
     }
 
     function cleanText(text) {
@@ -902,10 +700,10 @@
 
         const scorePercentage = Math.round((correctCount / originalWords.length) * 100);
         
-        // Save live metrics calculation in reference structure
-        targetSentence.tempScore = scorePercentage;
-        targetSentence.tempMissed = missedWords;
-        targetSentence.matchedCount = correctCount;
+        // గ్లోబల్ ఆబ్జెక్ట్‌లో సేవ్ చేయడం (ఫిక్స్)
+        currentLiveMetrics.tempScore = scorePercentage;
+        currentLiveMetrics.tempMissed = missedWords;
+        currentLiveMetrics.matchedCount = correctCount;
 
         const scoreView = document.getElementById("current-score-view");
         scoreView.innerText = `${scorePercentage}%`;
@@ -915,21 +713,14 @@
     function moveToNextAutomatic() {
         const target = currentSentences[sentenceIndex];
         
-        // Finalize sentence time metrics
         if (sentenceStartTime) {
             const duration = Math.max(1, Math.round((new Date() - sentenceStartTime) / 1000));
             totalReadingTimeSeconds += duration;
         }
 
-        let score = 0;
-        let missed = target.split(" ");
-        
-        if (typeof target === 'string' && currentSentences[sentenceIndex]) {
-            const realTargetObj = currentSentences[sentenceIndex];
-            score = realTargetObj.tempScore !== undefined ? realTargetObj.tempScore : 0;
-            missed = realTargetObj.tempMissed !== undefined ? realTargetObj.tempMissed : target.split(" ");
-            totalWordsReadSuccessfully += realTargetObj.matchedCount !== undefined ? realTargetObj.matchedCount : 0;
-        }
+        let score = currentLiveMetrics.tempScore;
+        let missed = currentLiveMetrics.tempMissed;
+        totalWordsReadSuccessfully += currentLiveMetrics.matchedCount;
 
         if(missed.length > 0) {
             wrongWordsLog.push({ sentence: target, missed: missed });
@@ -957,9 +748,9 @@
                     const duration = Math.max(1, Math.round((new Date() - sentenceStartTime) / 1000));
                     totalReadingTimeSeconds += duration;
                 }
-                const score = target.tempScore !== undefined ? target.tempScore : 0;
-                const missed = target.tempMissed !== undefined ? target.tempMissed : target.split(" ");
-                totalWordsReadSuccessfully += target.matchedCount !== undefined ? target.matchedCount : 0;
+                let score = currentLiveMetrics.tempScore;
+                let missed = currentLiveMetrics.tempMissed;
+                totalWordsReadSuccessfully += currentLiveMetrics.matchedCount;
 
                 wrongWordsLog.push({ sentence: target, missed: missed });
                 accumulatedScores += score;
@@ -979,22 +770,19 @@
         const name = document.getElementById("student-name").value || "Anonymous Student";
         const studentClass = document.getElementById("student-class").value;
         
-        // Time taken conversion system string formatting
         const endTime = new Date();
         const diffMs = endTime - startTime;
         const totalSeconds = Math.floor(diffMs / 1000);
         const mins = Math.floor(totalSeconds / 60);
         const secs = totalSeconds % 60;
-        totalTimeTaken = mins > 0 ? `${mins}m ${secs}s` : `${secs}s`;
+        let totalTimeTaken = mins > 0 ? `${mins}m ${secs}s` : `${secs}s`;
 
-        // Calculate WPM
         let wpm = 0;
         let actualTimeForWpm = totalReadingTimeSeconds > 0 ? totalReadingTimeSeconds : totalSeconds;
         if (actualTimeForWpm > 0) {
             wpm = Math.round((totalWordsReadSuccessfully / actualTimeForWpm) * 60);
         }
 
-        // Percentage matching score index logic
         const finalScore = questionsAttempted > 0 ? Math.round(accumulatedScores / questionsAttempted) : 0;
 
         document.getElementById("cert-name").innerText = name;
@@ -1005,7 +793,6 @@
         document.getElementById("cert-wpm").innerText = wpm;
         document.getElementById("cert-time").innerText = totalTimeTaken;
 
-        // Render incorrect words review system listing
         const errorListDetails = document.getElementById("error-list-details");
         errorListDetails.innerHTML = "";
 
@@ -1022,7 +809,6 @@
 
         document.getElementById("certificate-panel").style.display = "block";
 
-        // Google Sheet Cloud Sync Integration Payload
         const today = new Date();
         const formattedDate = `${String(today.getDate()).padStart(2, '0')}-${today.toLocaleString('default', { month: 'short' })}-${today.getFullYear()}`;
         
