@@ -48,8 +48,6 @@
         .doodle {
             position: absolute;
             opacity: 0.12; 
-            transform: rotate(0deg);
-            transition: transform 0.5s ease;
         }
 
         .container {
@@ -58,7 +56,7 @@
             background: rgba(255, 255, 255, 0.96);
             padding: 40px;
             border-radius: 24px;
-            box-shadow: 0 20px 40px -10px rgba(15, 23, 42, 0.15), 0 10px 15px -3px rgba(15, 23, 42, 0.05);
+            box-shadow: 0 20px 40px -10px rgba(15, 23, 42, 0.15);
             border: 4px solid #ffffff; 
             box-sizing: border-box;
             position: relative;
@@ -75,7 +73,6 @@
             margin-bottom: 12px;
             text-align: center;
             color: #1e3a8a;
-            text-shadow: 1px 1px 2px rgba(30, 58, 138, 0.1);
         }
         
         .app-title {
@@ -121,7 +118,6 @@
             background-color: #fcfcfc;
             font-weight: 500;
             color: #1e293b;
-            transition: all 0.2s ease;
         }
 
         button {
@@ -132,7 +128,6 @@
             font-size: 1.5rem; 
             font-weight: bold;
             cursor: pointer;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
             transition: all 0.2s ease;
             margin-top: 10px;
         }
@@ -225,7 +220,6 @@
             min-height: 140px;
             color: #0f172a;
             border: 4px dashed #cbd5e1;
-            box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
             white-space: normal; 
             word-break: break-word;
         }
@@ -250,9 +244,10 @@
         .cert-school { font-size: 3rem; font-weight: 800; color: #78350f; margin-bottom: 25px; }
         .cert-score { font-size: 6.5rem; font-weight: 900; color: #b45309; margin: 25px 0; }
 
-        .error-log-container { margin-top: 30px; text-align: left; background: #fff5f5; border: 2px solid #feb2b2; border-radius: 12px; padding: 25px; }
-        .error-log-title { font-size: 1.8rem; color: #991b1b; font-weight: bold; margin-bottom: 15px; border-bottom: 2px solid #fca5a5; padding-bottom: 10px; }
-        .error-item { font-size: 1.4rem; margin-bottom: 12px; line-height: 1.6; color: #2d3748; }
+        .error-log-container { margin-top: 30px; text-align: left; background: #fff5f5; border: 2px solid #fca5a5; border-radius: 12px; padding: 25px; }
+        .error-log-title { font-size: 1.6rem; color: #991b1b; font-weight: bold; margin-bottom: 15px; border-bottom: 2px solid #fca5a5; padding-bottom: 10px; }
+        .error-flex-box { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 10px; }
+        .error-badge { background: #fed7d7; color: #dc2626; padding: 6px 14px; border-radius: 8px; font-size: 1.3rem; font-weight: bold; border: 1px solid #fca5a5; }
         
         @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.6; } 100% { opacity: 1; } }
     </style>
@@ -260,8 +255,7 @@
 <body>
 
 <div class="bg-doodles">
-    <svg class="doodle doodle-1" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="1"><path d="M17.5 19A3.5 3.5 0 0 0 21 15.5c0-2.79-2.54-4.5-5-4.5-.42 0-.83.05-1.24.15A7 7 0 0 0 3 11.5c0 3.62 3.1 6.5 7 6.5h7.5z"/></svg>
-    <svg class="doodle doodle-2" viewBox="0 0 24 24" fill="none" stroke="#e11d48" stroke-width="1"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+    <svg class="doodle" style="top:10%; left:5%; width:40px; height:40px;" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="1"><path d="M17.5 19A3.5 3.5 0 0 0 21 15.5c0-2.79-2.54-4.5-5-4.5-.42 0-.83.05-1.24.15A7 7 0 0 0 3 11.5c0 3.62 3.1 6.5 7 6.5h7.5z"/></svg>
 </div>
 
 <div class="container">
@@ -329,7 +323,7 @@
             <button class="btn-primary" style="width:auto; margin:0; padding: 10px 20px; font-size:1.1rem; background-color:#f59e0b;" onclick="moveToNextSentence()">Skip / Next ➡️</button>
         </div>
         <div class="sentence-box" id="target-sentence">Please wait...</div>
-        <button id="mic-btn" class="btn-mic" onclick="startAssessmentListening()" disabled>🎤 Start Reading</button>
+        <button id="mic-btn" class="btn-mic" onclick="startAssessmentListening()">🎤 Start Reading</button>
         <div class="status-msg" id="status-text">Ready to start.</div>
         <div class="score-display" id="current-score-view">100%</div>
         <button class="btn-primary" style="background-color: #ef4444; max-width: 300px; margin: 20px auto; display: block;" onclick="abortAssessment()">❌ Abort / Stop Test</button>
@@ -352,8 +346,9 @@
 
         <div id="error-log-box" class="error-log-container">
             <div class="error-log-title">❌ Mistaken Words / తప్పుగా చదివిన పదాలు:</div>
-            <div id="error-list-details"></div>
+            <div id="error-list-details" class="error-flex-box"></div>
         </div>
+        
         <div style="font-size: 2.2rem; font-weight: bold; color: #78350f; margin-top: 30px;">Congratulations! 🎉</div>
         <button id="next-student-btn" class="btn-primary" style="margin-top: 35px; background-color: #9a3412; font-size: 1.6rem; padding: 20px 30px; border-radius: 12px;" onclick="resetToSetup()">
             👤 Test Next Student / తదుపరి విద్యార్థి
@@ -363,39 +358,6 @@
 
 <script>
 const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbx7S7hUa9_dCKjqW_gr6XQ9WAX7V9S6UC7H86yja_hWKZ1oJ-DjMwAxa_x1VlEXM58/exec";
-
-const OFFLINE_DATABASE = {
-    Nursery_Eng: ["A Apple", "B Ball", "C Cat", "D Dog", "E Elephant"],
-    Nursery_Tel: ["అమ్మ", "ఆవు", "ఇల్లు", "ఈల", "ఉడత"],
-    Nursery_Numbers: ["One", "Two", "Three", "Four", "Five"],
-    LKG_Eng: ["Red Apple", "Blue Balloon", "Green Tree"],
-    LKG_Tel: ["కమలం", "ఖడ్గం", "గంట"],
-    LKG_Numbers: ["10 Ten", "20 Twenty"],
-    LKG_Hindi: ["अ अनार", "आम"],
-    UKG_Eng: ["The sun is hot.", "I see a blue bird."],
-    UKG_Tel: ["బలపము", "రథము", "లత"],
-    UKG_Hindi: ["उल्लू", "ऊनी"],
-    "1st Class_Eng": ["The sun is very bright.", "The boy runs fast."],
-    "1st Class_Tel": ["అమ్మ మనకు దైవము.", "చెట్లు మనకు నీడను ఇస్తాయి.", "పిల్లలు చక్కగా చదవాలి."],
-    "1st Class_Hin": ["सूरज पूर्व से निकलता है।"],
-    "1st Class_Numbers": ["100 One Hundred"],
-    "2nd Class_Eng": ["Keep your surroundings clean.", "Honesty is the best policy."],
-    "2nd Class_Tel": ["పెద్దలను గౌరవించడం మన కర్తవ్యం.", "పుస్తకాలు మంచి జ్ఞానాన్ని ఇస్తాయి."],
-    "2nd Class_Hin": ["पेड़-पौधे हमारे सच्चे मित्र हैं।"],
-    "2nd Class_Numbers": ["1000 One Thousand"],
-    "3rd Class_Eng": ["Healthy food keeps our body fit."],
-    "3rd Class_Tel": ["దేశ భాషలందు తెలుగు లెస్స.", "మొక్కలు నాటడం ద్వారా పర్యావరణాన్ని రక్షించవచ్చు."],
-    "3rd Class_Hin": ["समय बहुत मूल्यवान है।"],
-    "3rd Class_Numbers": ["5000 Five Thousand"],
-    "4th Class_Eng": ["The school library has many books."],
-    "4th Class_Tel": ["వృక్షో రక్షతి రక్షితః అనగా చెట్లను రక్షించాల్సింది మనమే.", "చదువుతో పాటు మంచి సంస్కారం ఉండాలి."],
-    "4th Class_Hin": ["हमे प्लास्टिक के उपयोग से बचना चाहिए।"],
-    "4th Class_Numbers": ["25000 Twenty Five Thousand"],
-    "5th Class_Eng": ["Education empowers individuals."],
-    "5th Class_Tel": ["మాతృభాషను గౌరవించడం మన ప్రథమ బాధ్యత.", "పరిశుభ్రత దైవత్వంతో సమానమని చెప్తారు."],
-    "5th Class_Hin": ["सच्चा मित्र वही है जो विपत्ति में काम आए."],
-    "5th Class_Numbers": ["100000 One Lakh"]
-};
 
 let currentLanguage = "English";
 let currentSentences = [];
@@ -409,8 +371,8 @@ let startTime = null;
 let sentenceStartTime = null;
 let totalWordsReadSuccessfully = 0;
 let totalReadingTimeSeconds = 0;
-let wrongWordsLog = [];
-let liveCorrectWordsSet = new Set(); // విద్యార్థి పలికిన పదాలను భద్రపరచడానికి
+let wrongWordsLog = []; // తప్పు పదాలను మాత్రమే సేకరించడానికి సెట్
+let liveCorrectWordsSet = new Set();
 
 if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -419,7 +381,7 @@ if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
     recognition.interimResults = true;
     
     recognition.onstart = () => {
-        sentenceStartTime = new Date();
+        if(!sentenceStartTime) sentenceStartTime = new Date();
         const btn = document.getElementById("mic-btn");
         btn.innerText = "🎙️ Listening... Student is Reading";
         btn.classList.add("listening");
@@ -441,7 +403,6 @@ if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
         
         evaluateLiveText(liveSpeech);
 
-        // ఆటో నెక్స్ట్ స్మార్ట్ చెక్
         const target = currentSentences[sentenceIndex];
         const targetWords = target.split(/\s+/).filter(Boolean);
         if (targetWords.length === 0) return;
@@ -457,7 +418,8 @@ if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
         const lastWordClean = cleanText(targetWords[targetWords.length - 1]);
         const lastWordSpoken = liveCorrectWordsSet.has(lastWordClean);
 
-        if (progressRatio >= 0.60 || lastWordSpoken) {
+        // మైక్రోఫోన్ ఆటో-క్లోజ్ అవ్వకుండా మరియు పక్కాగా మ్యాచ్ అయినప్పుడు మాత్రమే ముందుకు వెళ్తుంది
+        if (progressRatio >= 0.75 || lastWordSpoken) {
             if (!autoNextTimeout) {
                 document.getElementById("status-text").innerText = "✨ Auto-matching complete! Moving ahead...";
                 autoNextTimeout = setTimeout(() => {
@@ -469,26 +431,19 @@ if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
 
     recognition.onerror = (e) => {
         console.error("Speech Error:", e.error);
-        if (isAssessmentActive && e.error !== 'no-speech') {
-            restartSpeechEngine();
-        }
     };
 
+    // కీలక మార్పు: బ్రౌజర్ ఆటోమేటిక్‌గా మైక్ ఆపేస్తే సిస్టమ్ టెస్ట్ ముగించదు, మళ్ళీ రీస్టార్ట్ చేస్తుంది
     recognition.onend = () => {
-        if (isAssessmentActive && !autoNextTimeout) {
-            restartSpeechEngine();
-        }
-    };
-}
-
-function restartSpeechEngine() {
-    try { recognition.stop(); } catch(e){}
-    setTimeout(() => {
+        const btn = document.getElementById("mic-btn");
+        btn.classList.remove("listening");
+        btn.innerText = "🎤 Start Reading";
+        
         if (isAssessmentActive && !autoNextTimeout) {
             setRecognitionLanguage();
-            try { recognition.start(); } catch(e){}
+            try { recognition.start(); } catch(err){}
         }
-    }, 400);
+    };
 }
 
 function setRecognitionLanguage() {
@@ -502,13 +457,10 @@ function setRecognitionLanguage() {
     }
 }
 
-// కీలక మార్పు: ఫుల్ స్టాప్స్, కామాలు మరియు దాచిన క్యారెక్టర్స్ ను పూర్తిగా క్లీన్ చేసే ప్రెసిషన్ లాజిక్
 function cleanText(text) {
     if (!text) return "";
     let low = text.toLowerCase().trim();
-    // అన్ని రకాల విరామ చిహ్నాలను (.,/#!$%^&*?:;{}=-_\`~()।॥) స్పేస్ తో రీప్లేస్ చేస్తుంది
     low = low.replace(/[\.,\-\/#!$%\^&\*;:{}=\-_`~()?।॥]/g, " ");
-    // మల్టిపుల్ స్పేసెస్ ని సింగిల్ స్పేస్ గా మారుస్తుంది
     return low.replace(/\s+/g, " ").trim();
 }
 
@@ -534,7 +486,6 @@ function renderSentenceHTML(wordsArray, scoreArray) {
     });
 }
 
-// మెరుగుపరచబడిన లైవ్ ఎవాల్యుయేషన్ లాజిక్
 function evaluateLiveText(speech) {
     if (!speech) return;
     const target = currentSentences[sentenceIndex];
@@ -546,14 +497,11 @@ function evaluateLiveText(speech) {
 
     targetWords.forEach((word) => {
         const cleanedWord = cleanText(word);
-        
-        // గూగుల్ స్పీచ్ లో పదం ఉందా లేదా అని పక్కాగా చెక్ చేయడం
         if (cleanedWord !== "" && speechClean.includes(cleanedWord)) {
             scoreArray.push(1); 
             currentSentenceCorrectCount++;
-            liveCorrectWordsSet.add(cleanedWord); // ఫైనల్ రిపోర్ట్ కోసం సేవ్ చేయడం
+            liveCorrectWordsSet.add(cleanedWord);
         } else if (liveCorrectWordsSet.has(cleanedWord)) {
-            // ఒకవేళ మునుపటి రౌండ్ లో పలికి ఉంటే కరెక్ట్ గానే ఉంచడం
             scoreArray.push(1);
             currentSentenceCorrectCount++;
         } else {
@@ -581,55 +529,28 @@ function fetchSheetQuestions() {
     fetchBtn.innerText = "⚡ Fetching from Google Sheets...";
     fetchBtn.disabled = true;
     
-    const finalUrl = `${WEB_APP_URL}?class=${encodeURIComponent(cls)}&subject=${encodeURIComponent(lang)}&language=${encodeURIComponent(lang)}`;
-
-    const apiTimeout = setTimeout(() => {
-        loadOfflineQuestions(cls, lang, "Google Sheet timeout. Loaded Offline Local Bank.");
-    }, 8000);
+    const finalUrl = `${WEB_APP_URL}?class=${encodeURIComponent(cls)}&subject=${encodeURIComponent(lang)}`;
 
     fetch(finalUrl)
         .then(res => res.json())
         .then(data => {
-            clearTimeout(apiTimeout);
             fetchBtn.disabled = false;
             fetchBtn.innerText = "Load Sheet Questions";
-            
-            if (data && data.status === "success" && Array.isArray(data.questions) && data.questions.length > 0) {
+            if (data && data.status === "success" && Array.isArray(data.questions)) {
                 buildQuestionsSelection(data.questions, "Live Cloud Sheet");
-            } else if (data && data.status === "success" && Array.isArray(data.data) && data.data.length > 0) {
-                buildQuestionsSelection(data.data, "Live Cloud Sheet");
-            } else {
-                loadOfflineQuestions(cls, lang, "No active sheet rows found. Loaded Offline Local Bank.");
             }
         })
         .catch(err => {
-            clearTimeout(apiTimeout);
             fetchBtn.disabled = false;
             fetchBtn.innerText = "Load Sheet Questions";
-            loadOfflineQuestions(cls, lang, "Connection offline / script error. Loaded Offline Local Bank.");
+            alert("Error loading Google Sheet. Check connectivity!");
         });
-}
-
-function loadOfflineQuestions(cls, lang, reasonMsg) {
-    const key = `${cls}_${lang.substring(0,3)}`;
-    let pool = OFFLINE_DATABASE[key] || OFFLINE_DATABASE[`${cls}_Eng`] || ["Sample reading line alpha", "Sample reading line beta"];
-    
-    const banner = document.getElementById("notice-banner");
-    banner.innerText = `ℹ️ ${reasonMsg}`;
-    banner.style.display = "block";
-    banner.style.backgroundColor = "#fee2e2";
-    banner.style.color = "#991b1b";
-    
-    buildQuestionsSelection(pool, "Offline Local Backup");
 }
 
 function buildQuestionsSelection(array, sourceName) {
     const container = document.getElementById("selection-box-container");
     container.style.display = "block";
-    
-    const badge = document.getElementById("source-badge");
-    badge.innerText = sourceName;
-    badge.className = sourceName.includes("Live") ? "badge badge-live" : "badge badge-offline";
+    document.getElementById("source-badge").innerText = sourceName;
     
     const listDiv = document.getElementById("questions-list");
     listDiv.innerHTML = "";
@@ -660,7 +581,6 @@ function buildQuestionsSelection(array, sourceName) {
         item.appendChild(label);
         listDiv.appendChild(item);
     });
-    
     updateSelectedCount();
 }
 
@@ -677,10 +597,7 @@ function updateSelectedCount() {
 
 function startSelectedAssessment() {
     const checked = document.querySelectorAll("#questions-list input[type='checkbox']:checked");
-    if (checked.length === 0) {
-        alert("Please pick at least 1 question item to evaluate.");
-        return;
-    }
+    if (checked.length === 0) return;
     
     currentSentences = Array.from(checked).map(c => c.value);
     
@@ -694,7 +611,6 @@ function startSelectedAssessment() {
     totalReadingTimeSeconds = 0;
     wrongWordsLog = [];
     isAssessmentActive = true;
-    liveCorrectWordsSet.clear();
     
     startTime = new Date();
     setupSentenceDisplay();
@@ -703,6 +619,7 @@ function startSelectedAssessment() {
 function setupSentenceDisplay() {
     if (autoNextTimeout) { clearTimeout(autoNextTimeout); autoNextTimeout = null; }
     liveCorrectWordsSet.clear();
+    sentenceStartTime = new Date();
     
     const target = currentSentences[sentenceIndex];
     updateSentenceFontSize(target);
@@ -712,44 +629,37 @@ function setupSentenceDisplay() {
     renderSentenceHTML(targetWords, initialScores);
     
     document.getElementById("progress-text").innerText = `Question ${sentenceIndex + 1} of ${currentSentences.length}`;
-    document.getElementById("status-text").innerText = "Click 'Start Reading' button below to activate mic.";
+    document.getElementById("status-text").innerText = "Press space or click mic button to read.";
     document.getElementById("current-score-view").style.display = "none";
     
-    const micBtn = document.getElementById("mic-btn");
-    micBtn.disabled = false;
-    micBtn.innerText = "🎤 Start Reading";
-    micBtn.className = "btn-mic";
-    
     setRecognitionLanguage();
+    try { recognition.start(); } catch(e){}
 }
 
 function startAssessmentListening() {
-    if (!recognition) {
-        alert("Web Speech API is not compatible or supported on this computer browser. Try Chrome.");
-        return;
-    }
-    autoNextTimeout = null;
     setRecognitionLanguage();
-    try { recognition.start(); } catch(e) { console.log(e); }
+    try { recognition.start(); } catch(e){}
 }
 
 function moveToNextSentence() {
     if (autoNextTimeout) { clearTimeout(autoNextTimeout); autoNextTimeout = null; }
-    try { recognition.stop(); } catch(e){}
-
+    
     const target = currentSentences[sentenceIndex];
     const targetWords = target.split(/\s+/).filter(Boolean);
     
     let correctCount = 0;
-    let localWrong = [];
     
     targetWords.forEach((word) => {
         const cleanedWord = cleanText(word);
-        // ఒకవేళ విద్యార్థి చదివిన సెట్ లో ఉంటే కరెక్ట్ అని మార్కులు వేయడం
         if (cleanedWord !== "" && liveCorrectWordsSet.has(cleanedWord)) {
             correctCount++;
-        } else {
-            localWrong.push(word);
+        } else if (cleanedWord !== "") {
+            // కేవలం తప్పుగా పలికిన పదాన్ని మాత్రమే అర్రే లోకి నెట్టడం (మొత్తం సెంటెన్స్ కాదు)
+            // ఫుల్ స్టాప్స్ లేని ప్యూర్ పదాన్ని మాత్రమే యాడ్ చేస్తుంది
+            const stripWord = word.replace(/[\.,\-\/#!$%\^&\*;:{}=\-_`~()?।॥]/g, "");
+            if(stripWord.trim() !== "" && !wrongWordsLog.includes(stripWord)) {
+                wrongWordsLog.push(stripWord);
+            }
         }
     });
 
@@ -759,12 +669,7 @@ function moveToNextSentence() {
     
     totalWordsReadSuccessfully += correctCount;
     if (sentenceStartTime) {
-        const duration = (new Date() - sentenceStartTime) / 1000;
-        totalReadingTimeSeconds += duration;
-    }
-    
-    if (localWrong.length > 0) {
-        wrongWordsLog.push({ question: target, words: localWrong });
+        totalReadingTimeSeconds += (new Date() - sentenceStartTime) / 1000;
     }
 
     sentenceIndex++;
@@ -794,20 +699,20 @@ function finishAssessmentReport() {
     document.getElementById("cert-q-count").innerText = questionsAttempted;
     
     const totalMinutes = totalReadingTimeSeconds > 0 ? (totalReadingTimeSeconds / 60) : 0.01;
-    const wpmCalculated = Math.round(totalWordsReadSuccessfully / totalMinutes);
-    document.getElementById("cert-wpm").innerText = wpmCalculated;
+    document.getElementById("cert-wpm").innerText = Math.round(totalWordsReadSuccessfully / totalMinutes);
     document.getElementById("cert-time").innerText = `${Math.round(totalReadingTimeSeconds)}s`;
     
+    // కేవలం తప్పుగా పలికిన పదాలను బ్యాడ్జ్‌లుగా అమర్చడం
     const detailsDiv = document.getElementById("error-list-details");
     detailsDiv.innerHTML = "";
     if (wrongWordsLog.length === 0) {
-        detailsDiv.innerHTML = "<div class='error-item' style='color: var(--success); font-weight:bold;'>Excellent! No reading errors logged. Perfect score. ⭐</div>";
+        detailsDiv.innerHTML = "<div style='color: var(--success); font-weight:bold; font-size:1.4rem;'>Excellent! Perfect reading. No mistakes! ⭐</div>";
     } else {
-        wrongWordsLog.forEach((log, idx) => {
-            const row = document.createElement("div");
-            row.className = "error-item";
-            row.innerHTML = `<strong>Line ${idx+1}:</strong> "${log.question}"<br><span style="color:#dc2626; font-weight:bold;">Missed/Wrong:</span> ${log.words.map(w => `<span style="background: #fed7d7; padding: 2px 6px; border-radius: 4px; margin-right: 4px;">${w}</span>`).join(" ")}`;
-            detailsDiv.appendChild(row);
+        wrongWordsLog.forEach((word) => {
+            const badge = document.createElement("span");
+            badge.className = "error-badge";
+            badge.innerText = word;
+            detailsDiv.appendChild(badge);
         });
     }
     
@@ -828,18 +733,16 @@ function sendPayloadToGoogleSheet(name, studentClass, finalScore, totalTimeTaken
         timeTaken: totalTimeTaken
     };
 
-    if (WEB_APP_URL !== "YOUR_DEPLOYED_WEB_APP_URL_HERE") {
-        fetch(WEB_APP_URL, {
-            method: "POST",
-            mode: "no-cors", 
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(scorePayload)
-        }).catch(err => console.error("Write error:", err));
-    }
+    fetch(WEB_APP_URL, {
+        method: "POST",
+        mode: "no-cors", 
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(scorePayload)
+    }).catch(err => console.error(err));
 }
 
 function abortAssessment() {
-    if (confirm("Are you sure you want to stop and abort the current test?")) {
+    if (confirm("Are you sure you want to stop?")) {
         isAssessmentActive = false;
         if (autoNextTimeout) clearTimeout(autoNextTimeout);
         try { recognition.stop(); } catch(e){}
