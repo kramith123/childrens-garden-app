@@ -24,7 +24,7 @@
             background: linear-gradient(135deg, #e0f2fe 0%, #f0fdf4 50%, #fef9c3 100%);
             color: var(--text);
             margin: 0;
-            padding: 10px; 
+            padding: 20px; 
             display: flex;
             justify-content: center;
             align-items: center;
@@ -50,9 +50,10 @@
             opacity: 0.12; 
         }
 
+        /* విండో సైజ్ మళ్ళీ ప్రొజెక్టర్ కి సరిపోయేలా పెద్దదిగా మార్చబడింది */
         .container {
-            width: 98%;
-            max-width: 1800px;
+            width: 95%;
+            max-width: 1400px;
             background: rgba(255, 255, 255, 0.96);
             padding: 40px;
             border-radius: 24px;
@@ -62,7 +63,7 @@
             position: relative;
             z-index: 10; 
             backdrop-filter: blur(8px);
-            margin: 10px auto;
+            margin: 20px auto;
         }
 
         .school-title {
@@ -359,6 +360,40 @@
 <script>
 const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbx7S7hUa9_dCKjqW_gr6XQ9WAX7V9S6UC7H86yja_hWKZ1oJ-DjMwAxa_x1VlEXM58/exec";
 
+// మీ ఒరిజినల్ ఆఫ్‌లైన్ లోకల్ బ్యాకప్ డేటాబేస్
+const OFFLINE_DATABASE = {
+    Nursery_Eng: ["A Apple", "B Ball", "C Cat", "D Dog", "E Elephant"],
+    Nursery_Tel: ["అమ్మ", "ఆవు", "ఇల్లు", "ఈల", "ఉడత"],
+    Nursery_Numbers: ["One", "Two", "Three", "Four", "Five"],
+    LKG_Eng: ["Red Apple", "Blue Balloon", "Green Tree"],
+    LKG_Tel: ["కమలం", "ఖడ్గం", "గంట"],
+    LKG_Numbers: ["10 Ten", "20 Twenty"],
+    LKG_Hindi: ["अ अनार", "आम"],
+    UKG_Eng: ["The sun is hot.", "I see a blue bird."],
+    UKG_Tel: ["బలపము", "రథము", "లత"],
+    UKG_Hindi: ["उल्लू", "ऊनी"],
+    "1st Class_Eng": ["The sun is very bright.", "The boy runs fast."],
+    "1st Class_Tel": ["అమ్మ మనకు దైవము.", "చెట్లు మనకు నీడను ఇస్తాయి.", "ピల్లలు చక్కగా చదవాలి."],
+    "1st Class_Hin": ["सूरज पूर्व से निकलता है।"],
+    "1st Class_Numbers": ["100 One Hundred"],
+    "2nd Class_Eng": ["Keep your surroundings clean.", "Honesty is the best policy."],
+    "2nd Class_Tel": ["పెద్దలను గౌరవించడం మన కర్తవ్యం.", "పుస్తకాలు మంచి జ్ఞానాన్ని ఇస్తాయి."],
+    "2nd Class_Hin": ["पेड़-पौधे हमारे सच्चे मित्र हैं।"],
+    "2nd Class_Numbers": ["1000 One Thousand"],
+    "3rd Class_Eng": ["Healthy food keeps our body fit."],
+    "3rd Class_Tel": ["దేశ భాషలందు తెలుగు లెస్స.", "మొక్కలు నాటడం ద్వారా పర్యావరణాన్ని రక్షించవచ్చు."],
+    "3rd Class_Hin": ["समय बहुत मूल्यवान है।"],
+    "3rd Class_Numbers": ["5000 Five Thousand"],
+    "4th Class_Eng": ["The school library has many books."],
+    "4th Class_Tel": ["వృక్షో రక్షతి రక్షితః అనగా చెట్లను రక్షించాల్సింది మనమే.", "చదువుతో పాటు మంచి సంస్కారం ఉండాలి."],
+    "4th Class_Hin": ["हमे प्लास्टिक के उपयोग से बचना चाहिए।"],
+    "4th Class_Numbers": ["25000 Twenty Five Thousand"],
+    "5th Class_Eng": ["Education empowers individuals."],
+    "5th Class_Tel": ["మాతృభాషను గౌరవించడం మన ప్రథమ బాధ్యత.", "పరిశుభ్రత దైవత్వంతో సమానమని చెప్తారు."],
+    "5th Class_Hin": ["सच्चा मित्र वही है जो विपत्ति में काम आए."],
+    "5th Class_Numbers": ["100000 One Lakh"]
+};
+
 let currentLanguage = "English";
 let currentSentences = [];
 let sentenceIndex = 0;
@@ -371,7 +406,7 @@ let startTime = null;
 let sentenceStartTime = null;
 let totalWordsReadSuccessfully = 0;
 let totalReadingTimeSeconds = 0;
-let wrongWordsLog = []; // తప్పు పదాలను మాత్రమే సేకరించడానికి సెట్
+let wrongWordsLog = []; 
 let liveCorrectWordsSet = new Set();
 
 if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
@@ -418,7 +453,7 @@ if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
         const lastWordClean = cleanText(targetWords[targetWords.length - 1]);
         const lastWordSpoken = liveCorrectWordsSet.has(lastWordClean);
 
-        // మైక్రోఫోన్ ఆటో-క్లోజ్ అవ్వకుండా మరియు పక్కాగా మ్యాచ్ అయినప్పుడు మాత్రమే ముందుకు వెళ్తుంది
+        // మైక్రోఫోన్ ఆటో-క్లోజ్ సమస్య రాకుండా పక్కాగా మ్యాచ్ అయితేనే ఆటోమేటిక్ గా ముందుకు వెళ్తుంది
         if (progressRatio >= 0.75 || lastWordSpoken) {
             if (!autoNextTimeout) {
                 document.getElementById("status-text").innerText = "✨ Auto-matching complete! Moving ahead...";
@@ -433,12 +468,12 @@ if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
         console.error("Speech Error:", e.error);
     };
 
-    // కీలక మార్పు: బ్రౌజర్ ఆటోమేటిక్‌గా మైక్ ఆపేస్తే సిస్టమ్ టెస్ట్ ముగించదు, మళ్ళీ రీస్టార్ట్ చేస్తుంది
     recognition.onend = () => {
         const btn = document.getElementById("mic-btn");
         btn.classList.remove("listening");
         btn.innerText = "🎤 Start Reading";
         
+        // గూగుల్ ఇంజన్ ఆగిపోయినా సరే టెస్ట్ మధ్యలో క్లోజ్ అవ్వదు, మళ్ళీ ఆక్టివేట్ అవుతుంది
         if (isAssessmentActive && !autoNextTimeout) {
             setRecognitionLanguage();
             try { recognition.start(); } catch(err){}
@@ -457,6 +492,7 @@ function setRecognitionLanguage() {
     }
 }
 
+// పక్కాగా విరామ చిహ్నాలు తొలగించే క్లీన్ ఫంక్షన్
 function cleanText(text) {
     if (!text) return "";
     let low = text.toLowerCase().trim();
@@ -517,6 +553,7 @@ function evaluateLiveText(speech) {
     view.style.display = "block";
 }
 
+// మీ ఒరిజినల్ పక్కా గూగుల్ షీట్ లోడింగ్ ఫంక్షన్ (data.questions మరియు data.data రెండింటినీ హ్యాండిల్ చేస్తుంది)
 function fetchSheetQuestions() {
     const banner = document.getElementById("notice-banner");
     banner.style.display = "none";
@@ -529,28 +566,54 @@ function fetchSheetQuestions() {
     fetchBtn.innerText = "⚡ Fetching from Google Sheets...";
     fetchBtn.disabled = true;
     
-    const finalUrl = `${WEB_APP_URL}?class=${encodeURIComponent(cls)}&subject=${encodeURIComponent(lang)}`;
+    const finalUrl = `${WEB_APP_URL}?class=${encodeURIComponent(cls)}&subject=${encodeURIComponent(lang)}&language=${encodeURIComponent(lang)}`;
+
+    const apiTimeout = setTimeout(() => {
+        loadOfflineQuestions(cls, lang, "Google Sheet timeout. Loaded Offline Local Bank.");
+    }, 8000);
 
     fetch(finalUrl)
         .then(res => res.json())
         .then(data => {
+            clearTimeout(apiTimeout);
             fetchBtn.disabled = false;
             fetchBtn.innerText = "Load Sheet Questions";
-            if (data && data.status === "success" && Array.isArray(data.questions)) {
+            
+            if (data && data.status === "success" && Array.isArray(data.questions) && data.questions.length > 0) {
                 buildQuestionsSelection(data.questions, "Live Cloud Sheet");
+            } else if (data && data.status === "success" && Array.isArray(data.data) && data.data.length > 0) {
+                buildQuestionsSelection(data.data, "Live Cloud Sheet");
+            } else {
+                loadOfflineQuestions(cls, lang, "No active sheet rows found. Loaded Offline Local Bank.");
             }
         })
         .catch(err => {
+            clearTimeout(apiTimeout);
             fetchBtn.disabled = false;
             fetchBtn.innerText = "Load Sheet Questions";
-            alert("Error loading Google Sheet. Check connectivity!");
+            loadOfflineQuestions(cls, lang, "Connection offline / script error. Loaded Offline Local Bank.");
         });
+}
+
+function loadOfflineQuestions(cls, lang, reasonMsg) {
+    const key = `${cls}_${lang.substring(0,3)}`;
+    let pool = OFFLINE_DATABASE[key] || OFFLINE_DATABASE[`${cls}_Eng`] || ["Sample reading line alpha", "Sample reading line beta"];
+    
+    const banner = document.getElementById("notice-banner");
+    banner.innerText = `ℹ️ ${reasonMsg}`;
+    banner.style.display = "block";
+    banner.style.backgroundColor = "#fee2e2";
+    banner.style.color = "#991b1b";
+    
+    buildQuestionsSelection(pool, "Offline Local Backup");
 }
 
 function buildQuestionsSelection(array, sourceName) {
     const container = document.getElementById("selection-box-container");
     container.style.display = "block";
-    document.getElementById("source-badge").innerText = sourceName;
+    
+    const badge = document.getElementById("source-badge");
+    badge.innerText = sourceName;
     
     const listDiv = document.getElementById("questions-list");
     listDiv.innerHTML = "";
@@ -654,8 +717,7 @@ function moveToNextSentence() {
         if (cleanedWord !== "" && liveCorrectWordsSet.has(cleanedWord)) {
             correctCount++;
         } else if (cleanedWord !== "") {
-            // కేవలం తప్పుగా పలికిన పదాన్ని మాత్రమే అర్రే లోకి నెట్టడం (మొత్తం సెంటెన్స్ కాదు)
-            // ఫుల్ స్టాప్స్ లేని ప్యూర్ పదాన్ని మాత్రమే యాడ్ చేస్తుంది
+            // కేవలం తప్పు పదాలను మాత్రమే విడిగా ఫిల్టర్ చేసి అర్రే కి పంపుతుంది
             const stripWord = word.replace(/[\.,\-\/#!$%\^&\*;:{}=\-_`~()?।॥]/g, "");
             if(stripWord.trim() !== "" && !wrongWordsLog.includes(stripWord)) {
                 wrongWordsLog.push(stripWord);
@@ -702,7 +764,7 @@ function finishAssessmentReport() {
     document.getElementById("cert-wpm").innerText = Math.round(totalWordsReadSuccessfully / totalMinutes);
     document.getElementById("cert-time").innerText = `${Math.round(totalReadingTimeSeconds)}s`;
     
-    // కేవలం తప్పుగా పలికిన పదాలను బ్యాడ్జ్‌లుగా అమర్చడం
+    // తప్పుగా చదివిన చిన్న పదాలను మాత్రమే బ్యాడ్జ్‌ల లాగా అమర్చే ప్రెసిషన్ లాజిక్
     const detailsDiv = document.getElementById("error-list-details");
     detailsDiv.innerHTML = "";
     if (wrongWordsLog.length === 0) {
