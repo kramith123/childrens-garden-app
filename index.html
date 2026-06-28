@@ -362,7 +362,6 @@
 </div>
 
 <script>
-// మీ గూగుల్ వెబ్ యాప్ URL
 const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbx7S7hUa9_dCKjqW_gr6XQ9WAX7V9S6UC7H86yja_hWKZ1oJ-DjMwAxa_x1VlEXM58/exec";
 
 const OFFLINE_DATABASE = {
@@ -381,7 +380,7 @@ const OFFLINE_DATABASE = {
     "1st Class_Hin": ["सूरज पूर्व से निकलता है।"],
     "1st Class_Numbers": ["100 One Hundred"],
     "2nd Class_Eng": ["Keep your surroundings clean.", "Honesty is the best policy."],
-    "2nd Class_Tel": ["పెద్దలను గౌరవించడం మన కర్తవ్యం.", "పుस्तకాలు మంచి జ్ఞానాన్ని ఇస్తాయి."],
+    "2nd Class_Tel": ["పెద్దలను గౌరవించడం మన కర్తవ్యం.", "పుస్తకాలు మంచి జ్ఞానాన్ని ఇస్తాయి."],
     "2nd Class_Hin": ["पेड़-पौधे हमारे सच्चे मित्र हैं।"],
     "2nd Class_Numbers": ["1000 One Thousand"],
     "3rd Class_Eng": ["Healthy food keeps our body fit."],
@@ -411,7 +410,7 @@ let sentenceStartTime = null;
 let totalWordsReadSuccessfully = 0;
 let totalReadingTimeSeconds = 0;
 let wrongWordsLog = [];
-let lastProcessedTranscript = "";
+let liveCorrectWordsSet = new Set(); // విద్యార్థి పలికిన పదాలను భద్రపరచడానికి
 
 if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -438,31 +437,25 @@ if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
             }
         }
         let liveSpeech = finalTranscript || interimTranscript;
-        
-        // ఖాళీగా ఉంటే ప్రాసెస్ చేయొద్దు
         if (!liveSpeech.trim()) return;
         
-        lastProcessedTranscript = liveSpeech;
         evaluateLiveText(liveSpeech);
 
-        // స్మార్ట్ ఆటో-నెక్స్ట్ లాజిక్
+        // ఆటో నెక్స్ట్ స్మార్ట్ చెక్
         const target = currentSentences[sentenceIndex];
-        const targetClean = cleanText(target);
-        const speechClean = cleanText(liveSpeech);
-        
-        const targetWords = targetClean.split(/\s+/).filter(Boolean);
+        const targetWords = target.split(/\s+/).filter(Boolean);
         if (targetWords.length === 0) return;
 
         let matchCount = 0;
-        targetWords.forEach(tw => {
-            if (speechClean.includes(tw)) matchCount++;
+        targetWords.forEach(word => {
+            if (liveCorrectWordsSet.has(cleanText(word))) {
+                matchCount++;
+            }
         });
 
-        // తెలుగు కోసం మరింత మెరుగైన కండిషన్: 
-        // 60% కన్నా ఎక్కువ పదాలు మ్యాచ్ అయినా లేదా చివరి పదం పలికినా ముందుకు వెళ్తుంది.
         const progressRatio = matchCount / targetWords.length;
-        const lastWord = targetWords[targetWords.length - 1];
-        const lastWordSpoken = lastWord ? speechClean.includes(lastWord) : false;
+        const lastWordClean = cleanText(targetWords[targetWords.length - 1]);
+        const lastWordSpoken = liveCorrectWordsSet.has(lastWordClean);
 
         if (progressRatio >= 0.60 || lastWordSpoken) {
             if (!autoNextTimeout) {
@@ -492,32 +485,31 @@ function restartSpeechEngine() {
     try { recognition.stop(); } catch(e){}
     setTimeout(() => {
         if (isAssessmentActive && !autoNextTimeout) {
-            // రీస్టార్ట్ చేసేటప్పుడు కూడా కరెక్ట్ లాంగువేజ్ ఉండేలా చూసుకోవడం
             setRecognitionLanguage();
             try { recognition.start(); } catch(e){}
         }
-    }, 3000);
+    }, 400);
 }
 
-// స్పీచ్ ఇంజన్ లాంగువేజ్ ని సెట్ చేసే ముఖ్యమైన ఫంక్షన్ (తెలుగు కోసం ఫిక్స్)
 function setRecognitionLanguage() {
     if (!recognition) return;
     if (currentLanguage === "Telugu") {
-        recognition.lang = "te-IN"; // తెలుగు లాంగ్వేజ్ కోడ్
+        recognition.lang = "te-IN";
     } else if (currentLanguage === "Hindi") {
-        recognition.lang = "hi-IN"; // హిందీ లాంగ్వేజ్ కోడ్
+        recognition.lang = "hi-IN";
     } else {
-        recognition.lang = "en-IN"; // ఇంగ్లీష్ లాంగ్వేజ్ కోడ్
+        recognition.lang = "en-IN";
     }
 }
 
-// క్యారెక్టర్స్ క్లీనింగ్ ప్రెసిషన్
+// కీలక మార్పు: ఫుల్ స్టాప్స్, కామాలు మరియు దాచిన క్యారెక్టర్స్ ను పూర్తిగా క్లీన్ చేసే ప్రెసిషన్ లాజిక్
 function cleanText(text) {
     if (!text) return "";
-    let low = text.toLowerCase();
-    // తెలుగు హల్లులు, దీర్ఘాలు పాడవకుండా కేవలం పంక్చుయేషన్స్ మాత్రమే తీసివేస్తుంది
-    low = low.replace(/[\.,-\/#!$%\^&\*;:{}=\-_`~()?।॥]/g, " ");
-    return low.trim();
+    let low = text.toLowerCase().trim();
+    // అన్ని రకాల విరామ చిహ్నాలను (.,/#!$%^&*?:;{}=-_\`~()।॥) స్పేస్ తో రీప్లేస్ చేస్తుంది
+    low = low.replace(/[\.,\-\/#!$%\^&\*;:{}=\-_`~()?।॥]/g, " ");
+    // మల్టిపుల్ స్పేసెస్ ని సింగిల్ స్పేస్ గా మారుస్తుంది
+    return low.replace(/\s+/g, " ").trim();
 }
 
 function updateSentenceFontSize(text) {
@@ -542,6 +534,7 @@ function renderSentenceHTML(wordsArray, scoreArray) {
     });
 }
 
+// మెరుగుపరచబడిన లైవ్ ఎవాల్యుయేషన్ లాజిక్
 function evaluateLiveText(speech) {
     if (!speech) return;
     const target = currentSentences[sentenceIndex];
@@ -553,9 +546,15 @@ function evaluateLiveText(speech) {
 
     targetWords.forEach((word) => {
         const cleanedWord = cleanText(word);
-        // పదం ఖాళీగా ఉంటే లేదా స్పీచ్ టెక్స్ట్ లో ఉంటే కరెక్ట్ గా మార్చడం
+        
+        // గూగుల్ స్పీచ్ లో పదం ఉందా లేదా అని పక్కాగా చెక్ చేయడం
         if (cleanedWord !== "" && speechClean.includes(cleanedWord)) {
             scoreArray.push(1); 
+            currentSentenceCorrectCount++;
+            liveCorrectWordsSet.add(cleanedWord); // ఫైనల్ రిపోర్ట్ కోసం సేవ్ చేయడం
+        } else if (liveCorrectWordsSet.has(cleanedWord)) {
+            // ఒకవేళ మునుపటి రౌండ్ లో పలికి ఉంటే కరెక్ట్ గానే ఉంచడం
+            scoreArray.push(1);
             currentSentenceCorrectCount++;
         } else {
             scoreArray.push(0); 
@@ -570,7 +569,6 @@ function evaluateLiveText(speech) {
     view.style.display = "block";
 }
 
-// 1) పరిష్కారం: గూగుల్ షీట్స్ నుండి డేటా ఫెచ్ చేయడం కోసం సరిచేసిన ఫంక్షన్
 function fetchSheetQuestions() {
     const banner = document.getElementById("notice-banner");
     banner.style.display = "none";
@@ -583,7 +581,6 @@ function fetchSheetQuestions() {
     fetchBtn.innerText = "⚡ Fetching from Google Sheets...";
     fetchBtn.disabled = true;
     
-    // మీ యాప్ స్క్రిప్ట్ పారామీటర్ మ్యాచ్ అవ్వడానికి `subject` మరియు `language` రెండింటినీ పంపడం జరిగింది
     const finalUrl = `${WEB_APP_URL}?class=${encodeURIComponent(cls)}&subject=${encodeURIComponent(lang)}&language=${encodeURIComponent(lang)}`;
 
     const apiTimeout = setTimeout(() => {
@@ -697,7 +694,7 @@ function startSelectedAssessment() {
     totalReadingTimeSeconds = 0;
     wrongWordsLog = [];
     isAssessmentActive = true;
-    lastProcessedTranscript = "";
+    liveCorrectWordsSet.clear();
     
     startTime = new Date();
     setupSentenceDisplay();
@@ -705,7 +702,7 @@ function startSelectedAssessment() {
 
 function setupSentenceDisplay() {
     if (autoNextTimeout) { clearTimeout(autoNextTimeout); autoNextTimeout = null; }
-    lastProcessedTranscript = "";
+    liveCorrectWordsSet.clear();
     
     const target = currentSentences[sentenceIndex];
     updateSentenceFontSize(target);
@@ -723,7 +720,6 @@ function setupSentenceDisplay() {
     micBtn.innerText = "🎤 Start Reading";
     micBtn.className = "btn-mic";
     
-    // టెస్ట్ రన్ అవుతున్న లాంగ్వేజ్ ని కన్ఫర్మ్ చేయడం
     setRecognitionLanguage();
 }
 
@@ -733,7 +729,7 @@ function startAssessmentListening() {
         return;
     }
     autoNextTimeout = null;
-    setRecognitionLanguage(); // మైక్ ఆన్ చేసే ముందు లాంగ్వేజ్ సెట్ చేయడం
+    setRecognitionLanguage();
     try { recognition.start(); } catch(e) { console.log(e); }
 }
 
@@ -744,14 +740,13 @@ function moveToNextSentence() {
     const target = currentSentences[sentenceIndex];
     const targetWords = target.split(/\s+/).filter(Boolean);
     
-    // ఒకవేళ ఏమీ చదవకుండా స్కిప్ కొడితే లేదా తప్పులు ఉంటే ఎవాల్యుయేట్ చేయడం
-    const speechClean = cleanText(lastProcessedTranscript);
     let correctCount = 0;
     let localWrong = [];
     
     targetWords.forEach((word) => {
         const cleanedWord = cleanText(word);
-        if (cleanedWord !== "" && speechClean.includes(cleanedWord)) {
+        // ఒకవేళ విద్యార్థి చదివిన సెట్ లో ఉంటే కరెక్ట్ అని మార్కులు వేయడం
+        if (cleanedWord !== "" && liveCorrectWordsSet.has(cleanedWord)) {
             correctCount++;
         } else {
             localWrong.push(word);
@@ -870,7 +865,7 @@ function resetToSetup() {
     wrongWordsLog = [];
     totalWordsReadSuccessfully = 0;
     totalReadingTimeSeconds = 0;
-    lastProcessedTranscript = "";
+    liveCorrectWordsSet.clear();
 }
 </script>
 </body>
