@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -332,7 +333,8 @@
 </div>
 
 <script>
-const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbx7S7hUa9_dCKjqW_gr6XQ9WAX7V9S6UC7H86yja_hWKZ1oJ-DjMwAxa_x1VlEXM58/exec";
+// ⚠️ ఇక్కడ మీ కొత్త డిప్లాయ్మెంట్ వెబ్ యాప్ URL ని పేస్ట్ చేయండి:
+const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzqH57NhYE-CKJEANGFSohjx1V0Pin8KjyDISFU1oJBpCHyB2y9vUopSODKFjlbGnzf/exec";
 
 const OFFLINE_DATABASE = {
     Nursery_Eng: ["A Apple", "B Ball", "C Cat", "D Dog", "E Elephant"],
@@ -346,11 +348,11 @@ const OFFLINE_DATABASE = {
     UKG_Tel: ["బలపము", "రథము", "లత"],
     UKG_Hindi: ["उल्लू", "ऊनी"],
     "1st Class_Eng": ["The sun is very bright.", "The boy runs fast."],
-    "1st Class_Tel": ["అమ్మ మనకు దైవము.", "చెట్లు మనకు నీడను ఇస్తాయి.", "పిల్లలు చక్కగా చదవాలి."],
+    "1st Class_Tel": ["అమ్మ మనకు దైవము.", "చెట్లు మనకు నీడను ఇస్తాయి.", "ピッラル チャッカగా చదవాలి."],
     "1st Class_Hin": ["सूरज पूर्व से निकलता है।"],
     "1st Class_Numbers": ["100 One Hundred"],
     "2nd Class_Eng": ["Keep your surroundings clean.", "Honesty is the best policy."],
-    "2nd Class_Tel": ["పెద్దలను గౌరవించడం మన கர்తవ్యం.", "పుస్తకాలు మంచి జ్ఞానాన్ని ఇస్తాయి."],
+    "2nd Class_Tel": ["పెద్దలను గౌరవించడం మన కర్తవ్యం.", "పుస్తకాలు మంచి జ్ఞానాన్ని ఇస్తాయి."],
     "2nd Class_Hin": ["पेड़-पौधे हमारे सच्चे मित्र हैं।"],
     "2nd Class_Numbers": ["1000 One Thousand"]
 };
@@ -502,14 +504,10 @@ function evaluateLiveText(speech) {
     view.innerText = `${accuracy}%`;
     view.style.display = "block";
 
-    // 🔒 DOUBLE LOCK FIX FOR LONG LINES:
-    // కేవలం చివరి పదం పలికితే సరిపోదు.. వాక్యంలో కనీసం 80% పదాలు గ్రీన్ అవ్వాలి, మరియు చివరి పదం పలకాలి.
-    // అప్పుడే వెంటనే నెక్స్ట్ కి వెళ్తుంది. దీనివల్ల లాంగ్ లైన్స్ మధ్యలో అస్సలు స్కిప్ అవ్వవు!
     if (isLastWordCorrect && accuracy >= 80) {
         if (autoNextTimeout) { clearTimeout(autoNextTimeout); autoNextTimeout = null; }
         moveToNextSentence();
     } else if (accuracy >= 95) {
-        // ఒకవేళ చివరి పదం సరిగ్గా పలకకపోయినా.. మిగిలిన 95% వాక్యం పలికితే 1.5 సెకన్లు ఆగి ముందుకు వెళ్తుంది.
         if (!autoNextTimeout) {
             document.getElementById("status-text").innerText = "⏱️ Line complete. Moving next in 1.5 seconds...";
             autoNextTimeout = setTimeout(() => {
@@ -677,7 +675,7 @@ function startSelectedAssessment() {
     
     if (autoNextTimeout) { clearTimeout(autoNextTimeout); autoNextTimeout = null; }
     
-    startTime = new Date();
+    startTime = new Date(); // ⏰ Starting Time ఇక్కడ క్యాప్చర్ అవుతుంది
     setupSentenceDisplay();
 }
 
@@ -796,9 +794,15 @@ function finishAssessmentReport() {
     sendPayloadToGoogleSheet(name, studentClass, finalScore, Math.round(totalReadingTimeSeconds));
 }
 
+// 🚀 గూగుల్ షీట్ లోని కాలమ్స్ ఆర్డర్ (A నుండి H) ప్రకారం డేటాను పంపే కొత్త ఫంక్షన్:
 function sendPayloadToGoogleSheet(name, studentClass, finalScore, totalTimeTaken) {
     const today = new Date();
-    const formattedDate = `${String(today.getDate()).padStart(2, '0')}-${today.toLocaleString('default', { month: 'short' }) smokes}-${today.getFullYear()}`;
+    const formattedDate = `${String(today.getDate()).padStart(2, '0')}-${today.toLocaleString('default', { month: 'short' })}-${today.getFullYear()}`;
+    
+    let startTimeString = "N/A";
+    if (startTime) {
+        startTimeString = startTime.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true });
+    }
     
     const scorePayload = {
         date: formattedDate,
@@ -807,8 +811,10 @@ function sendPayloadToGoogleSheet(name, studentClass, finalScore, totalTimeTaken
         language: currentLanguage,
         questions: currentSentences.length,
         score: `${finalScore}%`,
-        timeTaken: totalTimeTaken
+        startingTime: startTimeString, // Column G
+        timeTaken: `${totalTimeTaken} Sec` // Column H
     };
+    
     if (WEB_APP_URL !== "YOUR_DEPLOYED_WEB_APP_URL_HERE") {
         fetch(WEB_APP_URL, {
             method: "POST",
