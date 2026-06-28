@@ -50,7 +50,6 @@
             opacity: 0.12; 
         }
 
-        /* ప్రొజెక్టర్ మరియు డెస్క్‌టాప్ కోసం భారీ మెయిన్ విండో సైజ్ */
         .container {
             width: 98%;
             max-width: 1750px;
@@ -210,7 +209,6 @@
         .q-item label { margin: 0; cursor: pointer; flex-grow: 1; font-weight: 500; font-size: 1.6rem; }
         .panel { display: none; margin-top: 35px; border-top: 3px solid var(--border); padding-top: 35px; }
         
-        /* భారీ వాక్యాల ప్రదర్శన బాక్స్ */
         .sentence-box {
             display: flex;
             flex-wrap: wrap;
@@ -380,7 +378,7 @@ const OFFLINE_DATABASE = {
     "1st Class_Hin": ["सूरज पूर्व से निकलता है।"],
     "1st Class_Numbers": ["100 One Hundred"],
     "2nd Class_Eng": ["Keep your surroundings clean.", "Honesty is the best policy."],
-    "2nd Class_Tel": ["పెద్దలను గౌరవించడం మన కర్తవ్యం.", "పుस्तకాలు మంచి జ్ఞానాన్ని ఇస్తాయి."],
+    "2nd Class_Tel": ["పెద్దలను గౌరవించడం మన కర్తవ్యం.", "పుస్తకాలు మంచి జ్ఞానాన్ని ఇస్తాయి."],
     "2nd Class_Hin": ["पेड़-पौधे हमारे सच्चे मित्र हैं।"],
     "2nd Class_Numbers": ["1000 One Thousand"],
     "3rd Class_Eng": ["Healthy food keeps our body fit."],
@@ -404,13 +402,14 @@ let accumulatedScores = 0;
 let questionsAttempted = 0;
 let recognition = null;
 let isAssessmentActive = false;
-let autoMicLoop = true; // నిరంతర మైక్రోఫోన్ రన్నింగ్ కోసం పాత లాజిక్ సక్రియం చేయబడింది
+let autoMicLoop = true; 
 let startTime = null;
 let sentenceStartTime = null;
 let totalWordsReadSuccessfully = 0;
 let totalReadingTimeSeconds = 0;
 let wrongWordsLog = []; 
 let liveCorrectWordsSet = new Set();
+let autoNextTimeout = null; 
 
 if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -446,7 +445,6 @@ if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
         console.error("Speech Error:", e.error);
     };
 
-    // గూగుల్ ఇంజన్ ఆటోమేటిక్ గా ఆపివేసినా, ఈ లూప్ సిస్టమ్ ను క్లోజ్ అవ్వనివ్వదు. మళ్ళీ ఆటో-స్టార్ట్ చేస్తుంది!
     recognition.onend = () => {
         const btn = document.getElementById("mic-btn");
         btn.classList.remove("listening");
@@ -507,16 +505,28 @@ function evaluateLiveText(speech) {
     
     let scoreArray = [];
     let currentSentenceCorrectCount = 0;
+    let isLastWordCorrect = false;
 
-    targetWords.forEach((word) => {
+    // చివరి పదాన్ని గుర్తించడం కోసం
+    const lastWordInTarget = targetWords.length ? cleanText(targetWords[targetWords.length - 1]) : "";
+
+    targetWords.forEach((word, idx) => {
         const cleanedWord = cleanText(word);
         if (cleanedWord !== "" && speechClean.includes(cleanedWord)) {
             scoreArray.push(1); 
             currentSentenceCorrectCount++;
             liveCorrectWordsSet.add(cleanedWord);
+            
+            // ఒకవేళ ఇది చివరి పదం అయితే ట్రాక్ చేయడం
+            if (idx === targetWords.length - 1) {
+                isLastWordCorrect = true;
+            }
         } else if (liveCorrectWordsSet.has(cleanedWord)) {
             scoreArray.push(1);
             currentSentenceCorrectCount++;
+            if (idx === targetWords.length - 1) {
+                isLastWordCorrect = true;
+            }
         } else {
             scoreArray.push(0); 
         }
@@ -528,6 +538,29 @@ function evaluateLiveText(speech) {
     const view = document.getElementById("current-score-view");
     view.innerText = `${accuracy}%`;
     view.style.display = "block";
+
+    // 🌟 మీ సూపర్ స్మార్ట్ లాజిక్ ఇక్కడ అప్లై చేసాను 🌟
+    if (isLastWordCorrect) {
+        // కండిషన్ 1: చివరి పదం అండర్‌లైన్ అవ్వగానే ఏమాత్రం ఆలస్యం లేకుండా వెంటనే నెక్స్ట్ కి వెళ్తుంది!
+        if (autoNextTimeout) clearTimeout(autoNextTimeout);
+        autoNextTimeout = null;
+        moveToNextSentence();
+    } else if (accuracy >= 60 || speechClean.split(/\s+/).length >= Math.max(1, targetWords.length - 1)) {
+        // కండిషన్ 2: విద్యార్థి ఎక్కువ శాతం చదివాడు కానీ చివరి పదం మిస్ అయింది/తప్పు చదివాడు -> 3 సెకన్ల టైమర్ రన్ అవుతుంది
+        if (!autoNextTimeout) {
+            document.getElementById("status-text").innerText = "Waiting 3 seconds to auto-advance... 🔄";
+            autoNextTimeout = setTimeout(() => {
+                moveToNextSentence();
+            }, 3000);
+        }
+    } else {
+        // ఇంకా చదవడం పూర్తి కాకపోతే టైమర్ రీసెట్ అవుతుంది
+        if (autoNextTimeout) {
+            clearTimeout(autoNextTimeout);
+            autoNextTimeout = null;
+            document.getElementById("status-text").innerText = "Speech engine active. Read clearly...";
+        }
+    }
 }
 
 function fetchSheetQuestions() {
@@ -651,6 +684,7 @@ function startSelectedAssessment() {
     wrongWordsLog = [];
     isAssessmentActive = true;
     autoMicLoop = true;
+    if (autoNextTimeout) { clearTimeout(autoNextTimeout); autoNextTimeout = null; }
     
     startTime = new Date();
     setupSentenceDisplay();
@@ -659,6 +693,7 @@ function startSelectedAssessment() {
 function setupSentenceDisplay() {
     liveCorrectWordsSet.clear();
     sentenceStartTime = new Date();
+    if (autoNextTimeout) { clearTimeout(autoNextTimeout); autoNextTimeout = null; }
     
     const target = currentSentences[sentenceIndex];
     updateSentenceFontSize(target);
@@ -668,7 +703,7 @@ function setupSentenceDisplay() {
     renderSentenceHTML(targetWords, initialScores);
     
     document.getElementById("progress-text").innerText = `Question ${sentenceIndex + 1} of ${currentSentences.length}`;
-    document.getElementById("status-text").innerText = "Mic looping active. Read fully and press Skip/Next when done.";
+    document.getElementById("status-text").innerText = "Mic looping active. Read fully...";
     document.getElementById("current-score-view").style.display = "none";
     
     setRecognitionLanguage();
@@ -681,6 +716,8 @@ function startAssessmentListening() {
 }
 
 function moveToNextSentence() {
+    if (autoNextTimeout) { clearTimeout(autoNextTimeout); autoNextTimeout = null; }
+    
     const target = currentSentences[sentenceIndex];
     const targetWords = target.split(/\s+/).filter(Boolean);
     
@@ -718,6 +755,7 @@ function moveToNextSentence() {
 function finishAssessmentReport() {
     autoMicLoop = false;
     isAssessmentActive = false;
+    if (autoNextTimeout) { clearTimeout(autoNextTimeout); autoNextTimeout = null; }
     try { recognition.stop(); } catch(e){}
     
     document.getElementById("assessment-panel").style.display = "none";
@@ -780,6 +818,7 @@ function abortAssessment() {
     if (confirm("Are you sure you want to stop?")) {
         autoMicLoop = false;
         isAssessmentActive = false;
+        if (autoNextTimeout) { clearTimeout(autoNextTimeout); autoNextTimeout = null; }
         try { recognition.stop(); } catch(e){}
         resetToSetup();
     }
@@ -805,6 +844,7 @@ function resetToSetup() {
     totalWordsReadSuccessfully = 0;
     totalReadingTimeSeconds = 0;
     liveCorrectWordsSet.clear();
+    if (autoNextTimeout) { clearTimeout(autoNextTimeout); autoNextTimeout = null; }
 }
 </script>
 </body>
