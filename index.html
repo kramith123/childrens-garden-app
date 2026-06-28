@@ -211,7 +211,6 @@
         .q-item label { margin: 0; cursor: pointer; flex-grow: 1; font-weight: 500; font-size: 1.4rem; }
         .panel { display: none; margin-top: 30px; border-top: 3px solid var(--border); padding-top: 30px; }
         
-        /* 1) పరిష్కారం: పదాల ఆర్డర్ మారకుండా ఫ్లెక్స్ మరియు టెక్స్ట్ అలైన్‌మెంట్ సెట్టింగ్స్ */
         .sentence-box {
             display: flex;
             flex-wrap: wrap;
@@ -231,7 +230,6 @@
             word-break: break-word;
         }
 
-        /* అక్షరాల కింద గ్యాప్ పెంచడం మరియు విరిగిపోకుండా ఇన్-లైన్ బ్లాక్ స్థిరపరచడం */
         .w-correct, .w-incorrect, .w-normal {
             display: inline-block;
             margin: 5px 0;
@@ -326,7 +324,10 @@
     </div>
 
     <div id="assessment-panel" class="panel">
-        <h3 id="progress-text" style="text-align: center; color: #475569; font-size: 1.8rem;">Processing...</h3>
+        <div style="display:flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+            <h3 id="progress-text" style="color: #475569; font-size: 1.8rem; margin:0;">Processing...</h3>
+            <button class="btn-primary" style="width:auto; margin:0; padding: 10px 20px; font-size:1.1rem; background-color:#f59e0b;" onclick="moveToNextSentence()">Skip / Next ➡️</button>
+        </div>
         <div class="sentence-box" id="target-sentence">Please wait...</div>
         <button id="mic-btn" class="btn-mic" onclick="startAssessmentListening()" disabled>🎤 Start Reading</button>
         <div class="status-msg" id="status-text">Ready to start.</div>
@@ -361,7 +362,9 @@
 </div>
 
 <script>
+// మీ గూగుల్ వెబ్ యాప్ URL
 const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbx7S7hUa9_dCKjqW_gr6XQ9WAX7V9S6UC7H86yja_hWKZ1oJ-DjMwAxa_x1VlEXM58/exec";
+
 const OFFLINE_DATABASE = {
     Nursery_Eng: ["A Apple", "B Ball", "C Cat", "D Dog", "E Elephant"],
     Nursery_Tel: ["అమ్మ", "ఆవు", "ఇల్లు", "ఈల", "ఉడత"],
@@ -378,11 +381,11 @@ const OFFLINE_DATABASE = {
     "1st Class_Hin": ["सूरज पूर्व से निकलता है।"],
     "1st Class_Numbers": ["100 One Hundred"],
     "2nd Class_Eng": ["Keep your surroundings clean.", "Honesty is the best policy."],
-    "2nd Class_Tel": ["పెద్దలను గౌరవించడం మన కర్తవ్యం.", "పుస్తకాలు మంచి జ్ఞానాన్ని ఇస్తాయి."],
+    "2nd Class_Tel": ["పెద్దలను గౌరవించడం మన కర్తవ్యం.", "పుस्तకాలు మంచి జ్ఞానాన్ని ఇస్తాయి."],
     "2nd Class_Hin": ["पेड़-पौधे हमारे सच्चे मित्र हैं।"],
     "2nd Class_Numbers": ["1000 One Thousand"],
     "3rd Class_Eng": ["Healthy food keeps our body fit."],
-    "3rd Class_Tel": ["దేశ भाषाలందు తెలుగు లెస్స.", "మొక్కలు నాటడం ద్వారా పర్యావరణాన్ని రక్షించవచ్చు."],
+    "3rd Class_Tel": ["దేశ భాషలందు తెలుగు లెస్స.", "మొక్కలు నాటడం ద్వారా పర్యావరణాన్ని రక్షించవచ్చు."],
     "3rd Class_Hin": ["समय बहुत मूल्यवान है।"],
     "3rd Class_Numbers": ["5000 Five Thousand"],
     "4th Class_Eng": ["The school library has many books."],
@@ -390,7 +393,7 @@ const OFFLINE_DATABASE = {
     "4th Class_Hin": ["हमे प्लास्टिक के उपयोग से बचना चाहिए।"],
     "4th Class_Numbers": ["25000 Twenty Five Thousand"],
     "5th Class_Eng": ["Education empowers individuals."],
-    "5th Class_Tel": ["మాతృభాషను గౌరవించడం మన ప్రథమ बाధ్యత.", "పరిశుభ్రత దైవత్వంతో సమానమని చెప్తారు."],
+    "5th Class_Tel": ["మాతృభాషను గౌరవించడం మన ప్రథమ బాధ్యత.", "పరిశుభ్రత దైవత్వంతో సమానమని చెప్తారు."],
     "5th Class_Hin": ["सच्चा मित्र वही है जो विपत्ति में काम आए."],
     "5th Class_Numbers": ["100000 One Lakh"]
 };
@@ -408,6 +411,7 @@ let sentenceStartTime = null;
 let totalWordsReadSuccessfully = 0;
 let totalReadingTimeSeconds = 0;
 let wrongWordsLog = [];
+let lastProcessedTranscript = "";
 
 if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -434,35 +438,38 @@ if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
             }
         }
         let liveSpeech = finalTranscript || interimTranscript;
+        
+        // ఖాళీగా ఉంటే ప్రాసెస్ చేయొద్దు
+        if (!liveSpeech.trim()) return;
+        
+        lastProcessedTranscript = liveSpeech;
         evaluateLiveText(liveSpeech);
 
-        // 2) మరియు 3) పరిష్కారం: స్మార్ట్ ఎండ్ డిటెక్షన్ & లూప్ బగ్ ఫిక్స్
+        // స్మార్ట్ ఆటో-నెక్స్ట్ లాజిక్
         const target = currentSentences[sentenceIndex];
         const targetClean = cleanText(target);
         const speechClean = cleanText(liveSpeech);
         
         const targetWords = targetClean.split(/\s+/).filter(Boolean);
-        const spokenWords = speechClean.split(/\s+/).filter(Boolean);
+        if (targetWords.length === 0) return;
 
-        // మొత్తం పదాలలో కనీసం 70% మ్యాచ్ అయినా లేదా చివరి 2 పదాలలో ఏ ఒక్కటి మ్యాచ్ అయినా ఆటోమేటిక్‌గా నెక్స్ట్ కి వెళ్తుంది.
         let matchCount = 0;
         targetWords.forEach(tw => {
             if (speechClean.includes(tw)) matchCount++;
         });
 
+        // తెలుగు కోసం మరింత మెరుగైన కండిషన్: 
+        // 60% కన్నా ఎక్కువ పదాలు మ్యాచ్ అయినా లేదా చివరి పదం పలికినా ముందుకు వెళ్తుంది.
+        const progressRatio = matchCount / targetWords.length;
         const lastWord = targetWords[targetWords.length - 1];
-        const secLastWord = targetWords[targetWords.length - 2] || "";
         const lastWordSpoken = lastWord ? speechClean.includes(lastWord) : false;
-        const secLastWordSpoken = secLastWord ? speechClean.includes(secLastWord) : false;
 
-        const highPercentageMatched = (targetWords.length > 0) && ((matchCount / targetWords.length) >= 0.70);
-
-        if ((lastWordSpoken || secLastWordSpoken || highPercentageMatched) && spokenWords.length >= Math.min(2, targetWords.length)) {
+        if (progressRatio >= 0.60 || lastWordSpoken) {
             if (!autoNextTimeout) {
                 document.getElementById("status-text").innerText = "✨ Auto-matching complete! Moving ahead...";
                 autoNextTimeout = setTimeout(() => {
                     moveToNextSentence();
-                }, 1200); 
+                }, 1500); 
             }
         }
     };
@@ -485,55 +492,56 @@ function restartSpeechEngine() {
     try { recognition.stop(); } catch(e){}
     setTimeout(() => {
         if (isAssessmentActive && !autoNextTimeout) {
+            // రీస్టార్ట్ చేసేటప్పుడు కూడా కరెక్ట్ లాంగువేజ్ ఉండేలా చూసుకోవడం
+            setRecognitionLanguage();
             try { recognition.start(); } catch(e){}
         }
-    }, 400);
+    }, 3000);
 }
 
+// స్పీచ్ ఇంజన్ లాంగువేజ్ ని సెట్ చేసే ముఖ్యమైన ఫంక్షన్ (తెలుగు కోసం ఫిక్స్)
+function setRecognitionLanguage() {
+    if (!recognition) return;
+    if (currentLanguage === "Telugu") {
+        recognition.lang = "te-IN"; // తెలుగు లాంగ్వేజ్ కోడ్
+    } else if (currentLanguage === "Hindi") {
+        recognition.lang = "hi-IN"; // హిందీ లాంగ్వేజ్ కోడ్
+    } else {
+        recognition.lang = "en-IN"; // ఇంగ్లీష్ లాంగ్వేజ్ కోడ్
+    }
+}
+
+// క్యారెక్టర్స్ క్లీనింగ్ ప్రెసిషన్
 function cleanText(text) {
     if (!text) return "";
     let low = text.toLowerCase();
-    // తెలుగు ఒత్తులు మరియు స్పెషల్ క్యారెక్టర్స్ మ్యాచింగ్ ను సులభతరం చేయడానికి క్లీనింగ్ ప్రెసిషన్
-    low = low.replace(/[\.,-\/#!$%\^&\*;:{}=\-_`~()?।]/g, " ");
+    // తెలుగు హల్లులు, దీర్ఘాలు పాడవకుండా కేవలం పంక్చుయేషన్స్ మాత్రమే తీసివేస్తుంది
+    low = low.replace(/[\.,-\/#!$%\^&\*;:{}=\-_`~()?।॥]/g, " ");
     return low.trim();
 }
 
-// 1) పరిష్కారం: సెంటెన్స్ పొడవును బట్టి డైనమిక్ ఫాంట్ సైజ్ సర్దుబాటు
 function updateSentenceFontSize(text) {
     const box = document.getElementById("target-sentence");
     const len = text.length;
-    
-    if (len > 60) {
-        box.style.fontSize = "2.8rem"; 
-    } else if (len > 35) {
-        box.style.fontSize = "3.8rem"; 
-    } else if (len > 15) {
-        box.style.fontSize = "4.8rem"; 
-    } else {
-        box.style.fontSize = "5.5rem"; 
-    }
+    if (len > 60) { box.style.fontSize = "2.8rem"; } 
+    else if (len > 35) { box.style.fontSize = "3.8rem"; } 
+    else if (len > 15) { box.style.fontSize = "4.6rem"; } 
+    else { box.style.fontSize = "5.5rem"; }
 }
 
 function renderSentenceHTML(wordsArray, scoreArray) {
     const box = document.getElementById("target-sentence");
     box.innerHTML = "";
-    
     wordsArray.forEach((word, idx) => {
         const span = document.createElement("span");
         span.innerText = word;
-        
-        if (scoreArray[idx] === 1) {
-            span.className = "w-correct";
-        } else if (scoreArray[idx] === -1) {
-            span.className = "w-incorrect";
-        } else {
-            span.className = "w-normal";
-        }
+        if (scoreArray[idx] === 1) { span.className = "w-correct"; } 
+        else if (scoreArray[idx] === -1) { span.className = "w-incorrect"; } 
+        else { span.className = "w-normal"; }
         box.appendChild(span);
     });
 }
 
-// 3) పరిష్కారం: చదవకుండానే అండర్ లైన్ అవ్వకుండా లైవ్ ఎవాల్యుయేషన్ మెరుగుపరచడం
 function evaluateLiveText(speech) {
     if (!speech) return;
     const target = currentSentences[sentenceIndex];
@@ -545,7 +553,8 @@ function evaluateLiveText(speech) {
 
     targetWords.forEach((word) => {
         const cleanedWord = cleanText(word);
-        if (cleanedWord === "" || speechClean.includes(cleanedWord)) {
+        // పదం ఖాళీగా ఉంటే లేదా స్పీచ్ టెక్స్ట్ లో ఉంటే కరెక్ట్ గా మార్చడం
+        if (cleanedWord !== "" && speechClean.includes(cleanedWord)) {
             scoreArray.push(1); 
             currentSentenceCorrectCount++;
         } else {
@@ -561,6 +570,7 @@ function evaluateLiveText(speech) {
     view.style.display = "block";
 }
 
+// 1) పరిష్కారం: గూగుల్ షీట్స్ నుండి డేటా ఫెచ్ చేయడం కోసం సరిచేసిన ఫంక్షన్
 function fetchSheetQuestions() {
     const banner = document.getElementById("notice-banner");
     banner.style.display = "none";
@@ -569,24 +579,36 @@ function fetchSheetQuestions() {
     const lang = document.getElementById("language").value;
     currentLanguage = lang;
     
-    document.getElementById("fetch-btn").innerText = "⚡ Fetching from Google Sheets...";
+    const fetchBtn = document.getElementById("fetch-btn");
+    fetchBtn.innerText = "⚡ Fetching from Google Sheets...";
+    fetchBtn.disabled = true;
     
+    // మీ యాప్ స్క్రిప్ట్ పారామీటర్ మ్యాచ్ అవ్వడానికి `subject` మరియు `language` రెండింటినీ పంపడం జరిగింది
+    const finalUrl = `${WEB_APP_URL}?class=${encodeURIComponent(cls)}&subject=${encodeURIComponent(lang)}&language=${encodeURIComponent(lang)}`;
+
     const apiTimeout = setTimeout(() => {
         loadOfflineQuestions(cls, lang, "Google Sheet timeout. Loaded Offline Local Bank.");
-    }, 7000);
+    }, 8000);
 
-    fetch(`${WEB_APP_URL}?class=${encodeURIComponent(cls)}&subject=${encodeURIComponent(lang)}`)
+    fetch(finalUrl)
         .then(res => res.json())
         .then(data => {
             clearTimeout(apiTimeout);
+            fetchBtn.disabled = false;
+            fetchBtn.innerText = "Load Sheet Questions";
+            
             if (data && data.status === "success" && Array.isArray(data.questions) && data.questions.length > 0) {
                 buildQuestionsSelection(data.questions, "Live Cloud Sheet");
+            } else if (data && data.status === "success" && Array.isArray(data.data) && data.data.length > 0) {
+                buildQuestionsSelection(data.data, "Live Cloud Sheet");
             } else {
                 loadOfflineQuestions(cls, lang, "No active sheet rows found. Loaded Offline Local Bank.");
             }
         })
         .catch(err => {
             clearTimeout(apiTimeout);
+            fetchBtn.disabled = false;
+            fetchBtn.innerText = "Load Sheet Questions";
             loadOfflineQuestions(cls, lang, "Connection offline / script error. Loaded Offline Local Bank.");
         });
 }
@@ -598,12 +620,13 @@ function loadOfflineQuestions(cls, lang, reasonMsg) {
     const banner = document.getElementById("notice-banner");
     banner.innerText = `ℹ️ ${reasonMsg}`;
     banner.style.display = "block";
+    banner.style.backgroundColor = "#fee2e2";
+    banner.style.color = "#991b1b";
     
     buildQuestionsSelection(pool, "Offline Local Backup");
 }
 
 function buildQuestionsSelection(array, sourceName) {
-    document.getElementById("fetch-btn").innerText = "Load Sheet Questions";
     const container = document.getElementById("selection-box-container");
     container.style.display = "block";
     
@@ -674,6 +697,7 @@ function startSelectedAssessment() {
     totalReadingTimeSeconds = 0;
     wrongWordsLog = [];
     isAssessmentActive = true;
+    lastProcessedTranscript = "";
     
     startTime = new Date();
     setupSentenceDisplay();
@@ -681,14 +705,12 @@ function startSelectedAssessment() {
 
 function setupSentenceDisplay() {
     if (autoNextTimeout) { clearTimeout(autoNextTimeout); autoNextTimeout = null; }
+    lastProcessedTranscript = "";
     
     const target = currentSentences[sentenceIndex];
-    
-    // డైనమిక్ ఫాంట్ సైజ్ అప్లై చేయడం
     updateSentenceFontSize(target);
     
     const targetWords = target.split(/\s+/).filter(Boolean);
-    
     const initialScores = targetWords.map(() => 0);
     renderSentenceHTML(targetWords, initialScores);
     
@@ -700,6 +722,9 @@ function setupSentenceDisplay() {
     micBtn.disabled = false;
     micBtn.innerText = "🎤 Start Reading";
     micBtn.className = "btn-mic";
+    
+    // టెస్ట్ రన్ అవుతున్న లాంగ్వేజ్ ని కన్ఫర్మ్ చేయడం
+    setRecognitionLanguage();
 }
 
 function startAssessmentListening() {
@@ -708,6 +733,7 @@ function startAssessmentListening() {
         return;
     }
     autoNextTimeout = null;
+    setRecognitionLanguage(); // మైక్ ఆన్ చేసే ముందు లాంగ్వేజ్ సెట్ చేయడం
     try { recognition.start(); } catch(e) { console.log(e); }
 }
 
@@ -717,15 +743,15 @@ function moveToNextSentence() {
 
     const target = currentSentences[sentenceIndex];
     const targetWords = target.split(/\s+/).filter(Boolean);
-    const box = document.getElementById("target-sentence");
-    const spans = box.querySelectorAll("span");
     
+    // ఒకవేళ ఏమీ చదవకుండా స్కిప్ కొడితే లేదా తప్పులు ఉంటే ఎవాల్యుయేట్ చేయడం
+    const speechClean = cleanText(lastProcessedTranscript);
     let correctCount = 0;
     let localWrong = [];
     
-    targetWords.forEach((word, idx) => {
-        const isCorrect = spans[idx] && spans[idx].className === "w-correct";
-        if (isCorrect) {
+    targetWords.forEach((word) => {
+        const cleanedWord = cleanText(word);
+        if (cleanedWord !== "" && speechClean.includes(cleanedWord)) {
             correctCount++;
         } else {
             localWrong.push(word);
@@ -785,7 +811,7 @@ function finishAssessmentReport() {
         wrongWordsLog.forEach((log, idx) => {
             const row = document.createElement("div");
             row.className = "error-item";
-            row.innerHTML = `<strong>Line ${idx+1}:</strong> "${log.question}"<br><span style="color:#dc2626;">Missed: ${log.words.join(", ")}</span>`;
+            row.innerHTML = `<strong>Line ${idx+1}:</strong> "${log.question}"<br><span style="color:#dc2626; font-weight:bold;">Missed/Wrong:</span> ${log.words.map(w => `<span style="background: #fed7d7; padding: 2px 6px; border-radius: 4px; margin-right: 4px;">${w}</span>`).join(" ")}`;
             detailsDiv.appendChild(row);
         });
     }
@@ -844,6 +870,7 @@ function resetToSetup() {
     wrongWordsLog = [];
     totalWordsReadSuccessfully = 0;
     totalReadingTimeSeconds = 0;
+    lastProcessedTranscript = "";
 }
 </script>
 </body>
