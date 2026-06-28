@@ -34,13 +34,31 @@
             overflow-x: hidden;
         }
 
+        .bg-doodles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+            overflow: hidden;
+        }
+
+        .doodle {
+            position: absolute;
+            opacity: 0.12; 
+            transform: rotate(0deg);
+            transition: transform 0.5s ease;
+        }
+
         .container {
             width: 98%;
             max-width: 1800px;
             background: rgba(255, 255, 255, 0.96);
             padding: 40px;
             border-radius: 24px;
-            box-shadow: 0 20px 40px -10px rgba(15, 23, 42, 0.15);
+            box-shadow: 0 20px 40px -10px rgba(15, 23, 42, 0.15), 0 10px 15px -3px rgba(15, 23, 42, 0.05);
             border: 4px solid #ffffff; 
             box-sizing: border-box;
             position: relative;
@@ -57,6 +75,7 @@
             margin-bottom: 12px;
             text-align: center;
             color: #1e3a8a;
+            text-shadow: 1px 1px 2px rgba(30, 58, 138, 0.1);
         }
         
         .app-title {
@@ -78,6 +97,7 @@
             .form-grid { grid-template-columns: 1fr; }
             .school-title { font-size: 1.8rem; }
             .app-title { font-size: 1.1rem; }
+            .container { padding: 30px 20px; }
         }
 
         .form-group { margin-bottom: 5px; }
@@ -99,7 +119,9 @@
             box-sizing: border-box;
             font-size: 1.4rem; 
             background-color: #fcfcfc;
+            font-weight: 500;
             color: #1e293b;
+            transition: all 0.2s ease;
         }
 
         button {
@@ -110,6 +132,7 @@
             font-size: 1.5rem; 
             font-weight: bold;
             cursor: pointer;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
             transition: all 0.2s ease;
             margin-top: 10px;
         }
@@ -157,6 +180,7 @@
             width: auto;
             margin: 0;
             cursor: pointer;
+            font-size: 1.25rem;
             font-weight: 600;
         }
 
@@ -201,6 +225,7 @@
             min-height: 140px;
             color: #0f172a;
             border: 4px dashed #cbd5e1;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
             white-space: normal;
             word-break: break-word;
         }
@@ -233,6 +258,11 @@
     </style>
 </head>
 <body>
+
+<div class="bg-doodles">
+    <svg class="doodle doodle-1" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="1"><path d="M17.5 19A3.5 3.5 0 0 0 21 15.5c0-2.79-2.54-4.5-5-4.5-.42 0-.83.05-1.24.15A7 7 0 0 0 3 11.5c0 3.62 3.1 6.5 7 6.5h7.5z"/></svg>
+    <svg class="doodle doodle-2" viewBox="0 0 24 24" fill="none" stroke="#e11d48" stroke-width="1"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+</div>
 
 <div class="container">
     <div class="school-title">Children's Garden E.M. High School</div>
@@ -346,13 +376,25 @@ const OFFLINE_DATABASE = {
     UKG_Tel: ["బలపము", "రథము", "లత"],
     UKG_Hindi: ["उल्लू", "ऊनी"],
     "1st Class_Eng": ["The sun is very bright.", "The boy runs fast."],
-    "1st Class_Tel": ["అమ్మ మనకు దైవము.", "チェట్లు మనకు నీడను ఇస్తాయి.", "పిల్లలు చక్కగా చదవాలి."],
+    "1st Class_Tel": ["అమ్మ మనకు దైవము.", "చెట్లు మనకు నీడను ఇస్తాయి.", "పిల్లలు చక్కగా చదవాలి."],
     "1st Class_Hin": ["सूरज पूर्व से निकलता है।"],
     "1st Class_Numbers": ["100 One Hundred"],
     "2nd Class_Eng": ["Keep your surroundings clean.", "Honesty is the best policy."],
-    "2nd Class_Tel": ["పెద్దలను గౌరవించడం మన കർతవ్యం.", "పుస్తకాలు మంచి జ్ఞానాన్ని ఇస్తాయి."],
+    "2nd Class_Tel": ["పెద్దలను గౌరవించడం మన కర్తవ్యం.", "పుస్తకాలు మంచి జ్ఞానాన్ని ఇస్తాయి."],
     "2nd Class_Hin": ["पेड़-पौधे हमारे सच्चे मित्र हैं।"],
-    "2nd Class_Numbers": ["1000 One Thousand"]
+    "2nd Class_Numbers": ["1000 One Thousand"],
+    "3rd Class_Eng": ["Healthy food keeps our body fit."],
+    "3rd Class_Tel": ["देश भाषा lందు తెలుగు లెస్స.", "మొక్కలు నాటడం ద్వారా పర్యావरणాన్ని రక్షించవచ్చు."],
+    "3rd Class_Hin": ["समय बहुत मूल्यवान है।"],
+    "3rd Class_Numbers": ["5000 Five Thousand"],
+    "4th Class_Eng": ["The school library has many books."],
+    "4th Class_Tel": ["వృక్షో రక్షతి రక్షితః అనగా చెట్లను రక్షించాల్సింది మనమే.", "చదువుతో పాటు మంచి సంస్కారం ఉండాలి."],
+    "4th Class_Hin": ["हमे प्लास्टिक के उपयोग से बचना चाहिए।"],
+    "4th Class_Numbers": ["25000 Twenty Five Thousand"],
+    "5th Class_Eng": ["Education empowers individuals."],
+    "5th Class_Tel": ["మాతృభాషను గౌరవించడం మన ప్రథమ బాధ్యత.", "परिశుభ్రత దైవత్వంతో సమానమని చెప్తారు."],
+    "5th Class_Hin": ["सच्चा मित्र वही है जो विपत्ति में काम आए."],
+    "5th Class_Numbers": ["100000 One Lakh"]
 };
 
 let currentLanguage = "English";
@@ -368,9 +410,8 @@ let sentenceStartTime = null;
 let totalWordsReadSuccessfully = 0;
 let totalReadingTimeSeconds = 0;
 let wrongWordsLog = [];
-
-let permanentlyMatchedWordsSet = new Set(); 
-let isMicrophoneIntendedToBeActive = false; 
+let liveCorrectWordsSet = new Set();
+let isMicrophoneIntendedToBeActive = false;
 
 if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -400,6 +441,41 @@ if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
         if (!liveSpeech.trim()) return;
         
         evaluateLiveText(liveSpeech);
+
+        // 🔒 SMART AUTOMATCH LOCK SYSTEM
+        const target = currentSentences[sentenceIndex];
+        const targetWords = target.split(/\s+/).filter(Boolean);
+        if (targetWords.length === 0) return;
+
+        let matchCount = 0;
+        targetWords.forEach(word => {
+            const cleanedWord = cleanText(word);
+            let isSmallWordExempted = (currentLanguage === "English" && cleanedWord.length <= 2);
+            if (liveCorrectWordsSet.has(cleanedWord) || isSmallWordExempted) {
+                matchCount++;
+            }
+        });
+
+        const progressRatio = matchCount / targetWords.length;
+        const lastWordClean = cleanText(targetWords[targetWords.length - 1]);
+        const lastWordSpoken = liveCorrectWordsSet.has(lastWordClean);
+
+        // కనీసం 90% లేదా చివరి పదం కచ్చితంగా పలికితేనే ఆటోమేటిక్ గా ముందుకు వెళ్తుంది.
+        if (progressRatio >= 0.90 || lastWordSpoken) {
+            if (!autoNextTimeout) {
+                document.getElementById("status-text").innerText = "✨ Complete matching done! Moving ahead...";
+                autoNextTimeout = setTimeout(() => {
+                    moveToNextSentence();
+                }, 1500);
+            }
+        } else {
+            // ఒకవేళ సగం చదివి ఆగిపోతే, యాప్ అనవసరంగా స్కిప్ అవ్వకుండా టైమర్ క్లియర్ చేస్తుంది.
+            if (autoNextTimeout) {
+                clearTimeout(autoNextTimeout);
+                autoNextTimeout = null;
+                document.getElementById("status-text").innerText = "Speech engine active. Read clearly...";
+            }
+        }
     };
 
     recognition.onerror = (e) => {
@@ -443,8 +519,7 @@ function setRecognitionLanguage() {
 
 function cleanText(text) {
     if (!text) return "";
-    let low = text.toString().toLowerCase().trim();
-    low = low.replace(/[\r\n\t]/g, " ");
+    let low = text.toLowerCase().trim();
     low = low.replace(/[\.,\-\/#!$%\^&\*;:{}=\-_`~()?।॥]/g, " ");
     return low.replace(/\s+/g, " ").trim();
 }
@@ -452,10 +527,10 @@ function cleanText(text) {
 function updateSentenceFontSize(text) {
     const box = document.getElementById("target-sentence");
     const len = text.length;
-    if (len > 120) { box.style.fontSize = "2.0rem"; box.style.lineHeight = "1.6"; }
-    else if (len > 60) { box.style.fontSize = "2.6rem"; } 
-    else if (len > 35) { box.style.fontSize = "3.5rem"; } 
-    else { box.style.fontSize = "4.5rem"; }
+    if (len > 60) { box.style.fontSize = "2.8rem"; } 
+    else if (len > 35) { box.style.fontSize = "3.8rem"; } 
+    else if (len > 15) { box.style.fontSize = "4.6rem"; } 
+    else { box.style.fontSize = "5.5rem"; }
 }
 
 function renderSentenceHTML(wordsArray, scoreArray) {
@@ -463,7 +538,7 @@ function renderSentenceHTML(wordsArray, scoreArray) {
     box.innerHTML = "";
     wordsArray.forEach((word, idx) => {
         const span = document.createElement("span");
-        span.innerText = word.trim();
+        span.innerText = word;
         if (scoreArray[idx] === 1) { span.className = "w-correct"; } 
         else if (scoreArray[idx] === -1) { span.className = "w-incorrect"; } 
         else { span.className = "w-normal"; }
@@ -474,73 +549,30 @@ function renderSentenceHTML(wordsArray, scoreArray) {
 function evaluateLiveText(speech) {
     if (!speech || !isAssessmentActive) return;
     const target = currentSentences[sentenceIndex];
-    const targetWords = target.split(/\s+/).map(w => w.trim()).filter(Boolean);
+    const targetWords = target.split(/\s+/).filter(Boolean);
     const speechClean = cleanText(speech);
     
     let scoreArray = [];
     let currentSentenceCorrectCount = 0;
-    let isLastWordCorrect = false;
-    const lastWordIdx = targetWords.length - 1;
-
-    const liveWordsArray = speechClean.split(" ");
-
-    targetWords.forEach((word, idx) => {
+    
+    targetWords.forEach((word) => {
         const cleanedWord = cleanText(word);
-        
-        // 🌟 SMALL WORDS AUTO-EXEMPTION MECHANISM
-        // ఇంగ్లీషులో 2 అంతకంటే తక్కువ అక్షరాలు ఉన్న చిన్న పదాలను ఆటో-కరెక్ట్ చేస్తుంది (చిన్న పొరపాట్లు స్కిప్ అవ్వకుండా)
         let isSmallWordExempted = (currentLanguage === "English" && cleanedWord.length <= 2);
-
-        if (cleanedWord !== "" && (speechClean.includes(cleanedWord) || liveWordsArray.some(lw => lw === cleanedWord) || permanentlyMatchedWordsSet.has(cleanedWord) || isSmallWordExempted)) {
+        
+        if (cleanedWord !== "" && (speechClean.includes(cleanedWord) || liveCorrectWordsSet.has(cleanedWord) || isSmallWordExempted)) {
             scoreArray.push(1); 
             currentSentenceCorrectCount++;
-            permanentlyMatchedWordsSet.add(cleanedWord); 
-            if (idx === lastWordIdx) isLastWordCorrect = true;
+            liveCorrectWordsSet.add(cleanedWord);
         } else {
             scoreArray.push(0); 
         }
     });
-
     renderSentenceHTML(targetWords, scoreArray);
     
     const accuracy = targetWords.length ? Math.round((currentSentenceCorrectCount / targetWords.length) * 100) : 100;
     const view = document.getElementById("current-score-view");
     view.innerText = `${accuracy}%`;
     view.style.display = "block";
-
-    // 🔒 STRICT LOCK: చివరి పదం పలికినా లేదా కనీసం 90% పెద్ద పదాలు పూర్తయితేనే ఆటో-నెక్స్ట్ అవుతుంది!
-    if (isLastWordCorrect || accuracy >= 90) {
-        if (autoNextTimeout) { clearTimeout(autoNextTimeout); autoNextTimeout = null; }
-        moveToNextSentence();
-    } else {
-        // విద్యార్థి సగం చదివి ఆగినప్పుడు టైమర్ ఆన్ అవ్వకుండా లాక్ చేసాము.
-        if (autoNextTimeout) {
-            clearTimeout(autoNextTimeout);
-            autoNextTimeout = null;
-            document.getElementById("status-text").innerText = "Speech engine active. Read clearly...";
-        }
-    }
-}
-
-function smartSentenceSplitter(rawQuestionsArray) {
-    let finalizedList = [];
-    rawQuestionsArray.forEach(item => {
-        if (!item) return;
-        let splitByLines = item.toString().split(/[\r\n]+/);
-        
-        splitByLines.forEach(line => {
-            if(!line || !line.trim()) return;
-            
-            let subSentences = line.split(/[\.\?।॥]/g);
-            subSentences.forEach(sub => {
-                let cleanSub = sub.trim();
-                if (cleanSub.length > 1) {
-                    finalizedList.push(cleanSub);
-                }
-            });
-        });
-    });
-    return finalizedList.length > 0 ? finalizedList : rawQuestionsArray;
 }
 
 function fetchSheetQuestions() {
@@ -566,18 +598,13 @@ function fetchSheetQuestions() {
             fetchBtn.disabled = false;
             fetchBtn.innerText = "Load Sheet Questions";
             
-            let rawList = [];
             if (data && data.status === "success" && Array.isArray(data.questions) && data.questions.length > 0) {
-                rawList = data.questions;
+                buildQuestionsSelection(data.questions, "Live Cloud Sheet");
             } else if (data && data.status === "success" && Array.isArray(data.data) && data.data.length > 0) {
-                rawList = data.data;
+                buildQuestionsSelection(data.data, "Live Cloud Sheet");
             } else {
                 loadOfflineQuestions(cls, lang, "No active sheet rows found. Loaded Offline Local Bank.");
-                return;
             }
-            
-            let dynamicSentences = smartSentenceSplitter(rawList);
-            buildQuestionsSelection(dynamicSentences, "Live Cloud Sheet");
         })
         .catch(err => {
             clearTimeout(apiTimeout);
@@ -597,8 +624,7 @@ function loadOfflineQuestions(cls, lang, reasonMsg) {
     banner.style.backgroundColor = "#fee2e2";
     banner.style.color = "#991b1b";
     
-    let processedPool = smartSentenceSplitter(pool);
-    buildQuestionsSelection(processedPool, "Offline Local Backup");
+    buildQuestionsSelection(pool, "Offline Local Backup");
 }
 
 function buildQuestionsSelection(array, sourceName) {
@@ -624,14 +650,14 @@ function buildQuestionsSelection(array, sourceName) {
 
         const checkbox = document.createElement("input");
         checkbox.type = "checkbox";
-        checkbox.value = q.trim();
+        checkbox.value = q;
         checkbox.id = `q-chk-${idx}`;
         checkbox.checked = true; 
         checkbox.onchange = () => updateSelectedCount();
 
         const label = document.createElement("label");
         label.htmlFor = `q-chk-${idx}`;
-        label.innerText = q.trim();
+        label.innerText = q;
 
         item.appendChild(checkbox);
         item.appendChild(label);
@@ -658,7 +684,7 @@ function startSelectedAssessment() {
         return;
     }
     
-    currentSentences = Array.from(checked).map(c => c.value.trim());
+    currentSentences = Array.from(checked).map(c => c.value);
     
     document.getElementById("setup-screen").style.display = "none";
     document.getElementById("assessment-panel").style.display = "block";
@@ -669,10 +695,8 @@ function startSelectedAssessment() {
     totalReadingTimeSeconds = 0;
     wrongWordsLog = [];
     isAssessmentActive = true;
-    isMicrophoneIntendedToBeActive = true; 
-    permanentlyMatchedWordsSet.clear();
-    
-    if (autoNextTimeout) { clearTimeout(autoNextTimeout); autoNextTimeout = null; }
+    isMicrophoneIntendedToBeActive = true;
+    liveCorrectWordsSet.clear();
     
     startTime = new Date();
     setupSentenceDisplay();
@@ -680,13 +704,12 @@ function startSelectedAssessment() {
 
 function setupSentenceDisplay() {
     if (autoNextTimeout) { clearTimeout(autoNextTimeout); autoNextTimeout = null; }
-    permanentlyMatchedWordsSet.clear(); 
-    sentenceStartTime = new Date();
+    liveCorrectWordsSet.clear();
     
     const target = currentSentences[sentenceIndex];
     updateSentenceFontSize(target);
     
-    const targetWords = target.split(/\s+/).map(w => w.trim()).filter(Boolean);
+    const targetWords = target.split(/\s+/).filter(Boolean);
     const initialScores = targetWords.map(() => 0);
     renderSentenceHTML(targetWords, initialScores);
     
@@ -699,7 +722,7 @@ function setupSentenceDisplay() {
     
     try { recognition.stop(); } catch(e){}
     setTimeout(() => {
-        if(isAssessmentActive) {
+        if (isAssessmentActive) {
             setRecognitionLanguage();
             try { recognition.start(); } catch(e){}
         }
@@ -708,7 +731,7 @@ function setupSentenceDisplay() {
 
 function startAssessmentListening() {
     if (!recognition) return;
-    if (autoNextTimeout) { clearTimeout(autoNextTimeout); autoNextTimeout = null; }
+    autoNextTimeout = null;
     isMicrophoneIntendedToBeActive = true;
     try { recognition.stop(); } catch(e){}
     setTimeout(() => {
@@ -719,10 +742,9 @@ function startAssessmentListening() {
 
 function moveToNextSentence() {
     if (autoNextTimeout) { clearTimeout(autoNextTimeout); autoNextTimeout = null; }
-    if (!isAssessmentActive) return;
-
+    
     const target = currentSentences[sentenceIndex];
-    const targetWords = target.split(/\s+/).map(w => w.trim()).filter(Boolean);
+    const targetWords = target.split(/\s+/).filter(Boolean);
     
     let correctCount = 0;
     let localWrong = [];
@@ -730,8 +752,7 @@ function moveToNextSentence() {
     targetWords.forEach((word) => {
         const cleanedWord = cleanText(word);
         let isSmallWordExempted = (currentLanguage === "English" && cleanedWord.length <= 2);
-        
-        if (cleanedWord !== "" && (permanentlyMatchedWordsSet.has(cleanedWord) || isSmallWordExempted)) {
+        if (cleanedWord !== "" && (liveCorrectWordsSet.has(cleanedWord) || isSmallWordExempted)) {
             correctCount++;
         } else {
             localWrong.push(word);
@@ -762,8 +783,7 @@ function moveToNextSentence() {
 
 function finishAssessmentReport() {
     isAssessmentActive = false;
-    isMicrophoneIntendedToBeActive = false; 
-    if (autoNextTimeout) { clearTimeout(autoNextTimeout); autoNextTimeout = null; }
+    isMicrophoneIntendedToBeActive = false;
     try { recognition.stop(); } catch(e){}
     
     document.getElementById("assessment-panel").style.display = "none";
@@ -850,8 +870,7 @@ function resetToSetup() {
     wrongWordsLog = [];
     totalWordsReadSuccessfully = 0;
     totalReadingTimeSeconds = 0;
-    permanentlyMatchedWordsSet.clear();
-    if (autoNextTimeout) { clearTimeout(autoNextTimeout); autoNextTimeout = null; }
+    liveCorrectWordsSet.clear();
 }
 </script>
 </body>
