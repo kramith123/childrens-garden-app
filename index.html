@@ -555,10 +555,15 @@ function fetchSheetQuestions() {
     fetchBtn.innerText = "⚡ Fetching from Google Sheets...";
     fetchBtn.disabled = true;
     
-    const finalUrl = `${WEB_APP_URL}?class=${encodeURIComponent(cls)}&subject=${encodeURIComponent(lang)}&language=${encodeURIComponent(lang)}`;
+    // 🔥 FIXED: URL పారామీటర్లను Code.gs కి తగ్గట్టుగా కరెక్ట్ చేశాం
+    const finalUrl = `${WEB_APP_URL}?class=${encodeURIComponent(cls)}&language=${encodeURIComponent(lang)}`;
+    
     const apiTimeout = setTimeout(() => {
+        fetchBtn.disabled = false;
+        fetchBtn.innerText = "Load Sheet Questions";
         loadOfflineQuestions(cls, lang, "Google Sheet timeout. Loaded Offline Local Bank.");
     }, 8000);
+
     fetch(finalUrl)
         .then(res => res.json())
         .then(data => {
@@ -568,15 +573,22 @@ function fetchSheetQuestions() {
             
             let rawList = [];
            
-            if (data && data.status === "success" && Array.isArray(data.questions) && data.questions.length > 0) {
-                rawList = data.questions;
-            } else if (data && data.status === "success" && Array.isArray(data.data) && data.data.length > 0) {
+            if (data && data.status === "success" && Array.isArray(data.data)) {
                 rawList = data.data;
+            } else if (data && data.status === "error") {
+                // షీట్ ట్యాబ్ దొరకనప్పుడు వచ్చే ఎర్రర్ మెసేజ్ చూపిస్తుంది
+                alert("Error: " + data.message);
+                loadOfflineQuestions(cls, lang, data.message);
+                return;
             } else {
                 loadOfflineQuestions(cls, lang, "No active sheet rows found. Loaded Offline Local Bank.");
                 return;
             }
             
+            if (rawList.length === 0) {
+                alert("గమనిక: ఈ షీట్ ట్యాబ్ లో ప్రశ్నలు ఏవీ లేవు (ఖాలీగా ఉంది)!");
+            }
+
             let dynamicSentences = smartSentenceSplitter(rawList);
             buildQuestionsSelection(dynamicSentences, "Live Cloud Sheet");
         })
@@ -584,7 +596,8 @@ function fetchSheetQuestions() {
             clearTimeout(apiTimeout);
             fetchBtn.disabled = false;
             fetchBtn.innerText = "Load Sheet Questions";
-            loadOfflineQuestions(cls, lang, "Connection offline / script error. Loaded Offline Local Bank.");
+            console.error("Fetch Error:", err);
+            loadOfflineQuestions(cls, lang, "Connection error / Script error. Loaded Offline Local Bank.");
         });
 }
 
