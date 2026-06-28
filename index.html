@@ -50,52 +50,53 @@
             opacity: 0.12; 
         }
 
-        /* విండో సైజ్ మళ్ళీ ప్రొజెక్టర్ కి సరిపోయేలా పెద్దదిగా మార్చబడింది */
+        /* ప్రాజెక్ట్, డెస్క్‌టాప్ మరియు మొబైల్ కోసం భారీగా మార్చబడిన మెయిన్ విండో సైజ్ */
         .container {
-            width: 95%;
-            max-width: 1400px;
-            background: rgba(255, 255, 255, 0.96);
-            padding: 40px;
-            border-radius: 24px;
-            box-shadow: 0 20px 40px -10px rgba(15, 23, 42, 0.15);
-            border: 4px solid #ffffff; 
+            width: 96%;
+            max-width: 1600px;
+            background: rgba(255, 255, 255, 0.97);
+            padding: 50px 40px;
+            border-radius: 28px;
+            box-shadow: 0 25px 50px -12px rgba(15, 23, 42, 0.18);
+            border: 5px solid #ffffff; 
             box-sizing: border-box;
             position: relative;
             z-index: 10; 
-            backdrop-filter: blur(8px);
-            margin: 20px auto;
+            backdrop-filter: blur(10px);
+            margin: 15px auto;
         }
 
         .school-title {
-            font-size: 3rem;
-            font-weight: 800;
+            font-size: 3.5rem;
+            font-weight: 900;
             text-transform: uppercase;
-            letter-spacing: 1.5px;
-            margin-bottom: 12px;
+            letter-spacing: 2px;
+            margin-bottom: 15px;
             text-align: center;
             color: #1e3a8a;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
         }
         
         .app-title {
-            font-size: 1.8rem;
+            font-size: 2rem;
             color: #475569;
             font-weight: 600;
-            margin-bottom: 40px;
+            margin-bottom: 45px;
             text-align: center;
         }
 
         .form-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 24px;
-            margin-bottom: 30px;
+            gap: 30px;
+            margin-bottom: 35px;
         }
 
-        @media (max-width: 768px) {
+        @media (max-width: 992px) {
             .form-grid { grid-template-columns: 1fr; }
-            .school-title { font-size: 1.8rem; }
-            .app-title { font-size: 1.1rem; }
-            .container { padding: 30px 20px; }
+            .school-title { font-size: 2.2rem; }
+            .app-title { font-size: 1.3rem; }
+            .container { padding: 35px 20px; }
         }
 
         .form-group { margin-bottom: 5px; }
@@ -103,30 +104,36 @@
 
         label {
             display: block;
-            margin-bottom: 10px;
+            margin-bottom: 12px;
             font-weight: 700;
-            font-size: 1.4rem; 
+            font-size: 1.5rem; 
             color: #334155;
         }
 
         input, select {
             width: 100%;
-            padding: 16px 20px; 
-            border: 2px solid var(--border);
-            border-radius: 12px;
+            padding: 18px 22px; 
+            border: 2.5px solid var(--border);
+            border-radius: 14px;
             box-sizing: border-box;
-            font-size: 1.4rem; 
+            font-size: 1.5rem; 
             background-color: #fcfcfc;
             font-weight: 500;
             color: #1e293b;
+            transition: border-color 0.2s;
+        }
+        
+        input:focus, select:focus {
+            outline: none;
+            border-color: #2563eb;
         }
 
         button {
             width: 100%;
-            padding: 20px 24px; 
+            padding: 22px 26px; 
             border: none;
-            border-radius: 12px;
-            font-size: 1.5rem; 
+            border-radius: 14px;
+            font-size: 1.6rem; 
             font-weight: bold;
             cursor: pointer;
             transition: all 0.2s ease;
@@ -134,37 +141,40 @@
         }
 
         .btn-primary { background-color: #2563eb; color: white; }
-        .btn-success { background-color: var(--success); color: white; margin-top: 25px; font-size: 1.6rem; padding: 22px 24px; }
+        .btn-primary:hover { background-color: #1d4ed8; }
+        .btn-success { background-color: var(--success); color: white; margin-top: 30px; font-size: 1.8rem; padding: 24px 26px; }
         
         .btn-mic {
             background-color: #ef4444;
             color: white;
-            margin-top: 25px;
-            font-size: 2rem; 
-            padding: 26px;
-            border-radius: 16px;
+            margin-top: 30px;
+            font-size: 2.2rem; 
+            padding: 28px;
+            border-radius: 18px;
+            box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
         }
 
         .btn-mic.listening {
             background-color: #16a34a;
             animation: pulse 1.5s infinite;
+            box-shadow: 0 4px 15px rgba(22, 163, 74, 0.4);
         }
         
         .q-selection-box {
             display: none;
             background: #f8fafc;
             border: 2px solid #e2e8f0;
-            border-radius: 16px;
-            padding: 30px;
-            margin-top: 30px;
+            border-radius: 18px;
+            padding: 35px;
+            margin-top: 35px;
         }
 
         .q-header-controls {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 20px;
-            font-size: 1.3rem;
+            margin-bottom: 25px;
+            font-size: 1.4rem;
         }
 
         .btn-link {
@@ -176,36 +186,36 @@
             width: auto;
             margin: 0;
             cursor: pointer;
-            font-size: 1.25rem;
+            font-size: 1.35rem;
             font-weight: 600;
         }
 
         .q-scroll {
-            max-height: 450px;
+            max-height: 480px;
             overflow-y: auto;
             border: 2px solid #e2e8f0;
             background: #ffffff;
-            border-radius: 12px;
-            padding: 15px;
+            border-radius: 14px;
+            padding: 20px;
         }
 
         .q-item {
             display: flex;
             align-items: center;
-            padding: 18px; 
+            padding: 20px; 
             border-bottom: 1px solid #f1f5f9;
-            font-size: 1.4rem;
+            font-size: 1.5rem;
             cursor: pointer;
         }
 
         .q-item input {
             width: auto;
-            margin-right: 18px;
-            transform: scale(1.8); 
+            margin-right: 20px;
+            transform: scale(2); 
         }
 
-        .q-item label { margin: 0; cursor: pointer; flex-grow: 1; font-weight: 500; font-size: 1.4rem; }
-        .panel { display: none; margin-top: 30px; border-top: 3px solid var(--border); padding-top: 30px; }
+        .q-item label { margin: 0; cursor: pointer; flex-grow: 1; font-weight: 500; font-size: 1.5rem; }
+        .panel { display: none; margin-top: 35px; border-top: 3px solid var(--border); padding-top: 35px; }
         
         .sentence-box {
             display: flex;
@@ -214,11 +224,11 @@
             align-items: center;
             text-align: center;
             gap: 15px 25px; 
-            padding: 50px 30px;
+            padding: 60px 40px;
             background: #f1f5f9;
-            border-radius: 20px;
-            margin: 30px 0;
-            min-height: 140px;
+            border-radius: 24px;
+            margin: 35px 0;
+            min-height: 160px;
             color: #0f172a;
             border: 4px dashed #cbd5e1;
             white-space: normal; 
@@ -237,18 +247,18 @@
         .w-incorrect { color: var(--incorrect-word); border-bottom: 6px solid var(--incorrect-word); }
         .w-normal { color: #0f172a; border-bottom: 6px solid transparent; }
 
-        .status-msg { text-align: center; font-weight: bold; margin: 20px 0; height: 35px; color: #475569; font-size: 1.6rem; }
-        .score-display { text-align: center; font-size: 6rem; font-weight: 900; color: var(--success); display: none; margin: 25px 0; }
-        .notification-banner { display: none; background-color: #fee2e2; border: 2px solid #fca5a5; color: #991b1b; padding: 20px; border-radius: 12px; margin-bottom: 30px; font-size: 1.3rem; }
+        .status-msg { text-align: center; font-weight: bold; margin: 25px 0; height: 35px; color: #475569; font-size: 1.8rem; }
+        .score-display { text-align: center; font-size: 6.5rem; font-weight: 900; color: var(--success); display: none; margin: 30px 0; }
+        .notification-banner { display: none; background-color: #fee2e2; border: 2px solid #fca5a5; color: #991b1b; padding: 22px; border-radius: 14px; margin-bottom: 35px; font-size: 1.4rem; }
         
-        .certificate-card { border: 12px double #b45309; padding: 60px 40px; background: #ffffff; text-align: center; border-radius: 20px; margin-top: 35px; }
-        .cert-school { font-size: 3rem; font-weight: 800; color: #78350f; margin-bottom: 25px; }
-        .cert-score { font-size: 6.5rem; font-weight: 900; color: #b45309; margin: 25px 0; }
+        .certificate-card { border: 12px double #b45309; padding: 70px 50px; background: #ffffff; text-align: center; border-radius: 24px; margin-top: 40px; }
+        .cert-school { font-size: 3.2rem; font-weight: 800; color: #78350f; margin-bottom: 30px; }
+        .cert-score { font-size: 7rem; font-weight: 900; color: #b45309; margin: 30px 0; }
 
-        .error-log-container { margin-top: 30px; text-align: left; background: #fff5f5; border: 2px solid #fca5a5; border-radius: 12px; padding: 25px; }
-        .error-log-title { font-size: 1.6rem; color: #991b1b; font-weight: bold; margin-bottom: 15px; border-bottom: 2px solid #fca5a5; padding-bottom: 10px; }
-        .error-flex-box { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 10px; }
-        .error-badge { background: #fed7d7; color: #dc2626; padding: 6px 14px; border-radius: 8px; font-size: 1.3rem; font-weight: bold; border: 1px solid #fca5a5; }
+        .error-log-container { margin-top: 40px; text-align: left; background: #fff5f5; border: 2px solid #fca5a5; border-radius: 14px; padding: 30px; }
+        .error-log-title { font-size: 1.8rem; color: #991b1b; font-weight: bold; margin-bottom: 20px; border-bottom: 2px solid #fca5a5; padding-bottom: 12px; }
+        .error-flex-box { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 12px; }
+        .error-badge { background: #fed7d7; color: #dc2626; padding: 8px 16px; border-radius: 10px; font-size: 1.4rem; font-weight: bold; border: 1px solid #fca5a5; }
         
         @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.6; } 100% { opacity: 1; } }
     </style>
@@ -299,7 +309,7 @@
         
         <div id="selection-box-container" class="q-selection-box">
             <div class="q-header-controls">
-                <span style="font-weight: bold; color: #1e3a8a; font-size: 1.4rem;">
+                <span style="font-weight: bold; color: #1e3a8a; font-size: 1.5rem;">
                     Select Questions to Ask: <span id="source-badge"></span>
                 </span>
                 <div>
@@ -310,7 +320,7 @@
             
             <div class="q-scroll" id="questions-list"></div>
             
-            <div style="margin-top: 20px; font-size: 1.4rem; font-weight: 700; color: #475569;">
+            <div style="margin-top: 20px; font-size: 1.5rem; font-weight: 700; color: #475569;">
                 Selected: <span id="selected-counter" style="color: #2563eb;">0</span>
             </div>
             
@@ -319,30 +329,30 @@
     </div>
 
     <div id="assessment-panel" class="panel">
-        <div style="display:flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-            <h3 id="progress-text" style="color: #475569; font-size: 1.8rem; margin:0;">Processing...</h3>
-            <button class="btn-primary" style="width:auto; margin:0; padding: 10px 20px; font-size:1.1rem; background-color:#f59e0b;" onclick="moveToNextSentence()">Skip / Next ➡️</button>
+        <div style="display:flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+            <h3 id="progress-text" style="color: #475569; font-size: 2rem; margin:0;">Processing...</h3>
+            <button class="btn-primary" style="width:auto; margin:0; padding: 14px 28px; font-size:1.3rem; background-color:#f59e0b;" onclick="moveToNextSentence()">Skip / Next ➡️</button>
         </div>
         <div class="sentence-box" id="target-sentence">Please wait...</div>
         <button id="mic-btn" class="btn-mic" onclick="startAssessmentListening()">🎤 Start Reading</button>
         <div class="status-msg" id="status-text">Ready to start.</div>
         <div class="score-display" id="current-score-view">100%</div>
-        <button class="btn-primary" style="background-color: #ef4444; max-width: 300px; margin: 20px auto; display: block;" onclick="abortAssessment()">❌ Abort / Stop Test</button>
+        <button class="btn-primary" style="background-color: #ef4444; max-width: 350px; margin: 30px auto; display: block; padding: 16px;" onclick="abortAssessment()">❌ Abort / Stop Test</button>
     </div>
 
     <div id="certificate-panel" class="certificate-card" style="display: none;">
-        <div style="font-size: 4rem; margin-bottom: 15px;">🏆</div>
-        <h2 style="color: #78350f; font-family: Georgia, serif; margin-bottom: 10px; font-size: 2.8rem;">Certificate of Completion</h2>
+        <div style="font-size: 4.5rem; margin-bottom: 20px;">🏆</div>
+        <h2 style="color: #78350f; font-family: Georgia, serif; margin-bottom: 15px; font-size: 3.2rem;">Certificate of Completion</h2>
         <div class="cert-school">Children's Garden E.M. High School</div>
-        <div style="font-size: 1.8rem; line-height: 1.8; margin: 30px 0; color: #451a03;">
+        <div style="font-size: 2rem; line-height: 1.8; margin: 35px 0; color: #451a03;">
             This certifies that student <strong><span id="cert-name"></span></strong><br>
             from <strong><span id="cert-class"></span></strong> has successfully evaluated their performance in 
             <strong><span id="cert-lang"></span></strong>.
         </div>
-        <div style="font-size: 1.3rem; text-transform: uppercase; color: #9a3412; font-weight: bold; letter-spacing: 1.5px;">Assessment Metrics</div>
+        <div style="font-size: 1.4rem; text-transform: uppercase; color: #9a3412; font-weight: bold; letter-spacing: 1.5px;">Assessment Metrics</div>
         <div class="cert-score" id="cert-final-score">0%</div>
-        <div style="color: #78350f; margin-bottom: 25px; font-weight: 700; font-size: 1.5rem;">
-            Total Questions: <span id="cert-q-count">0</span> | Reading Speed: <span id="cert-wpm" style="color: #2563eb; font-size: 1.8rem;">0</span> WPM | Time Taken: <span id="cert-time">0s</span>
+        <div style="color: #78350f; margin-bottom: 30px; font-weight: 700; font-size: 1.6rem;">
+            Total Questions: <span id="cert-q-count">0</span> | Reading Speed: <span id="cert-wpm" style="color: #2563eb; font-size: 2rem;">0</span> WPM | Time Taken: <span id="cert-time">0s</span>
         </div>
 
         <div id="error-log-box" class="error-log-container">
@@ -350,8 +360,8 @@
             <div id="error-list-details" class="error-flex-box"></div>
         </div>
         
-        <div style="font-size: 2.2rem; font-weight: bold; color: #78350f; margin-top: 30px;">Congratulations! 🎉</div>
-        <button id="next-student-btn" class="btn-primary" style="margin-top: 35px; background-color: #9a3412; font-size: 1.6rem; padding: 20px 30px; border-radius: 12px;" onclick="resetToSetup()">
+        <div style="font-size: 2.5rem; font-weight: bold; color: #78350f; margin-top: 35px;">Congratulations! 🎉</div>
+        <button id="next-student-btn" class="btn-primary" style="margin-top: 40px; background-color: #9a3412; font-size: 1.8rem; padding: 22px 35px; border-radius: 14px;" onclick="resetToSetup()">
             👤 Test Next Student / తదుపరి విద్యార్థి
         </button>
     </div>
@@ -360,7 +370,6 @@
 <script>
 const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbx7S7hUa9_dCKjqW_gr6XQ9WAX7V9S6UC7H86yja_hWKZ1oJ-DjMwAxa_x1VlEXM58/exec";
 
-// మీ ఒరిజినల్ ఆఫ్‌లైన్ లోకల్ బ్యాకప్ డేటాబేస్
 const OFFLINE_DATABASE = {
     Nursery_Eng: ["A Apple", "B Ball", "C Cat", "D Dog", "E Elephant"],
     Nursery_Tel: ["అమ్మ", "ఆవు", "ఇల్లు", "ఈల", "ఉడత"],
@@ -373,11 +382,11 @@ const OFFLINE_DATABASE = {
     UKG_Tel: ["బలపము", "రథము", "లత"],
     UKG_Hindi: ["उल्लू", "ऊनी"],
     "1st Class_Eng": ["The sun is very bright.", "The boy runs fast."],
-    "1st Class_Tel": ["అమ్మ మనకు దైవము.", "చెట్లు మనకు నీడను ఇస్తాయి.", "ピల్లలు చక్కగా చదవాలి."],
+    "1st Class_Tel": ["అమ్మ మనకు దైవము.", "చెట్లు మనకు నీడను ఇస్తాయి."],
     "1st Class_Hin": ["सूरज पूर्व से निकलता है।"],
     "1st Class_Numbers": ["100 One Hundred"],
     "2nd Class_Eng": ["Keep your surroundings clean.", "Honesty is the best policy."],
-    "2nd Class_Tel": ["పెద్దలను గౌరవించడం మన కర్తవ్యం.", "పుస్తకాలు మంచి జ్ఞానాన్ని ఇస్తాయి."],
+    "2nd Class_Tel": ["పెద్దలను గౌరవించడం మన కర్తవ్యం.", "पुस्तకాలు మంచి జ్ఞానాన్ని ఇస్తాయి."],
     "2nd Class_Hin": ["पेड़-पौधे हमारे सच्चे मित्र हैं।"],
     "2nd Class_Numbers": ["1000 One Thousand"],
     "3rd Class_Eng": ["Healthy food keeps our body fit."],
@@ -453,8 +462,8 @@ if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
         const lastWordClean = cleanText(targetWords[targetWords.length - 1]);
         const lastWordSpoken = liveCorrectWordsSet.has(lastWordClean);
 
-        // మైక్రోఫోన్ ఆటో-క్లోజ్ సమస్య రాకుండా పక్కాగా మ్యాచ్ అయితేనే ఆటోమేటిక్ గా ముందుకు వెళ్తుంది
-        if (progressRatio >= 0.75 || lastWordSpoken) {
+        // స్టూడెంట్ పర్ఫెక్ట్ గా చదివినప్పుడు మాత్రమే ఆటో-నెక్స్ట్ సేఫ్ టైమర్ రన్ అవుతుంది
+        if (progressRatio >= 0.85 || lastWordSpoken) {
             if (!autoNextTimeout) {
                 document.getElementById("status-text").innerText = "✨ Auto-matching complete! Moving ahead...";
                 autoNextTimeout = setTimeout(() => {
@@ -468,12 +477,12 @@ if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
         console.error("Speech Error:", e.error);
     };
 
+    // అత్యంత ముఖ్యం: గూగుల్ ఇంజన్ ఆటోమేటిక్ గా ఆగిపోయినా సరే టెస్ట్ క్లోజ్ అవ్వదు! మళ్ళీ మైక్ రీస్టార్ట్ అవుతుంది.
     recognition.onend = () => {
         const btn = document.getElementById("mic-btn");
         btn.classList.remove("listening");
         btn.innerText = "🎤 Start Reading";
         
-        // గూగుల్ ఇంజన్ ఆగిపోయినా సరే టెస్ట్ మధ్యలో క్లోజ్ అవ్వదు, మళ్ళీ ఆక్టివేట్ అవుతుంది
         if (isAssessmentActive && !autoNextTimeout) {
             setRecognitionLanguage();
             try { recognition.start(); } catch(err){}
@@ -492,7 +501,6 @@ function setRecognitionLanguage() {
     }
 }
 
-// పక్కాగా విరామ చిహ్నాలు తొలగించే క్లీన్ ఫంక్షన్
 function cleanText(text) {
     if (!text) return "";
     let low = text.toLowerCase().trim();
@@ -503,10 +511,10 @@ function cleanText(text) {
 function updateSentenceFontSize(text) {
     const box = document.getElementById("target-sentence");
     const len = text.length;
-    if (len > 60) { box.style.fontSize = "2.8rem"; } 
-    else if (len > 35) { box.style.fontSize = "3.8rem"; } 
-    else if (len > 15) { box.style.fontSize = "4.6rem"; } 
-    else { box.style.fontSize = "5.5rem"; }
+    if (len > 60) { box.style.fontSize = "3.2rem"; } 
+    else if (len > 35) { box.style.fontSize = "4.2rem"; } 
+    else if (len > 15) { box.style.fontSize = "5.2rem"; } 
+    else { box.style.fontSize = "6rem"; }
 }
 
 function renderSentenceHTML(wordsArray, scoreArray) {
@@ -553,7 +561,6 @@ function evaluateLiveText(speech) {
     view.style.display = "block";
 }
 
-// మీ ఒరిజినల్ పక్కా గూగుల్ షీట్ లోడింగ్ ఫంక్షన్ (data.questions మరియు data.data రెండింటినీ హ్యాండిల్ చేస్తుంది)
 function fetchSheetQuestions() {
     const banner = document.getElementById("notice-banner");
     banner.style.display = "none";
@@ -717,7 +724,6 @@ function moveToNextSentence() {
         if (cleanedWord !== "" && liveCorrectWordsSet.has(cleanedWord)) {
             correctCount++;
         } else if (cleanedWord !== "") {
-            // కేవలం తప్పు పదాలను మాత్రమే విడిగా ఫిల్టర్ చేసి అర్రే కి పంపుతుంది
             const stripWord = word.replace(/[\.,\-\/#!$%\^&\*;:{}=\-_`~()?।॥]/g, "");
             if(stripWord.trim() !== "" && !wrongWordsLog.includes(stripWord)) {
                 wrongWordsLog.push(stripWord);
@@ -764,11 +770,10 @@ function finishAssessmentReport() {
     document.getElementById("cert-wpm").innerText = Math.round(totalWordsReadSuccessfully / totalMinutes);
     document.getElementById("cert-time").innerText = `${Math.round(totalReadingTimeSeconds)}s`;
     
-    // తప్పుగా చదివిన చిన్న పదాలను మాత్రమే బ్యాడ్జ్‌ల లాగా అమర్చే ప్రెసిషన్ లాజిక్
     const detailsDiv = document.getElementById("error-list-details");
     detailsDiv.innerHTML = "";
     if (wrongWordsLog.length === 0) {
-        detailsDiv.innerHTML = "<div style='color: var(--success); font-weight:bold; font-size:1.4rem;'>Excellent! Perfect reading. No mistakes! ⭐</div>";
+        detailsDiv.innerHTML = "<div style='color: var(--success); font-weight:bold; font-size:1.5rem;'>Excellent! Perfect reading. No mistakes! ⭐</div>";
     } else {
         wrongWordsLog.forEach((word) => {
             const badge = document.createElement("span");
