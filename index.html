@@ -346,7 +346,7 @@ const OFFLINE_DATABASE = {
     UKG_Tel: ["బలపము", "రథము", "లత"],
     UKG_Hindi: ["उल्लू", "ऊनी"],
     "1st Class_Eng": ["The sun is very bright.", "The boy runs fast."],
-    "1st Class_Tel": ["అమ్మ మనకు దైవము.", "チェట్లు మనకు నీడను ఇస్తాయి.", "పిల్లలు చక్కగా చదవాలి."],
+    "1st Class_Tel": ["అమ్మ మనకు దైవము.", "చెట్లు మనకు నీడను ఇస్తాయి.", "పిల్లలు చక్కగా చదవాలి."],
     "1st Class_Hin": ["सूरज पूर्व से निकलता है।"],
     "1st Class_Numbers": ["100 One Hundred"],
     "2nd Class_Eng": ["Keep your surroundings clean.", "Honesty is the best policy."],
@@ -369,7 +369,6 @@ let totalWordsReadSuccessfully = 0;
 let totalReadingTimeSeconds = 0;
 let wrongWordsLog = [];
 
-// 🧠 పర్మనెంట్ లెడ్జర్ సిస్టమ్ - బ్రౌజర్ ఫ్లష్ చేసినా ఈ డేటా ఎప్పటికీ డిలీట్ అవ్వదు!
 let permanentlyMatchedWordsSet = new Set(); 
 let isMicrophoneIntendedToBeActive = false; 
 
@@ -442,11 +441,13 @@ function setRecognitionLanguage() {
     }
 }
 
+// 🛠️ డీప్ శానిటైజర్: కనిపించని అదృశ్య స్పేస్ లు, క్యారెక్టర్లను పూర్తిగా తుడిచిపెడుతుంది
 function cleanText(text) {
     if (!text) return "";
-    let low = text.toLowerCase().trim();
-    // పంక్చుయేషన్స్ తో పాటు అన్ని రకాల స్పెషల్ క్యారెక్టర్స్ ను క్లీన్ చేస్తుంది
-    low = low.replace(/[\.,\-\/#!$%\^&\*;:{}=\-_`~()?।॥\s]/g, " ");
+    let low = text.toString().toLowerCase().trim();
+    // అన్ని రకాల \r, \n, ట్యాబ్ లు మరియు స్పెషల్ క్యారెక్టర్లను స్పేస్ తో రీప్లేస్ చేస్తుంది
+    low = low.replace(/[\r\n\t]/g, " ");
+    low = low.replace(/[\.,\-\/#!$%\^&\*;:{}=\-_`~()?।॥]/g, " ");
     return low.replace(/\s+/g, " ").trim();
 }
 
@@ -464,7 +465,7 @@ function renderSentenceHTML(wordsArray, scoreArray) {
     box.innerHTML = "";
     wordsArray.forEach((word, idx) => {
         const span = document.createElement("span");
-        span.innerText = word;
+        span.innerText = word.trim(); // ఎక్స్‌ట్రా స్పేస్ లేకుండా రెండర్ చేస్తుంది
         if (scoreArray[idx] === 1) { span.className = "w-correct"; } 
         else if (scoreArray[idx] === -1) { span.className = "w-incorrect"; } 
         else { span.className = "w-normal"; }
@@ -475,7 +476,8 @@ function renderSentenceHTML(wordsArray, scoreArray) {
 function evaluateLiveText(speech) {
     if (!speech || !isAssessmentActive) return;
     const target = currentSentences[sentenceIndex];
-    const targetWords = target.split(/\s+/).filter(Boolean);
+    // తెల్లటి ఖాళీలు లేకుండా పదాలను క్లీన్ గా అరే లోకి మారుస్తుంది
+    const targetWords = target.split(/\s+/).map(w => w.trim()).filter(Boolean);
     const speechClean = cleanText(speech);
     
     let scoreArray = [];
@@ -483,17 +485,15 @@ function evaluateLiveText(speech) {
     let isLastWordCorrect = false;
     const lastWordIdx = targetWords.length - 1;
 
-    // స్పీచ్ స్ట్రింగ్ లోని విడి పదాల అరే
     const liveWordsArray = speechClean.split(" ");
 
     targetWords.forEach((word, idx) => {
         const cleanedWord = cleanText(word);
         
-        // గూగుల్ లైవ్ స్పీచ్ లో ఉన్నా లేదా మన పర్మనెంట్ మెమరీ లెడ్జర్ లో ఉన్నా అది కరెక్ట్ కింద లాక్ అవుతుంది!
         if (cleanedWord !== "" && (speechClean.includes(cleanedWord) || liveWordsArray.some(lw => lw === cleanedWord) || permanentlyMatchedWordsSet.has(cleanedWord))) {
             scoreArray.push(1); 
             currentSentenceCorrectCount++;
-            permanentlyMatchedWordsSet.add(cleanedWord); // పర్మనెంట్ గా సేవ్ అవుతుంది
+            permanentlyMatchedWordsSet.add(cleanedWord); 
             if (idx === lastWordIdx) isLastWordCorrect = true;
         } else {
             scoreArray.push(0); 
@@ -507,14 +507,12 @@ function evaluateLiveText(speech) {
     view.innerText = `${accuracy}%`;
     view.style.display = "block";
 
-    // చివరి పదం పలకగానే ఏమాత్రం ఆలస్యం లేకుండా నెక్స్ట్ వాక్యానికి వెళ్తుంది
     if (isLastWordCorrect) {
         if (autoNextTimeout) { clearTimeout(autoNextTimeout); autoNextTimeout = null; }
         moveToNextSentence();
     } else if (accuracy >= 65 || permanentlyMatchedWordsSet.size >= Math.max(1, targetWords.length - 2)) {
-        // విద్యార్థి చదవడం ఆపేస్తే 3 సెకన్లలో ఆటో అడ్వాన్స్
         if (!autoNextTimeout) {
-            document.getElementById("status-text").innerText = "⏱️ Paragraph ending. Moving next in 3 seconds...";
+            document.getElementById("status-text").innerText = "⏱️ Line ending. Moving next in 3 seconds...";
             autoNextTimeout = setTimeout(() => {
                 autoNextTimeout = null;
                 moveToNextSentence();
@@ -529,20 +527,23 @@ function evaluateLiveText(speech) {
     }
 }
 
-// 🛠️ పెద్ద పారాగ్రాఫ్‌లను చిన్న వాక్యాలుగా విడగొట్టే స్ప్లిట్టర్ ఫంక్షన్
 function smartSentenceSplitter(rawQuestionsArray) {
     let finalizedList = [];
     rawQuestionsArray.forEach(item => {
-        if (!item || !item.trim()) return;
+        if (!item) return;
+        // క్యారేజ్ రిటర్న్స్ (\r\n) ఆధారంగా కూడా ముక్కలు చేస్తుంది
+        let splitByLines = item.toString().split(/[\r\n]+/);
         
-        // బిందువులు (.), ప్రశ్నార్థకాలు (?), లేదా తెలుగు/హిందీ పూర్ణ విరామాలు (।/॥) ఆధారంగా విడగొడుతుంది
-        let subSentences = item.split(/[\.\?।॥]/g);
-        subSentences.forEach(sub => {
-            let cleanSub = sub.trim();
-            // కనీసం ఒక అక్షరమైనా ఉంటేనే యాడ్ చేస్తుంది
-            if (cleanSub.length > 1) {
-                finalizedList.push(cleanSub);
-            }
+        splitByLines.forEach(line => {
+            if(!line || !line.trim()) return;
+            
+            let subSentences = line.split(/[\.\?।॥]/g);
+            subSentences.forEach(sub => {
+                let cleanSub = sub.trim();
+                if (cleanSub.length > 1) {
+                    finalizedList.push(cleanSub);
+                }
+            });
         });
     });
     return finalizedList.length > 0 ? finalizedList : rawQuestionsArray;
@@ -581,7 +582,6 @@ function fetchSheetQuestions() {
                 return;
             }
             
-            // షీట్ నుండి వచ్చిన పెద్ద పారాలను చిన్న వాక్యాలుగా మార్చి లోడ్ చేస్తుంది
             let dynamicSentences = smartSentenceSplitter(rawList);
             buildQuestionsSelection(dynamicSentences, "Live Cloud Sheet");
         })
@@ -630,14 +630,14 @@ function buildQuestionsSelection(array, sourceName) {
 
         const checkbox = document.createElement("input");
         checkbox.type = "checkbox";
-        checkbox.value = q;
+        checkbox.value = q.trim();
         checkbox.id = `q-chk-${idx}`;
         checkbox.checked = true; 
         checkbox.onchange = () => updateSelectedCount();
 
         const label = document.createElement("label");
         label.htmlFor = `q-chk-${idx}`;
-        label.innerText = q;
+        label.innerText = q.trim();
 
         item.appendChild(checkbox);
         item.appendChild(label);
@@ -664,7 +664,7 @@ function startSelectedAssessment() {
         return;
     }
     
-    currentSentences = Array.from(checked).map(c => c.value);
+    currentSentences = Array.from(checked).map(c => c.value.trim());
     
     document.getElementById("setup-screen").style.display = "none";
     document.getElementById("assessment-panel").style.display = "block";
@@ -686,13 +686,13 @@ function startSelectedAssessment() {
 
 function setupSentenceDisplay() {
     if (autoNextTimeout) { clearTimeout(autoNextTimeout); autoNextTimeout = null; }
-    permanentlyMatchedWordsSet.clear(); // కొత్త వాక్యానికి మెమరీ రీసెట్
+    permanentlyMatchedWordsSet.clear(); 
     sentenceStartTime = new Date();
     
     const target = currentSentences[sentenceIndex];
     updateSentenceFontSize(target);
     
-    const targetWords = target.split(/\s+/).filter(Boolean);
+    const targetWords = target.split(/\s+/).map(w => w.trim()).filter(Boolean);
     const initialScores = targetWords.map(() => 0);
     renderSentenceHTML(targetWords, initialScores);
     
@@ -728,7 +728,7 @@ function moveToNextSentence() {
     if (!isAssessmentActive) return;
 
     const target = currentSentences[sentenceIndex];
-    const targetWords = target.split(/\s+/).filter(Boolean);
+    const targetWords = target.split(/\s+/).map(w => w.trim()).filter(Boolean);
     
     let correctCount = 0;
     let localWrong = [];
