@@ -790,10 +790,10 @@ function finishAssessmentReport() {
     isAssessmentActive = false;
     isMicrophoneIntendedToBeActive = false; 
     if (autoNextTimeout) { clearTimeout(autoNextTimeout); autoNextTimeout = null; }
-    if (lineMaxTimeout) { clearTimeout(lineMaxTimeout); lineMaxTimeout = null; } // డైనమిక్ టైమర్ క్లియర్
+    if (lineMaxTimeout) { clearTimeout(lineMaxTimeout); lineMaxTimeout = null; }
     try { recognition.stop(); } catch(e){}
     
-    // 1. అసెస్మెంట్ ప్యానల్ క్లోజ్ చేసి సర్టిఫికేట్ ప్యానల్ ఓపెన్ చేస్తాం
+    // అసెస్మెంట్ ప్యానల్ క్లోజ్ చేసి రిపోర్ట్ ప్యానల్ ఓపెన్ చేస్తాం
     document.getElementById("assessment-panel").style.display = "none";
     document.getElementById("certificate-panel").style.display = "block";
     
@@ -801,7 +801,7 @@ function finishAssessmentReport() {
     const name = document.getElementById("student-name").value || "Anonymous Student";
     const studentClass = document.getElementById("student-class").value;
     
-    // సర్టిఫికేట్ లోపల డేటాను నింపుతాం
+    // సర్టిఫికేట్ కార్డు లోపల డేటాను ముందుగానే బ్యాక్‌గ్రౌండ్ లో నింపుతాం
     document.getElementById("cert-name").innerText = name;
     document.getElementById("cert-class").innerText = studentClass;
     document.getElementById("cert-lang").innerText = currentLanguage;
@@ -811,135 +811,120 @@ function finishAssessmentReport() {
     document.getElementById("cert-wpm").innerText = Math.round(totalWordsReadSuccessfully / totalMinutes);
     document.getElementById("cert-time").innerText = `${Math.round(totalReadingTimeSeconds)}s`;
     
-    // 2. ఎర్రర్ లిస్ట్‌ను బిల్డ్ చేస్తాం
+    // ఎర్రర్ లిస్ట్‌ను బిల్డ్ చేస్తాం
     const detailsDiv = document.getElementById("error-list-details");
     detailsDiv.innerHTML = "";
     if (wrongWordsLog.length === 0) {
-        detailsDiv.innerHTML = "<div class='error-item' style='color: var(--success); font-weight:bold; text-align:center;'>Excellent! No errors. ⭐</div>";
+        detailsDiv.innerHTML = "<div class='error-item' style='color: #059669; font-weight:bold; text-align:center; font-size:1.2rem; background:#ecfdf5; padding:15px; border-radius:8px;'>Excellent! No errors. ⭐ Everything was read perfectly!</div>";
     } else {
         wrongWordsLog.forEach((log, idx) => {
             const row = document.createElement("div");
             row.className = "error-item";
-            row.innerHTML = `<strong>Line ${idx+1}:</strong> "${log.question}"<br><span style="color:#dc2626; font-weight:bold;">Missed:</span> ${log.words.map(w => `<span style="background: #fed7d7; padding: 2px 6px; border-radius: 4px; margin-right: 4px;">${w}</span>`).join(" ")}`;
+            row.innerHTML = `<strong>Line ${idx+1}:</strong> "${log.question}"<br><span style="color:#dc2626; font-weight:bold;">Missed:</span> ${log.words.map(w => `<span style="background: #fed7d7; padding: 2px 6px; border-radius: 4px; margin-right: 4px; display:inline-block; margin-top:4px;">${w}</span>`).join(" ")}`;
             detailsDiv.appendChild(row);
         });
     }
 
-    // 3. 🔥 మొదటి స్క్రీన్‌లో సర్టిఫికేట్ కార్డ్‌ను దాచిపెట్టి, కేవలం రిపోర్ట్ / ఎర్రర్స్ మాత్రమే చూపిస్తాం
+    // 🔥 RULE 1: మొదటి స్క్రీన్‌లో సర్టిఫికేట్ కార్డును మరియు పాత బటన్ల జోన్‌ను పూర్తిగా దాచేస్తున్నాం
     const certCard = document.querySelector(".certificate") || document.getElementById("certificate-card");
     if (certCard) {
         certCard.style.display = "none"; 
     }
     
-    // 'Next: View Certificate' బటన్ కోసం ఒక డివ్ (Div) క్రియేట్ చేస్తున్నాం
+    // ప్యానల్ లోపల ఉండే పాత హెడింగ్స్ (ఉదాహరణకు "Congratulations!" లేదా "Next Student" లైన్స్) ఏవైనా ఉంటే దాచేస్తున్నాం
+    const panelHeadings = document.querySelectorAll("#certificate-panel h2, #certificate-panel p");
+    panelHeadings.forEach(h => {
+        // సర్టిఫికేట్ లోపల ఉండే టెక్స్ట్ కాకుండా బయట ఉండేవాటిని మాత్రమే దాచుతాం
+        if(!h.closest('.certificate') && !h.closest('#certificate-card')) {
+            h.style.display = "none";
+        }
+    });
+
+    // ఎర్రర్ హెడింగ్ (❌ Mistaken Words / తప్పుగా చదివిన పదాలు) మాత్రం మొదటి స్క్రీన్‌లో కనిపించాలి
+    const errorHeadings = document.querySelectorAll("#certificate-panel h3");
+    errorHeadings.forEach(h => {
+        if(!h.closest('.certificate')) {
+            h.style.display = "block";
+        }
+    });
+    if(detailsDiv) detailsDiv.style.display = "block";
+    
+    // ఫ్లో కంట్రోల్ బటన్ ని క్రియేట్ చేస్తున్నాం
     let reportControls = document.getElementById("report-flow-controls");
     if (!reportControls) {
         reportControls = document.createElement("div");
         reportControls.id = "report-flow-controls";
         reportControls.style.textAlign = "center";
-        reportControls.style.marginTop = "20px";
+        reportControls.style.marginTop = "25px";
         detailsDiv.parentNode.insertBefore(reportControls, detailsDiv.nextSibling);
     }
     reportControls.style.display = "block";
     reportControls.innerHTML = `
-        <button id="show-cert-btn" onclick="toggleReportToCertificate()" style="background:var(--primary); color:white; padding:12px 30px; font-size:1.2rem; border:none; border-radius:8px; cursor:pointer; font-weight:bold; width:100%; max-width:300px; box-shadow:0 4px 6px rgba(0,0,0,0.1); margin-bottom:15px;">
+        <button id="show-cert-btn" onclick="toggleReportToCertificate()" style="background: linear-gradient(135deg, #6366f1, #4f46e5); color:white; padding:14px 35px; font-size:1.2rem; border:none; border-radius:30px; cursor:pointer; font-weight:bold; width:100%; max-width:320px; box-shadow:0 6px 15px rgba(79, 70, 229, 0.4); transition: transform 0.2s;">
             Next: View Certificate 🏆
         </button>
     `;
     
-    // బ్యాక్‌ఎండ్‌లో గూగుల్ షీట్‌కి డేటా పంపడం
+    // ఒకవేళ పాత క్లోజ్ జోన్ బటన్ ఉంటే దాన్ని హైడ్ చేయాలి
+    const oldCloseZone = document.getElementById("cert-close-zone");
+    if(oldCloseZone) oldCloseZone.style.display = "none";
+    
+    // గూగుల్ షీట్‌కి రిపోర్ట్ పంపడం
     sendPayloadToGoogleSheet(name, studentClass, finalScore, Math.round(totalReadingTimeSeconds));
 }
 
-// 🔥 కొత్త స్క్రీన్ మేనేజ్మెంట్ ఫంక్షన్ (ఎర్రర్స్ దాచి సర్టిఫికేట్ చూపించడానికి)
+// 🔥 RULE 2: సర్టిఫికేట్ స్క్రీన్‌ను అట్రాక్టివ్‌గా మార్చే ఫంక్షన్
 function toggleReportToCertificate() {
-    // 1. ఎర్రర్ సెక్షన్ మరియు దాని హెడింగ్‌లను దాచేస్తాం
+    // 1. ఎర్రర్ లిస్ట్ బాక్స్ మరియు దాని ఎరుపు రంగు హెడింగ్స్ అన్నింటినీ పూర్తిగా తీసేస్తున్నాం (దాచేస్తున్నాం)
     const detailsDiv = document.getElementById("error-list-details");
     if (detailsDiv) detailsDiv.style.display = "none";
     
-    const allHeadings = document.querySelectorAll("#certificate-panel h3");
+    const allHeadings = document.querySelectorAll("#certificate-panel h3, #certificate-panel h2, #certificate-panel p");
     allHeadings.forEach(h => {
-        if(h.innerText.includes("Errors") || h.innerText.includes("తప్పులు")) {
-            h.style.display = "none";
+        if(!h.closest('.certificate') && !h.closest('#certificate-card')) {
+            h.style.display = "none"; // సర్టిఫికేట్ బయట ఉన్న మిగతా అన్ని తప్పుల లైన్స్ మాయం!
         }
     });
     
-    // 'View Certificate' బటన్ ని దాచేస్తాం
+    // 'Next: View Certificate' బటన్ ని కూడా దాచేస్తున్నాం
     const reportControls = document.getElementById("report-flow-controls");
     if (reportControls) reportControls.style.display = "none";
     
-    // 2. అందమైన సర్టిఫికేట్ కార్డ్‌ను స్క్రీన్ మధ్యలోకి తెచ్చి చూపిస్తాం
+    // 2. అందమైన గ్రీన్ & గోల్డ్ సర్టిఫికేట్ కార్డును ప్రత్యక్షం చేసి ప్రెజెంట్ చేస్తున్నాం
     const certCard = document.querySelector(".certificate") || document.getElementById("certificate-card");
     if (certCard) {
         certCard.style.display = "block";
         certCard.style.margin = "0 auto";
+        // సర్టిఫికేట్ ఇంకా అట్రాక్టివ్ గా కనిపించడానికి స్టైల్స్ అప్లై చేస్తున్నాం
+        certCard.style.boxShadow = "0 20px 40px rgba(0,0,0,0.15)";
+        certCard.style.borderRadius = "12px";
+        certCard.style.border = "8px double #d4af37"; // గోల్డెన్ బార్డర్ లుక్
     }
     
-    // 3. సర్టిఫికేట్ కింద మాత్రమే "Next Student" బటన్ వచ్చేలా చేస్తున్నాం
+    // 3. సర్టిఫికేట్ కింద గ్రీన్ కలర్ 'Next Student' బటన్ క్లీన్ గా వచ్చేలా చేస్తున్నాం
     let certCloseZone = document.getElementById("cert-close-zone");
     if (!certCloseZone) {
         certCloseZone = document.createElement("div");
         certCloseZone.id = "cert-close-zone";
         certCloseZone.style.textAlign = "center";
-        certCloseZone.style.marginTop = "25px";
+        certCloseZone.style.marginTop = "30px";
         document.getElementById("certificate-panel").appendChild(certCloseZone);
     }
     certCloseZone.style.display = "block";
     certCloseZone.innerHTML = `
-        <button onclick="resetToSetup()" style="background:#059669; color:white; padding:12px 35px; font-size:1.1rem; border:none; border-radius:8px; cursor:pointer; font-weight:bold; box-shadow:0 4px 6px rgba(0,0,0,0.1);">
+        <button onclick="resetToSetup()" style="background: linear-gradient(135deg, #10b981, #059669); color:white; padding:14px 40px; font-size:1.15rem; border:none; border-radius:30px; cursor:pointer; font-weight:bold; box-shadow:0 6px 15px rgba(5, 150, 105, 0.4); width:100%; max-width:320px;">
             🔄 Next Student / Start New Test
         </button>
     `;
-}
-
-function sendPayloadToGoogleSheet(name, studentClass, finalScore, totalTimeTaken) {
-    const today = new Date();
-    const formattedDate = `${String(today.getDate()).padStart(2, '0')}-${today.toLocaleString('default', { month: 'short' })}-${today.getFullYear()}`;
-    let startTimeString = "N/A";
-    if (testStartTimeGlobal) {
-        startTimeString = testStartTimeGlobal.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true });
-    }
-    const scorePayload = {
-        date: formattedDate,
-        studentName: name,
-        studentClass: studentClass,
-        language: currentLanguage,
-        questions: currentSentences.length,
-        score: `${finalScore}%`,
-        startingTime: startTimeString,
-        timeTaken: `${totalTimeTaken} Sec`
-    };
-    if (WEB_APP_URL) {
-        fetch(WEB_APP_URL, {
-            method: "POST",
-            mode: "no-cors", 
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(scorePayload)
-        }).catch(err => console.error("Error saving score:", err));
-    }
-}
-
-function abortAssessment() {
-    if (confirm("Are you sure you want to stop?")) {
-        isAssessmentActive = false;
-        isMicrophoneIntendedToBeActive = false;
-        if (autoNextTimeout) clearTimeout(autoNextTimeout);
-        if (lineMaxTimeout) clearTimeout(lineMaxTimeout);
-        try { recognition.stop(); } catch(e){}
-        resetToSetup();
-    }
 }
 
 function resetToSetup() {
     document.getElementById("certificate-panel").style.display = "none";
     document.getElementById("setup-screen").style.display = "block";
     
-    // తదుపరి స్టూడెంట్ కోసం అన్ని స్క్రీన్‌ల ఎలిమెంట్స్‌ని మళ్లీ నార్మల్ మోడ్‌కి తెస్తున్నాం
+    // తదుపరి విద్యార్థి కోసం అన్ని ఎలిమెంట్లను రీసెట్ చేస్తున్నాం
     const detailsDiv = document.getElementById("error-list-details");
     if (detailsDiv) detailsDiv.style.display = "block";
-    
-    const allHeadings = document.querySelectorAll("#certificate-panel h3");
-    allHeadings.forEach(h => h.style.display = "block");
     
     const certCard = document.querySelector(".certificate") || document.getElementById("certificate-card");
     if (certCard) certCard.style.display = "block";
