@@ -881,7 +881,7 @@ function finishAssessmentReport() {
 }
 
 function toggleReportToCertificate() {
-    // 1. ఎర్రర్ బాక్స్, ఎరుపు రంగు హెడింగ్ మొత్తాన్ని స్క్రీన్ నుండి మాయం చేస్తున్నాం
+    // 1. ఎర్రర్ బాక్స్ మరియు డైనమిక్ ఎర్రర్ హెడింగ్‌ను దాచేస్తున్నాం
     const detailsDiv = document.getElementById("error-list-details");
     if (detailsDiv) detailsDiv.style.display = "none";
     
@@ -891,11 +891,7 @@ function toggleReportToCertificate() {
     const reportControls = document.getElementById("report-flow-controls");
     if (reportControls) reportControls.style.display = "none";
     
-    // మీ HTML లో గట్టిగా రాసి ఉన్న పాత Congratulations టెక్స్ట్ లని ఫోర్స్ గా క్లియర్ చేయడానికి ఒక ట్రిక్
-    const panel = document.getElementById("certificate-panel");
-    panel.style.textAlign = "center";
-
-    // 2. ఇప్పుడు అందమైన గోల్డెన్ డబుల్ బార్డర్ సర్టిఫికేట్‌ను మాత్రమే అట్రాక్టివ్‌గా చూపిస్తాం
+    // 2. సర్టిఫికేట్ కార్డును ప్రత్యక్షం చేస్తున్నాం
     const certCard = document.querySelector(".certificate") || document.getElementById("certificate-card");
     if (certCard) {
         certCard.style.display = "block";
@@ -903,9 +899,25 @@ function toggleReportToCertificate() {
         certCard.style.boxShadow = "0 20px 40px rgba(0,0,0,0.15)";
         certCard.style.borderRadius = "12px";
         certCard.style.border = "8px double #d4af37"; // అట్రాక్టివ్ గోల్డెన్ లుక్
+
+        // 🔥 ఇక్కడే అసలు మ్యాజిక్: సర్టిఫికేట్ కార్డు లోపల పొరపాటున ఉన్న పాత బ్రౌన్ బటన్, 
+        // కంగ్రాచులేషన్స్ టెక్స్ట్ లేదా ఎర్రర్ హెడింగ్స్ ఏవైనా ఉంటే వాటిని వెతికి పట్టుకుని మరీ డిలీట్ చేస్తున్నాం!
+        const unwantedElements = certCard.querySelectorAll("button, h3, h2, p");
+        unwantedElements.forEach(el => {
+            // సర్టిఫికేట్ లోపల ఉండాల్సిన మెయిన్ టెక్స్ట్‌లను (Name, Class, Score, WPM, Time) డిలీట్ చేయకుండా,
+            // కేవలం పాత బటన్లు మరియు పాత హెడింగ్స్ ని మాత్రమే రిమూవ్ చేస్తున్నాం
+            if (el.innerText.includes("Test Next Student") || 
+                el.innerText.includes("తదుపరి విద్యార్థి") || 
+                el.innerText.includes("Congratulations") || 
+                el.innerText.includes("Mistaken Words") || 
+                el.innerText.includes("తప్పుగా చదివిన")) {
+                el.remove(); // పూర్తిగా డిలీట్ అయిపోతుంది
+            }
+        });
     }
     
-    // 3. సర్టిఫికేట్ కింద మాత్రమే వచ్చేలా గ్రీన్ కలర్ 'Next Student' బటన్ క్రియేట్ చేస్తున్నాం
+    // 3. ఇప్పుడు సర్టిఫికేట్ కింద కొత్త గ్రీన్ కలర్ 'Next Student' బటన్ మాత్రమే క్లీన్ గా వస్తుంది
+    const panel = document.getElementById("certificate-panel");
     let certCloseZone = document.getElementById("cert-close-zone");
     if (!certCloseZone) {
         certCloseZone = document.createElement("div");
