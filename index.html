@@ -793,7 +793,6 @@ function finishAssessmentReport() {
     if (lineMaxTimeout) { clearTimeout(lineMaxTimeout); lineMaxTimeout = null; }
     try { recognition.stop(); } catch(e){}
     
-    // అసెస్మెంట్ ప్యానల్ క్లోజ్ చేసి రిపోర్ట్ ప్యానల్ ఓపెన్ చేస్తాం
     document.getElementById("assessment-panel").style.display = "none";
     document.getElementById("certificate-panel").style.display = "block";
     
@@ -801,7 +800,7 @@ function finishAssessmentReport() {
     const name = document.getElementById("student-name").value || "Anonymous Student";
     const studentClass = document.getElementById("student-class").value;
     
-    // సర్టిఫికేట్ కార్డు లోపల డేటాను ముందుగానే బ్యాక్‌గ్రౌండ్ లో నింపుతాం
+    // సర్టిఫికేట్ డేటా నింపడం
     document.getElementById("cert-name").innerText = name;
     document.getElementById("cert-class").innerText = studentClass;
     document.getElementById("cert-lang").innerText = currentLanguage;
@@ -811,146 +810,115 @@ function finishAssessmentReport() {
     document.getElementById("cert-wpm").innerText = Math.round(totalWordsReadSuccessfully / totalMinutes);
     document.getElementById("cert-time").innerText = `${Math.round(totalReadingTimeSeconds)}s`;
     
-    // ఎర్రర్ లిస్ట్‌ను బిల్డ్ చేస్తాం
-    const detailsDiv = document.getElementById("error-list-details");
+    // --- 🚨 ఇక్కడే మార్పు (ఫోర్స్ క్లీనప్) ---
+    // పాత బ్రౌన్ కలర్ బటన్లు, కంగ్రాచులేషన్స్ టెక్స్ట్‌లు మీ HTML లో ఎక్కడున్నా వాటిని పూర్తిగా క్లీన్ చేస్తున్నాం
+    const certCard = document.querySelector(".certificate") || document.getElementById("certificate-card");
+    if (certCard) {
+        certCard.style.display = "none"; // మొదట సర్టిఫికేట్ కార్డు కనిపించదు
+    }
+
+    // సర్టిఫికేట్ ప్యానల్ లో ఉన్న పాత బటన్లు, టెక్స్ట్‌లను వెతికి పూర్తిగా తొలగిస్తున్నాం
+    const panel = document.getElementById("certificate-panel");
+    const oldButtons = panel.querySelectorAll("button, .error-item, #report-flow-controls, #cert-close-zone");
+    oldButtons.forEach(el => el.remove());
+
+    // మీ పాత డిజైన్ లో ఉన్న బ్రౌన్ బటన్ క్లాస్/ఎలిమెంట్స్ ని కూడా స్క్రీన్ నుండి క్లీన్ చేస్తున్నాం
+    const oldBrownBtn = panel.querySelector("[style*='background-color'], button, a");
+    // ప్యానల్ లోని టెక్స్ట్‌లను క్లియర్ చేయడానికి ఎర్రర్ బాక్స్ ని మాత్రమే ఉంచుదాం
+    
+    // ఎర్రర్ బాక్స్ లేదా డివ్ ని క్లీన్ గా సెట్ చేయడం
+    let detailsDiv = document.getElementById("error-list-details");
+    if (!detailsDiv) {
+        detailsDiv = document.createElement("div");
+        detailsDiv.id = "error-list-details";
+        panel.appendChild(detailsDiv);
+    }
+    detailsDiv.style.display = "block";
     detailsDiv.innerHTML = "";
+    
+    // ❌ Mistaken Words హెడింగ్ ని క్రియేట్ చేయడం
+    let errTitle = document.getElementById("dynamic-error-title");
+    if(!errTitle) {
+        errTitle = document.createElement("h3");
+        errTitle.id = "dynamic-error-title";
+        errTitle.style.color = "#dc2626";
+        errTitle.style.textAlign = "center";
+        errTitle.style.marginTop = "20px";
+        detailsDiv.parentNode.insertBefore(errTitle, detailsDiv);
+    }
+    errTitle.style.display = "block";
+    errTitle.innerText = "❌ Mistaken Words / తప్పుగా చదివిన పదాలు:";
+
     if (wrongWordsLog.length === 0) {
-        detailsDiv.innerHTML = "<div class='error-item' style='color: #059669; font-weight:bold; text-align:center; font-size:1.2rem; background:#ecfdf5; padding:15px; border-radius:8px;'>Excellent! No errors. ⭐ Everything was read perfectly!</div>";
+        detailsDiv.innerHTML = "<div style='color: #059669; font-weight:bold; text-align:center; font-size:1.2rem; background:#ecfdf5; padding:15px; border-radius:8px;'>Excellent! No errors. ⭐ Everything was read perfectly!</div>";
     } else {
         wrongWordsLog.forEach((log, idx) => {
             const row = document.createElement("div");
-            row.className = "error-item";
+            row.style.padding = "10px";
+            row.style.borderBottom = "1px solid #fee2e2";
             row.innerHTML = `<strong>Line ${idx+1}:</strong> "${log.question}"<br><span style="color:#dc2626; font-weight:bold;">Missed:</span> ${log.words.map(w => `<span style="background: #fed7d7; padding: 2px 6px; border-radius: 4px; margin-right: 4px; display:inline-block; margin-top:4px;">${w}</span>`).join(" ")}`;
             detailsDiv.appendChild(row);
         });
     }
 
-    // 🔥 RULE 1: మొదటి స్క్రీన్‌లో సర్టిఫికేట్ కార్డును మరియు పాత బటన్ల జోన్‌ను పూర్తిగా దాచేస్తున్నాం
-    const certCard = document.querySelector(".certificate") || document.getElementById("certificate-card");
-    if (certCard) {
-        certCard.style.display = "none"; 
-    }
-    
-    // ప్యానల్ లోపల ఉండే పాత హెడింగ్స్ (ఉదాహరణకు "Congratulations!" లేదా "Next Student" లైన్స్) ఏవైనా ఉంటే దాచేస్తున్నాం
-    const panelHeadings = document.querySelectorAll("#certificate-panel h2, #certificate-panel p");
-    panelHeadings.forEach(h => {
-        // సర్టిఫికేట్ లోపల ఉండే టెక్స్ట్ కాకుండా బయట ఉండేవాటిని మాత్రమే దాచుతాం
-        if(!h.closest('.certificate') && !h.closest('#certificate-card')) {
-            h.style.display = "none";
-        }
-    });
-
-    // ఎర్రర్ హెడింగ్ (❌ Mistaken Words / తప్పుగా చదివిన పదాలు) మాత్రం మొదటి స్క్రీన్‌లో కనిపించాలి
-    const errorHeadings = document.querySelectorAll("#certificate-panel h3");
-    errorHeadings.forEach(h => {
-        if(!h.closest('.certificate')) {
-            h.style.display = "block";
-        }
-    });
-    if(detailsDiv) detailsDiv.style.display = "block";
-    
-    // ఫ్లో కంట్రోల్ బటన్ ని క్రియేట్ చేస్తున్నాం
+    // 1️⃣ మొదటి స్క్రీన్‌లో కేవలం ఈ బ్లూ బటన్ మాత్రమే వస్తుంది
     let reportControls = document.getElementById("report-flow-controls");
     if (!reportControls) {
         reportControls = document.createElement("div");
         reportControls.id = "report-flow-controls";
         reportControls.style.textAlign = "center";
         reportControls.style.marginTop = "25px";
-        detailsDiv.parentNode.insertBefore(reportControls, detailsDiv.nextSibling);
+        panel.appendChild(reportControls);
     }
     reportControls.style.display = "block";
     reportControls.innerHTML = `
-        <button id="show-cert-btn" onclick="toggleReportToCertificate()" style="background: linear-gradient(135deg, #6366f1, #4f46e5); color:white; padding:14px 35px; font-size:1.2rem; border:none; border-radius:30px; cursor:pointer; font-weight:bold; width:100%; max-width:320px; box-shadow:0 6px 15px rgba(79, 70, 229, 0.4); transition: transform 0.2s;">
+        <button onclick="toggleReportToCertificate()" style="background: linear-gradient(135deg, #4f46e5, #3730a3); color:white; padding:14px 40px; font-size:1.2rem; border:none; border-radius:30px; cursor:pointer; font-weight:bold; width:100%; max-width:320px; box-shadow:0 6px 15px rgba(79, 70, 229, 0.4); margin-top:20px;">
             Next: View Certificate 🏆
         </button>
     `;
     
-    // ఒకవేళ పాత క్లోజ్ జోన్ బటన్ ఉంటే దాన్ని హైడ్ చేయాలి
-    const oldCloseZone = document.getElementById("cert-close-zone");
-    if(oldCloseZone) oldCloseZone.style.display = "none";
-    
-    // గూగుల్ షీట్‌కి రిపోర్ట్ పంపడం
     sendPayloadToGoogleSheet(name, studentClass, finalScore, Math.round(totalReadingTimeSeconds));
 }
 
-// 🔥 RULE 2: సర్టిఫికేట్ స్క్రీన్‌ను అట్రాక్టివ్‌గా మార్చే ఫంక్షన్
 function toggleReportToCertificate() {
-    // 1. ఎర్రర్ లిస్ట్ బాక్స్ మరియు దాని ఎరుపు రంగు హెడింగ్స్ అన్నింటినీ పూర్తిగా తీసేస్తున్నాం (దాచేస్తున్నాం)
+    // 1. ఎర్రర్ బాక్స్, ఎరుపు రంగు హెడింగ్ మొత్తాన్ని స్క్రీన్ నుండి మాయం చేస్తున్నాం
     const detailsDiv = document.getElementById("error-list-details");
     if (detailsDiv) detailsDiv.style.display = "none";
     
-    const allHeadings = document.querySelectorAll("#certificate-panel h3, #certificate-panel h2, #certificate-panel p");
-    allHeadings.forEach(h => {
-        if(!h.closest('.certificate') && !h.closest('#certificate-card')) {
-            h.style.display = "none"; // సర్టిఫికేట్ బయట ఉన్న మిగతా అన్ని తప్పుల లైన్స్ మాయం!
-        }
-    });
+    const errTitle = document.getElementById("dynamic-error-title");
+    if (errTitle) errTitle.style.display = "none";
     
-    // 'Next: View Certificate' బటన్ ని కూడా దాచేస్తున్నాం
     const reportControls = document.getElementById("report-flow-controls");
     if (reportControls) reportControls.style.display = "none";
     
-    // 2. అందమైన గ్రీన్ & గోల్డ్ సర్టిఫికేట్ కార్డును ప్రత్యక్షం చేసి ప్రెజెంట్ చేస్తున్నాం
+    // మీ HTML లో గట్టిగా రాసి ఉన్న పాత Congratulations టెక్స్ట్ లని ఫోర్స్ గా క్లియర్ చేయడానికి ఒక ట్రిక్
+    const panel = document.getElementById("certificate-panel");
+    panel.style.textAlign = "center";
+
+    // 2. ఇప్పుడు అందమైన గోల్డెన్ డబుల్ బార్డర్ సర్టిఫికేట్‌ను మాత్రమే అట్రాక్టివ్‌గా చూపిస్తాం
     const certCard = document.querySelector(".certificate") || document.getElementById("certificate-card");
     if (certCard) {
         certCard.style.display = "block";
         certCard.style.margin = "0 auto";
-        // సర్టిఫికేట్ ఇంకా అట్రాక్టివ్ గా కనిపించడానికి స్టైల్స్ అప్లై చేస్తున్నాం
         certCard.style.boxShadow = "0 20px 40px rgba(0,0,0,0.15)";
         certCard.style.borderRadius = "12px";
-        certCard.style.border = "8px double #d4af37"; // గోల్డెన్ బార్డర్ లుక్
+        certCard.style.border = "8px double #d4af37"; // అట్రాక్టివ్ గోల్డెన్ లుక్
     }
     
-    // 3. సర్టిఫికేట్ కింద గ్రీన్ కలర్ 'Next Student' బటన్ క్లీన్ గా వచ్చేలా చేస్తున్నాం
+    // 3. సర్టిఫికేట్ కింద మాత్రమే వచ్చేలా గ్రీన్ కలర్ 'Next Student' బటన్ క్రియేట్ చేస్తున్నాం
     let certCloseZone = document.getElementById("cert-close-zone");
     if (!certCloseZone) {
         certCloseZone = document.createElement("div");
         certCloseZone.id = "cert-close-zone";
         certCloseZone.style.textAlign = "center";
         certCloseZone.style.marginTop = "30px";
-        document.getElementById("certificate-panel").appendChild(certCloseZone);
+        panel.appendChild(certCloseZone);
     }
     certCloseZone.style.display = "block";
     certCloseZone.innerHTML = `
-        <button onclick="resetToSetup()" style="background: linear-gradient(135deg, #10b981, #059669); color:white; padding:14px 40px; font-size:1.15rem; border:none; border-radius:30px; cursor:pointer; font-weight:bold; box-shadow:0 6px 15px rgba(5, 150, 105, 0.4); width:100%; max-width:320px;">
+        <button onclick="resetToSetup()" style="background: linear-gradient(135deg, #10b981, #059669); color:white; padding:14px 45px; font-size:1.2rem; border:none; border-radius:30px; cursor:pointer; font-weight:bold; box-shadow:0 6px 15px rgba(5, 150, 105, 0.4); width:100%; max-width:350px;">
             🔄 Next Student / Start New Test
         </button>
     `;
-}
-
-function resetToSetup() {
-    document.getElementById("certificate-panel").style.display = "none";
-    document.getElementById("setup-screen").style.display = "block";
-    
-    // తదుపరి విద్యార్థి కోసం అన్ని ఎలిమెంట్లను రీసెట్ చేస్తున్నాం
-    const detailsDiv = document.getElementById("error-list-details");
-    if (detailsDiv) detailsDiv.style.display = "block";
-    
-    const certCard = document.querySelector(".certificate") || document.getElementById("certificate-card");
-    if (certCard) certCard.style.display = "block";
-    
-    const reportControls = document.getElementById("report-flow-controls");
-    if (reportControls) reportControls.style.display = "none";
-    
-    const certCloseZone = document.getElementById("cert-close-zone");
-    if (certCloseZone) certCloseZone.style.display = "none";
-
-    const nameInput = document.getElementById("student-name");
-    nameInput.value = "";
-    nameInput.focus();
-    document.getElementById("selection-box-container").style.display = "none";
-    
-    currentSentences = [];
-    sentenceIndex = 0;
-    accumulatedScores = 0;
-    questionsAttempted = 0;
-    isAssessmentActive = false;
-    isMicrophoneIntendedToBeActive = false;
-    wrongWordsLog = [];
-    totalWordsReadSuccessfully = 0;
-    totalReadingTimeSeconds = 0;
-    permanentlyMatchedWordsSet.clear();
-    if (autoNextTimeout) { clearTimeout(autoNextTimeout); autoNextTimeout = null; }
-    if (lineMaxTimeout) { clearTimeout(lineMaxTimeout); lineMaxTimeout = null; }
 }
 </script>
