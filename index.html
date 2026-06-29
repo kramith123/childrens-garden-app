@@ -810,58 +810,68 @@ function finishAssessmentReport() {
     document.getElementById("cert-wpm").innerText = Math.round(totalWordsReadSuccessfully / totalMinutes);
     document.getElementById("cert-time").innerText = `${Math.round(totalReadingTimeSeconds)}s`;
     
-    // --- 🚨 ఇక్కడే మార్పు (ఫోర్స్ క్లీనప్) ---
-    // పాత బ్రౌన్ కలర్ బటన్లు, కంగ్రాచులేషన్స్ టెక్స్ట్‌లు మీ HTML లో ఎక్కడున్నా వాటిని పూర్తిగా క్లీన్ చేస్తున్నాం
+    // 1. సర్టిఫికేట్ కార్డును ప్రస్తుతానికి దాచడం
     const certCard = document.querySelector(".certificate") || document.getElementById("certificate-card");
     if (certCard) {
-        certCard.style.display = "none"; // మొదట సర్టిఫికేట్ కార్డు కనిపించదు
+        certCard.style.display = "none";
     }
 
-    // సర్టిఫికేట్ ప్యానల్ లో ఉన్న పాత బటన్లు, టెక్స్ట్‌లను వెతికి పూర్తిగా తొలగిస్తున్నాం
     const panel = document.getElementById("certificate-panel");
     const oldButtons = panel.querySelectorAll("button, .error-item, #report-flow-controls, #cert-close-zone");
     oldButtons.forEach(el => el.remove());
 
-    // మీ పాత డిజైన్ లో ఉన్న బ్రౌన్ బటన్ క్లాస్/ఎలిమెంట్స్ ని కూడా స్క్రీన్ నుండి క్లీన్ చేస్తున్నాం
-    const oldBrownBtn = panel.querySelector("[style*='background-color'], button, a");
-    // ప్యానల్ లోని టెక్స్ట్‌లను క్లియర్ చేయడానికి ఎర్రర్ బాక్స్ ని మాత్రమే ఉంచుదాం
+    // 🔥 ఇక్కడే మార్పు: HTML లో హార్డ్-కోడ్ చేసిన పాత 'Mistaken Words' బాక్స్ లను, 
+    // మరియు 'Congratulations' టెక్స్ట్ ను వెతికి పూర్తిగా హైడ్ చేస్తున్నాం. దీనివల్ల డూప్లికేట్స్ రావు.
+    const allPanelElements = panel.querySelectorAll("*");
+    allPanelElements.forEach(el => {
+        if (el.innerText && (el.innerText.includes("Mistaken Words") || el.innerText.includes("తప్పుగా చదివిన") || el.innerText.includes("Congratulations"))) {
+            if(el.tagName === 'DIV' || el.tagName === 'FIELDSET' || el.tagName === 'H2' || el.tagName === 'H3' || el.tagName === 'P') {
+                el.style.display = "none";
+            }
+        }
+    });
     
-    // ఎర్రర్ బాక్స్ లేదా డివ్ ని క్లీన్ గా సెట్ చేయడం
+    // ఎర్రర్ బాక్స్ ని ఫ్రెష్ గా క్రియేట్ చేయడం
     let detailsDiv = document.getElementById("error-list-details");
     if (!detailsDiv) {
         detailsDiv = document.createElement("div");
         detailsDiv.id = "error-list-details";
         panel.appendChild(detailsDiv);
     }
-    detailsDiv.style.display = "block";
-    detailsDiv.innerHTML = "";
     
-    // ❌ Mistaken Words హెడింగ్ ని క్రియేట్ చేయడం
-    let errTitle = document.getElementById("dynamic-error-title");
-    if(!errTitle) {
-        errTitle = document.createElement("h3");
-        errTitle.id = "dynamic-error-title";
-        errTitle.style.color = "#dc2626";
-        errTitle.style.textAlign = "center";
-        errTitle.style.marginTop = "20px";
-        detailsDiv.parentNode.insertBefore(errTitle, detailsDiv);
-    }
-    errTitle.style.display = "block";
-    errTitle.innerText = "❌ Mistaken Words / తప్పుగా చదివిన పదాలు:";
-
+    // మొదటి పేజీలో ఎర్రర్ బాక్స్ కి అట్రాక్టివ్ డిజైన్
+    detailsDiv.style.display = "block";
+    detailsDiv.style.background = "#fff1f2";
+    detailsDiv.style.border = "1px solid #fda4af";
+    detailsDiv.style.borderRadius = "10px";
+    detailsDiv.style.padding = "20px";
+    detailsDiv.style.margin = "20px auto";
+    detailsDiv.style.maxWidth = "700px";
+    detailsDiv.style.boxShadow = "0 4px 6px rgba(0,0,0,0.05)";
+    
+    // ఒకే ఒక్క హెడింగ్ ఇక్కడ యాడ్ చేస్తున్నాం
+    detailsDiv.innerHTML = `
+        <h3 style="color: #e11d48; text-align: center; margin-top: 0; border-bottom: 2px solid #fecdd3; padding-bottom: 15px; font-size: 1.3rem;">
+            ❌ Mistaken Words / తప్పుగా చదివిన పదాలు:
+        </h3>
+    `;
+    
     if (wrongWordsLog.length === 0) {
-        detailsDiv.innerHTML = "<div style='color: #059669; font-weight:bold; text-align:center; font-size:1.2rem; background:#ecfdf5; padding:15px; border-radius:8px;'>Excellent! No errors. ⭐ Everything was read perfectly!</div>";
+        detailsDiv.innerHTML += "<div style='color: #059669; font-weight:bold; text-align:center; font-size:1.2rem; background:#ecfdf5; padding:15px; border-radius:8px; margin-top:15px;'>Excellent! No errors. ⭐ Everything was read perfectly!</div>";
     } else {
         wrongWordsLog.forEach((log, idx) => {
             const row = document.createElement("div");
-            row.style.padding = "10px";
+            row.style.padding = "12px 10px";
             row.style.borderBottom = "1px solid #fee2e2";
-            row.innerHTML = `<strong>Line ${idx+1}:</strong> "${log.question}"<br><span style="color:#dc2626; font-weight:bold;">Missed:</span> ${log.words.map(w => `<span style="background: #fed7d7; padding: 2px 6px; border-radius: 4px; margin-right: 4px; display:inline-block; margin-top:4px;">${w}</span>`).join(" ")}`;
+            row.style.fontSize = "1.05rem";
+            row.innerHTML = `<strong style="color:#374151;">Line ${idx+1}:</strong> "${log.question}"<br>
+                             <span style="color:#dc2626; font-weight:bold; font-size: 0.9rem;">Missed:</span> 
+                             ${log.words.map(w => `<span style="background: #fecaca; color: #991b1b; padding: 3px 8px; border-radius: 6px; margin-right: 5px; display:inline-block; margin-top:6px; font-weight: 500;">${w}</span>`).join(" ")}`;
             detailsDiv.appendChild(row);
         });
     }
 
-    // 1️⃣ మొదటి స్క్రీన్‌లో కేవలం ఈ బ్లూ బటన్ మాత్రమే వస్తుంది
+    // మొదటి స్క్రీన్‌లో నెక్స్ట్ బటన్
     let reportControls = document.getElementById("report-flow-controls");
     if (!reportControls) {
         reportControls = document.createElement("div");
@@ -872,7 +882,7 @@ function finishAssessmentReport() {
     }
     reportControls.style.display = "block";
     reportControls.innerHTML = `
-        <button onclick="toggleReportToCertificate()" style="background: linear-gradient(135deg, #4f46e5, #3730a3); color:white; padding:14px 40px; font-size:1.2rem; border:none; border-radius:30px; cursor:pointer; font-weight:bold; width:100%; max-width:320px; box-shadow:0 6px 15px rgba(79, 70, 229, 0.4); margin-top:20px;">
+        <button onclick="toggleReportToCertificate()" style="background: linear-gradient(135deg, #4f46e5, #3730a3); color:white; padding:14px 40px; font-size:1.2rem; border:none; border-radius:30px; cursor:pointer; font-weight:bold; width:100%; max-width:320px; box-shadow:0 6px 15px rgba(79, 70, 229, 0.4); margin-top:10px;">
             Next: View Certificate 🏆
         </button>
     `;
@@ -881,54 +891,45 @@ function finishAssessmentReport() {
 }
 
 function toggleReportToCertificate() {
-    // 1. ఎర్రర్ బాక్స్ మరియు డైనమిక్ ఎర్రర్ హెడింగ్‌ను దాచేస్తున్నాం
+    // 1. ఎర్రర్ బాక్స్ ను పూర్తిగా దాచేస్తున్నాం
     const detailsDiv = document.getElementById("error-list-details");
-    if (detailsDiv) detailsDiv.style.display = "none";
-    
-    const errTitle = document.getElementById("dynamic-error-title");
-    if (errTitle) errTitle.style.display = "none";
+    if (detailsDiv) {
+        detailsDiv.style.display = "none";
+    }
     
     const reportControls = document.getElementById("report-flow-controls");
     if (reportControls) reportControls.style.display = "none";
     
-    // 2. సర్టిఫికేట్ కార్డును ప్రత్యక్షం చేస్తున్నాం
+    // 2. సర్టిఫికేట్ కార్డును ప్రత్యక్షం చేసి, ఇంప్రెసివ్ గా డిజైన్ చేస్తున్నాం
     const certCard = document.querySelector(".certificate") || document.getElementById("certificate-card");
     if (certCard) {
         certCard.style.display = "block";
-        certCard.style.margin = "0 auto";
-        certCard.style.boxShadow = "0 20px 40px rgba(0,0,0,0.15)";
-        certCard.style.borderRadius = "12px";
-        certCard.style.border = "8px double #d4af37"; // అట్రాక్టివ్ గోల్డెన్ లుక్
-
-        // 🔥 ఇక్కడే అసలు మ్యాజిక్: సర్టిఫికేట్ కార్డు లోపల పొరపాటున ఉన్న పాత బ్రౌన్ బటన్, 
-        // కంగ్రాచులేషన్స్ టెక్స్ట్ లేదా ఎర్రర్ హెడింగ్స్ ఏవైనా ఉంటే వాటిని వెతికి పట్టుకుని మరీ డిలీట్ చేస్తున్నాం!
-        const unwantedElements = certCard.querySelectorAll("button, h3, h2, p");
-        unwantedElements.forEach(el => {
-            // సర్టిఫికేట్ లోపల ఉండాల్సిన మెయిన్ టెక్స్ట్‌లను (Name, Class, Score, WPM, Time) డిలీట్ చేయకుండా,
-            // కేవలం పాత బటన్లు మరియు పాత హెడింగ్స్ ని మాత్రమే రిమూవ్ చేస్తున్నాం
-            if (el.innerText.includes("Test Next Student") || 
-                el.innerText.includes("తదుపరి విద్యార్థి") || 
-                el.innerText.includes("Congratulations") || 
-                el.innerText.includes("Mistaken Words") || 
-                el.innerText.includes("తప్పుగా చదివిన")) {
-                el.remove(); // పూర్తిగా డిలీట్ అయిపోతుంది
-            }
-        });
+        certCard.style.margin = "30px auto";
+        certCard.style.padding = "40px 20px";
+        certCard.style.backgroundColor = "#ffffff";
+        certCard.style.boxShadow = "0 20px 50px rgba(0,0,0,0.15)";
+        certCard.style.borderRadius = "16px";
+        certCard.style.border = "10px solid #d4af37"; // Thick Golden Border
+        certCard.style.outline = "2px solid #92400e"; // Inner outline effect
+        certCard.style.outlineOffset = "-12px";
+        certCard.style.maxWidth = "800px";
+        certCard.style.position = "relative"; // For background patterns if any
     }
     
-    // 3. ఇప్పుడు సర్టిఫికేట్ కింద కొత్త గ్రీన్ కలర్ 'Next Student' బటన్ మాత్రమే క్లీన్ గా వస్తుంది
+    // 3. సర్టిఫికేట్ కింద గ్రీన్ కలర్ 'Next Student' బటన్ మాత్రమే వస్తుంది
     const panel = document.getElementById("certificate-panel");
     let certCloseZone = document.getElementById("cert-close-zone");
     if (!certCloseZone) {
         certCloseZone = document.createElement("div");
         certCloseZone.id = "cert-close-zone";
         certCloseZone.style.textAlign = "center";
-        certCloseZone.style.marginTop = "30px";
+        certCloseZone.style.marginTop = "35px";
+        certCloseZone.style.marginBottom = "30px";
         panel.appendChild(certCloseZone);
     }
     certCloseZone.style.display = "block";
     certCloseZone.innerHTML = `
-        <button onclick="resetToSetup()" style="background: linear-gradient(135deg, #10b981, #059669); color:white; padding:14px 45px; font-size:1.2rem; border:none; border-radius:30px; cursor:pointer; font-weight:bold; box-shadow:0 6px 15px rgba(5, 150, 105, 0.4); width:100%; max-width:350px;">
+        <button onclick="resetToSetup()" style="background: linear-gradient(135deg, #10b981, #059669); color:white; padding:15px 45px; font-size:1.2rem; border:none; border-radius:30px; cursor:pointer; font-weight:bold; box-shadow:0 8px 20px rgba(5, 150, 105, 0.4); width:100%; max-width:350px; transition: transform 0.2s;">
             🔄 Next Student / Start New Test
         </button>
     `;
