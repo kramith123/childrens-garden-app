@@ -333,7 +333,7 @@
 
 <script>
 // ⚠️ ఇక్కడ మీ గూగుల్ వెబ్ యాప్ URL ని పేస్ట్ చేయండి:
-const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwpfOQ83nkdjxPLKiQ_8fBcOLuhc5nI2I4IE6BcsCvRA02G3kKOEzDWGiHo1E8ezTSS/exec";
+const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxpg2AwITjjNK6VwWcirfQhZW7bRgS9YHtqrSkyAcaxidfbx0nJWGMqugTw5NXRsZiQ/exec";
 
 const OFFLINE_DATABASE = {
     Nursery_Eng: ["A Apple", "B Ball", "C Cat", "D Dog", "E Elephant"],
@@ -668,16 +668,22 @@ function startSelectedAssessment() {
 
 function setupSentenceDisplay() {
     if (autoNextTimeout) { clearTimeout(autoNextTimeout); autoNextTimeout = null; }
+    if (lineMaxTimeout) { clearTimeout(lineMaxTimeout); lineMaxTimeout = null; } 
+    
     permanentlyMatchedWordsSet.clear();
     sentenceStartTime = new Date();
     const target = currentSentences[sentenceIndex];
     updateSentenceFontSize(target);
+    
+    // పదాల సంఖ్యను లెక్కిస్తున్నాం
     const targetWords = target.split(/\s+/).map(w => w.trim()).filter(Boolean);
     const initialScores = targetWords.map(() => 0);
     renderSentenceHTML(targetWords, initialScores);
+    
     document.getElementById("progress-text").innerText = `Question ${sentenceIndex + 1} of ${currentSentences.length}`;
     document.getElementById("status-text").innerText = "Mic active. Start reading now...";
     document.getElementById("current-score-view").style.display = "none";
+    
     try { recognition.stop(); } catch(e){}
     setTimeout(() => {
         if(isAssessmentActive) {
@@ -685,6 +691,28 @@ function setupSentenceDisplay() {
             try { recognition.start(); } catch(e){}
         }
     }, 200);
+
+    // 🔥 DYNAMIC TIMER: ప్రతి పదానికి 3.5 సెకన్లు ఇస్తున్నాం (చిన్న పిల్లల కోసం)
+    // వాక్యం పెద్దదైతే టైమ్ ఆటోమేటిక్‌గా పెరుగుతుంది
+    let wordCount = targetWords.length;
+    let calculatedSeconds = wordCount * 3500; // 3.5 సెకన్లు ఒక పదానికి
+    
+    // కానీ కనీసం (Minimum) 15 సెకన్లు, గరిష్టంగా (Maximum) 40 సెకన్లు ఉండేలా కండిషన్
+    if (calculatedSeconds < 15000) {
+        calculatedSeconds = 15000; 
+    } else if (calculatedSeconds > 40000) {
+        calculatedSeconds = 40000; 
+    }
+
+    console.log(`Words: ${wordCount}, Allowed Time: ${calculatedSeconds / 1000} seconds`);
+
+    // ఆటో-ఫార్వర్డ్ టైమర్ రన్ అవుతుంది
+    lineMaxTimeout = setTimeout(() => {
+        if (isAssessmentActive) {
+            document.getElementById("status-text").innerText = "⏱️ Time up! Moving to next line...";
+            moveToNextSentence();
+        }
+    }, calculatedSeconds); 
 }
 
 function startAssessmentListening() {
