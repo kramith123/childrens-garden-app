@@ -451,10 +451,35 @@ function cleanText(text) {
 function updateSentenceFontSize(text) {
     const box = document.getElementById("target-sentence");
     const len = text.length;
-    if (len > 120) { box.style.fontSize = "2.0rem"; box.style.lineHeight = "1.6"; }
-    else if (len > 60) { box.style.fontSize = "2.6rem"; } 
-    else if (len > 35) { box.style.fontSize = "3.5rem"; } 
-    else { box.style.fontSize = "4.5rem"; }
+    
+    // 📱 మొబైల్ స్క్రీన్ అవునా కాదా అని చెక్ చేస్తున్నాం (స్క్రీన్ వెడల్పు 768px కంటే తక్కువ ఉంటే)
+    const isMobile = window.innerWidth <= 768;
+
+    if (isMobile) {
+        // --- మొబైల్ సైజులు (చిన్నగా ఉంటాయి) ---
+        if (len > 120) { 
+            box.style.fontSize = "1.3rem"; 
+            box.style.lineHeight = "1.4"; 
+        } else if (len > 60) { 
+            box.style.fontSize = "1.6rem"; 
+        } else if (len > 35) { 
+            box.style.fontSize = "2.0rem"; 
+        } else { 
+            box.style.fontSize = "2.4rem"; // మొబైల్‌లో చిన్న వాక్యాలకు బెస్ట్ సైజ్
+        }
+    } else {
+        // --- డెస్క్‌టాప్/లాప్‌టాప్ సైజులు (మీ పాత సైజులే ఇవి) ---
+        if (len > 120) { 
+            box.style.fontSize = "2.0rem"; 
+            box.style.lineHeight = "1.6"; 
+        } else if (len > 60) { 
+            box.style.fontSize = "2.6rem"; 
+        } else if (len > 35) { 
+            box.style.fontSize = "3.5rem"; 
+        } else { 
+            box.style.fontSize = "4.5rem"; 
+        }
+    }
 }
 
 function renderSentenceHTML(wordsArray, scoreArray) {
