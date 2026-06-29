@@ -786,89 +786,53 @@ function moveToNextSentence() {
     }
 }
 
-// --- 1. అసెస్మెంట్ ముగిసినప్పుడు వచ్చే రిపోర్ట్ పేజీ ---
 function finishAssessmentReport() {
     isAssessmentActive = false;
-    isMicrophoneIntendedToBeActive = false; 
-    if (autoNextTimeout) { clearTimeout(autoNextTimeout); autoNextTimeout = null; }
-    if (lineMaxTimeout) { clearTimeout(lineMaxTimeout); lineMaxTimeout = null; }
-    try { recognition.stop(); } catch(e){}
-    
+    // ... (పాత కోడ్) ...
     document.getElementById("assessment-panel").style.display = "none";
     document.getElementById("certificate-panel").style.display = "block";
-    
-    // సర్టిఫికేట్ కార్డును ఇక్కడే హైడ్ చేస్తున్నాం (ఇది రెండో పేజీలో మాత్రమే కనిపిస్తుంది)
-    const certCard = document.querySelector(".certificate") || document.getElementById("certificate-card");
-    if (certCard) certCard.style.display = "none";
-    
-    // డేటా నింపడం
-    const finalScore = questionsAttempted ? Math.round(accumulatedScores / questionsAttempted) : 100;
-    const name = document.getElementById("student-name").value || "Anonymous Student";
-    const studentClass = document.getElementById("student-class").value;
-    
-    document.getElementById("cert-name").innerText = name;
-    document.getElementById("cert-class").innerText = studentClass;
-    document.getElementById("cert-final-score").innerText = `${finalScore}%`;
-    
-    // ఎర్రర్ లిస్ట్ డిస్ప్లే
-    let detailsDiv = document.getElementById("error-list-details");
-    if (!detailsDiv) {
-        detailsDiv = document.createElement("div");
-        detailsDiv.id = "error-list-details";
-        document.getElementById("certificate-panel").appendChild(detailsDiv);
-    }
-    
-    detailsDiv.style.display = "block";
-    detailsDiv.innerHTML = `<h3 style="color: #dc2626; text-align: center; margin-bottom:20px;">❌ Mistaken Words / తప్పుగా చదివిన పదాలు:</h3>`;
-    
-    if (wrongWordsLog.length === 0) {
-        detailsDiv.innerHTML += "<div style='color:green; text-align:center; font-weight:bold;'>Perfect! No errors.</div>";
-    } else {
-        wrongWordsLog.forEach((log, idx) => {
-            const row = document.createElement("div");
-            row.style.marginBottom = "10px";
-            row.style.borderBottom = "1px solid #eee";
-            row.innerHTML = `<strong>Q${idx+1}:</strong> ${log.question}<br><span style="color:red;">Missed:</span> ${log.words.join(", ")}`;
-            detailsDiv.appendChild(row);
-        });
-    }
 
-    // నెక్స్ట్ బటన్
-    let reportControls = document.getElementById("report-flow-controls");
-    if (!reportControls) {
-        reportControls = document.createElement("div");
-        reportControls.id = "report-flow-controls";
-        reportControls.style.textAlign = "center";
-        reportControls.style.marginTop = "20px";
-        document.getElementById("certificate-panel").appendChild(reportControls);
-    }
-    reportControls.style.display = "block";
-    reportControls.innerHTML = `
-        <button onclick="toggleReportToCertificate()" style="padding:15px 30px; background:#4f46e5; color:white; border:none; border-radius:25px; cursor:pointer; font-weight:bold;">
-            Next: View Certificate 🏆
-        </button>`;
+    // 1. మొదట పాత ఎలిమెంట్స్ ఏవైనా ఉంటే క్లీన్ చేయండి
+    const panel = document.getElementById("certificate-panel");
+    panel.innerHTML = ""; // మొత్తం ప్యానెల్ క్లియర్ చేస్తున్నాం
+
+    // 2. ఇప్పుడు రిపోర్ట్ పేజీ కోసం కొత్త కంటైనర్ ని క్రియేట్ చేయండి
+    const reportDiv = document.createElement("div");
+    reportDiv.id = "report-only-view";
+    reportDiv.innerHTML = `
+        <h2 style="text-align:center;">Assessment Report</h2>
+        <div id="error-list-details">
+            <h3 style="color: #dc2626;">❌ Mistaken Words / తప్పుగా చదివిన పదాలు:</h3>
+            </div>
+        <div style="text-align:center; margin-top:20px;">
+            <button onclick="toggleReportToCertificate()" style="padding:15px 30px; background:#4f46e5; color:white; border:none; border-radius:25px;">
+                Next: View Certificate 🏆
+            </button>
+        </div>
+    `;
+    panel.appendChild(reportDiv);
+    
+    // (ఇక్కడ మీ తప్పుల డేటాను row లుగా యాడ్ చేసుకోండి)
 }
 
-// --- 2. సర్టిఫికేట్ పేజీకి మారే ఫంక్షన్ ---
 function toggleReportToCertificate() {
-    document.getElementById("error-list-details").style.display = "none";
-    document.getElementById("report-flow-controls").style.display = "none";
-    
-    const certCard = document.querySelector(".certificate") || document.getElementById("certificate-card");
-    if (certCard) certCard.style.display = "block";
-    
-    let certCloseZone = document.getElementById("cert-close-zone");
-    if (!certCloseZone) {
-        certCloseZone = document.createElement("div");
-        certCloseZone.id = "cert-close-zone";
-        certCloseZone.style.textAlign = "center";
-        certCloseZone.style.marginTop = "20px";
-        document.getElementById("certificate-panel").appendChild(certCloseZone);
-    }
-    certCloseZone.style.display = "block";
-    certCloseZone.innerHTML = `
-        <button onclick="location.reload()" style="padding:15px 30px; background:#10b981; color:white; border:none; border-radius:25px; cursor:pointer; font-weight:bold;">
-            🔄 Next Student / Start New Test
-        </button>`;
+    const panel = document.getElementById("certificate-panel");
+    panel.innerHTML = ""; // రిపోర్ట్ పేజీని పూర్తిగా తీసేస్తున్నాం
+
+    // 3. ఇప్పుడు సర్టిఫికేట్ పేజీని క్రియేట్ చేయండి
+    const certDiv = document.createElement("div");
+    certDiv.id = "certificate-only-view";
+    certDiv.innerHTML = `
+        <div class="certificate" style="border: 8px double #d4af37; padding: 20px;">
+            <h1>Certificate of Completion</h1>
+            <p>Congratulations! ${document.getElementById("student-name").value}</p>
+            </div>
+        <div style="text-align:center; margin-top:30px;">
+            <button onclick="location.reload()" style="padding:15px 30px; background:#10b981; color:white; border:none; border-radius:25px;">
+                🔄 Next Student / Start New Test
+            </button>
+        </div>
+    `;
+    panel.appendChild(certDiv);
 }
 </script>
