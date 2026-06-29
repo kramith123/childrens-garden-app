@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="te">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Children's Garden Reading Assessment</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .listening { border: 4px solid #ef4444 !important; animation: pulse 1.5s infinite; }
+        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
+        .hidden { display: none; }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen p-4 md:p-8">
+
+    <div class="max-w-2xl mx-auto bg-white p-6 rounded-2xl shadow-lg">
+        <h1 class="text-2xl font-bold text-blue-800 mb-6 text-center">Reading Assessment</h1>
+        
+        <!-- Selection Panel -->
+        <div id="selection-panel" class="space-y-4">
+            <input type="text" id="student-name" placeholder="Student Name" class="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-400">
+            <select id="student-class" class="w-full p-3 border rounded-lg">
+                <option>Nursery</option><option>LKG</option><option>UKG</option>
+                <option>1st Class</option><option>2nd Class</option><option>3rd Class</option>
+                <option>4th Class</option><option>5th Class</option>
+            </select>
+            <select id="language" class="w-full p-3 border rounded-lg">
+                <option value="Eng">English</option><option value="Tel">Telugu</option><option value="Hin">Hindi</option>
+            </select>
+            <button onclick="startAssessment()" class="w-full bg-blue-600 text-white p-4 rounded-xl font-bold hover:bg-blue-700 transition">Start Test</button>
+        </div>
+
+        <!-- Assessment Panel -->
+        <div id="assessment-panel" class="hidden text-center space-y-6">
+            <div id="timer" class="text-lg font-mono text-blue-600">Time: 0s</div>
+            <div id="sentence-display" class="text-3xl font-medium p-8 bg-blue-50 rounded-xl min-h-[150px] flex items-center justify-center"></div>
+            <button id="mic-btn" onclick="toggleListening()" class="w-full bg-red-500 text-white p-6 rounded-2xl text-xl font-bold transition-all">🎤 Start Reading</button>
+            <textarea id="mistake-notes" placeholder="Add teacher's notes or mistakes here..." class="w-full p-3 border rounded-lg h-20"></textarea>
+            <button onclick="finishAssessment()" class="w-full bg-green-600 text-white p-3 rounded-xl font-bold">Finish & Generate Certificate</button>
+        </div>
+
+        <!-- Certificate Panel -->
+        <div id="certificate-panel" class="hidden text-center space-y-6 border-4 border-double border-blue-800 p-8">
+            <h2 class="text-3xl font-bold text-blue-900">Certificate of Completion</h2>
+            <div id="cert-details" class="text-lg space-y-2"></div>
+            <div id="cert-score" class="text-4xl font-black text-green-600"></div>
+            <button onclick="location.reload()" class="bg-gray-800 text-white px-6 py-2 rounded-full">New Assessment</button>
+        </div>
+    </div>
+
+    <script>
+        // ⚠️ మీ గూగుల్ యాప్స్ స్క్రిప్ట్ URL ఇక్కడ పేస్ట్ చేయండి:
+        const WEB_APP_URL = "YOUR_DEPLOYED_WEB_APP_URL_HERE";
+
+        let recognition, startTime, timerInterval;
+        let isListening = false;
+        let accumulatedScore = 100; // Mock scoring logic
+
+        function startAssessment() {
+            document.getElementById('selection-panel').classList.add('hidden');
+            document.getElementById('assessment-panel').classList.remove('hidden');
+            startTime = Date.now();
+            timerInterval = setInterval(updateTimer, 1000);
+        }
+
+        function updateTimer() {
+            const seconds = Math.floor((Date.now() - startTime) / 1000);
+            document.getElementById('timer').innerText = `Time: ${seconds}s`;
+        }
+
+        function toggleListening() {
+            if (!recognition) initRecognition();
+            if (isListening) {
+                recognition.stop();
+                isListening = false;
+                document.getElementById("mic-btn").classList.remove("listening");
+                document.getElementById("mic-btn").innerText = "🎤 Resume";
+            } else {
+                recognition.start();
+                isListening = true;
+                document.getElementById("mic-btn").classList.add("listening");
+                document.getElementById("mic-btn").innerText = "Listening...";
+            }
+        }
+
+        function initRecognition() {
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            recognition = new SpeechRecognition();
+            recognition.continuous = true;
+            recognition.interimResults = true;
+            const langCode = document.getElementById("language").value === "Tel" ? "te-IN" : (document.getElementById("language").value === "Hin" ? "hi-IN" : "en-IN");
+            recognition.lang = langCode;
+
+            recognition.onend = () => {
+                if (isListening) {
+                    setTimeout(() => { try { recognition.start(); } catch(e) {} }, 500);
+                }
+            };
+        }
+
+        function finishAssessment() {
+            clearInterval(timerInterval);
+            document.getElementById('assessment-panel').classList.add('hidden');
+            document.getElementById('certificate-panel').classList.remove('hidden');
+            
+            const name = document.getElementById("student-name").value;
+            const sClass = document.getElementById("student-class").value;
+            const lang = document.getElementById("language").value;
+            const timeTaken = document.getElementById("timer").innerText;
+            const notes = document.getElementById("mistake-notes").value;
+
+            document.getElementById("cert-details").innerHTML = `<p>Student: ${name}</p><p>Class: ${sClass} | Lang: ${lang}</p><p>Notes: ${notes}</p>`;
+            document.getElementById("cert-score").innerText = "Assessment Completed!";
+
+            // Google Sheets Submit
+            const payload = { name, sClass, lang, timeTaken, notes, date: new Date().toLocaleDateString() };
+            if (WEB_APP_URL !== "YOUR_DEPLOYED_WEB_APP_URL_HERE") {
+                fetch(WEB_APP_URL, {
+                    method: "POST",
+                    mode: "no-cors",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(payload)
+                });
+            }
+        }
+    </script>
+</body>
+</html>
