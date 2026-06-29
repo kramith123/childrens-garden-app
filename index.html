@@ -790,13 +790,18 @@ function finishAssessmentReport() {
     isAssessmentActive = false;
     isMicrophoneIntendedToBeActive = false; 
     if (autoNextTimeout) { clearTimeout(autoNextTimeout); autoNextTimeout = null; }
+    if (lineMaxTimeout) { clearTimeout(lineMaxTimeout); lineMaxTimeout = null; } // డైనమిక్ టైమర్ క్లియర్
     try { recognition.stop(); } catch(e){}
+    
+    // 1. అసెస్మెంట్ ప్యానల్ క్లోజ్ చేసి సర్టిఫికేట్ ప్యానల్ ఓపెన్ చేస్తాం
     document.getElementById("assessment-panel").style.display = "none";
     document.getElementById("certificate-panel").style.display = "block";
+    
     const finalScore = questionsAttempted ? Math.round(accumulatedScores / questionsAttempted) : 100;
     const name = document.getElementById("student-name").value || "Anonymous Student";
     const studentClass = document.getElementById("student-class").value;
     
+    // సర్టిఫికేట్ లోపల డేటాను నింపుతాం
     document.getElementById("cert-name").innerText = name;
     document.getElementById("cert-class").innerText = studentClass;
     document.getElementById("cert-lang").innerText = currentLanguage;
@@ -806,10 +811,11 @@ function finishAssessmentReport() {
     document.getElementById("cert-wpm").innerText = Math.round(totalWordsReadSuccessfully / totalMinutes);
     document.getElementById("cert-time").innerText = `${Math.round(totalReadingTimeSeconds)}s`;
     
+    // 2. ఎర్రర్ లిస్ట్‌ను బిల్డ్ చేస్తాం
     const detailsDiv = document.getElementById("error-list-details");
     detailsDiv.innerHTML = "";
     if (wrongWordsLog.length === 0) {
-        detailsDiv.innerHTML = "<div class='error-item' style='color: var(--success); font-weight:bold;'>Excellent! No errors. ⭐</div>";
+        detailsDiv.innerHTML = "<div class='error-item' style='color: var(--success); font-weight:bold; text-align:center;'>Excellent! No errors. ⭐</div>";
     } else {
         wrongWordsLog.forEach((log, idx) => {
             const row = document.createElement("div");
@@ -818,7 +824,72 @@ function finishAssessmentReport() {
             detailsDiv.appendChild(row);
         });
     }
+
+    // 3. 🔥 మొదటి స్క్రీన్‌లో సర్టిఫికేట్ కార్డ్‌ను దాచిపెట్టి, కేవలం రిపోర్ట్ / ఎర్రర్స్ మాత్రమే చూపిస్తాం
+    const certCard = document.querySelector(".certificate") || document.getElementById("certificate-card");
+    if (certCard) {
+        certCard.style.display = "none"; 
+    }
+    
+    // 'Next: View Certificate' బటన్ కోసం ఒక డివ్ (Div) క్రియేట్ చేస్తున్నాం
+    let reportControls = document.getElementById("report-flow-controls");
+    if (!reportControls) {
+        reportControls = document.createElement("div");
+        reportControls.id = "report-flow-controls";
+        reportControls.style.textAlign = "center";
+        reportControls.style.marginTop = "20px";
+        detailsDiv.parentNode.insertBefore(reportControls, detailsDiv.nextSibling);
+    }
+    reportControls.style.display = "block";
+    reportControls.innerHTML = `
+        <button id="show-cert-btn" onclick="toggleReportToCertificate()" style="background:var(--primary); color:white; padding:12px 30px; font-size:1.2rem; border:none; border-radius:8px; cursor:pointer; font-weight:bold; width:100%; max-width:300px; box-shadow:0 4px 6px rgba(0,0,0,0.1); margin-bottom:15px;">
+            Next: View Certificate 🏆
+        </button>
+    `;
+    
+    // బ్యాక్‌ఎండ్‌లో గూగుల్ షీట్‌కి డేటా పంపడం
     sendPayloadToGoogleSheet(name, studentClass, finalScore, Math.round(totalReadingTimeSeconds));
+}
+
+// 🔥 కొత్త స్క్రీన్ మేనేజ్మెంట్ ఫంక్షన్ (ఎర్రర్స్ దాచి సర్టిఫికేట్ చూపించడానికి)
+function toggleReportToCertificate() {
+    // 1. ఎర్రర్ సెక్షన్ మరియు దాని హెడింగ్‌లను దాచేస్తాం
+    const detailsDiv = document.getElementById("error-list-details");
+    if (detailsDiv) detailsDiv.style.display = "none";
+    
+    const allHeadings = document.querySelectorAll("#certificate-panel h3");
+    allHeadings.forEach(h => {
+        if(h.innerText.includes("Errors") || h.innerText.includes("తప్పులు")) {
+            h.style.display = "none";
+        }
+    });
+    
+    // 'View Certificate' బటన్ ని దాచేస్తాం
+    const reportControls = document.getElementById("report-flow-controls");
+    if (reportControls) reportControls.style.display = "none";
+    
+    // 2. అందమైన సర్టిఫికేట్ కార్డ్‌ను స్క్రీన్ మధ్యలోకి తెచ్చి చూపిస్తాం
+    const certCard = document.querySelector(".certificate") || document.getElementById("certificate-card");
+    if (certCard) {
+        certCard.style.display = "block";
+        certCard.style.margin = "0 auto";
+    }
+    
+    // 3. సర్టిఫికేట్ కింద మాత్రమే "Next Student" బటన్ వచ్చేలా చేస్తున్నాం
+    let certCloseZone = document.getElementById("cert-close-zone");
+    if (!certCloseZone) {
+        certCloseZone = document.createElement("div");
+        certCloseZone.id = "cert-close-zone";
+        certCloseZone.style.textAlign = "center";
+        certCloseZone.style.marginTop = "25px";
+        document.getElementById("certificate-panel").appendChild(certCloseZone);
+    }
+    certCloseZone.style.display = "block";
+    certCloseZone.innerHTML = `
+        <button onclick="resetToSetup()" style="background:#059669; color:white; padding:12px 35px; font-size:1.1rem; border:none; border-radius:8px; cursor:pointer; font-weight:bold; box-shadow:0 4px 6px rgba(0,0,0,0.1);">
+            🔄 Next Student / Start New Test
+        </button>
+    `;
 }
 
 function sendPayloadToGoogleSheet(name, studentClass, finalScore, totalTimeTaken) {
@@ -853,6 +924,7 @@ function abortAssessment() {
         isAssessmentActive = false;
         isMicrophoneIntendedToBeActive = false;
         if (autoNextTimeout) clearTimeout(autoNextTimeout);
+        if (lineMaxTimeout) clearTimeout(lineMaxTimeout);
         try { recognition.stop(); } catch(e){}
         resetToSetup();
     }
@@ -861,10 +933,28 @@ function abortAssessment() {
 function resetToSetup() {
     document.getElementById("certificate-panel").style.display = "none";
     document.getElementById("setup-screen").style.display = "block";
+    
+    // తదుపరి స్టూడెంట్ కోసం అన్ని స్క్రీన్‌ల ఎలిమెంట్స్‌ని మళ్లీ నార్మల్ మోడ్‌కి తెస్తున్నాం
+    const detailsDiv = document.getElementById("error-list-details");
+    if (detailsDiv) detailsDiv.style.display = "block";
+    
+    const allHeadings = document.querySelectorAll("#certificate-panel h3");
+    allHeadings.forEach(h => h.style.display = "block");
+    
+    const certCard = document.querySelector(".certificate") || document.getElementById("certificate-card");
+    if (certCard) certCard.style.display = "block";
+    
+    const reportControls = document.getElementById("report-flow-controls");
+    if (reportControls) reportControls.style.display = "none";
+    
+    const certCloseZone = document.getElementById("cert-close-zone");
+    if (certCloseZone) certCloseZone.style.display = "none";
+
     const nameInput = document.getElementById("student-name");
     nameInput.value = "";
     nameInput.focus();
     document.getElementById("selection-box-container").style.display = "none";
+    
     currentSentences = [];
     sentenceIndex = 0;
     accumulatedScores = 0;
@@ -876,5 +966,6 @@ function resetToSetup() {
     totalReadingTimeSeconds = 0;
     permanentlyMatchedWordsSet.clear();
     if (autoNextTimeout) { clearTimeout(autoNextTimeout); autoNextTimeout = null; }
+    if (lineMaxTimeout) { clearTimeout(lineMaxTimeout); lineMaxTimeout = null; }
 }
 </script>
