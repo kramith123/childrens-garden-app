@@ -231,6 +231,8 @@
         
         @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.6; } 100% { opacity: 1; } }
     </style>
+	<!-- html2canvas లైబ్రరీ (సర్టిఫికేట్ డౌన్‌లోడ్ కోసం) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 </head>
 <body>
 
@@ -867,21 +869,100 @@ function finishAssessmentReport() {
 
 function toggleReportToCertificate() {
     // 1. ఎర్రర్ రిపోర్ట్ భాగాన్ని పూర్తిగా హైడ్ చేస్తున్నాం
-    document.getElementById("clean-error-container").style.display = "none";
+    const errorContainer = document.getElementById("clean-error-container");
+    if (errorContainer) errorContainer.style.display = "none";
     
     // 2. సర్టిఫికేట్ కార్డును ఓపెన్ చేస్తున్నాం
     const certCard = document.getElementById("certificate-card");
-    certCard.style.display = "block";
-    certCard.style.margin = "0 auto";
+    if (certCard) {
+        certCard.style.display = "block";
+        certCard.style.margin = "0 auto";
+    }
     
-    // 3. సర్టిఫికేట్ కింద వచ్చే 'Next Student' గ్రీన్ బటన్‌ను ఆన్ చేస్తున్నాం
+    // 3. సర్టిఫికేట్ కింద 'Download' మరియు 'Next Student' బటన్లను చూపిస్తున్నాం
     const certCloseZone = document.getElementById("cert-close-zone");
-    certCloseZone.style.display = "block";
-    certCloseZone.innerHTML = `
-        <button onclick="resetToSetup()" style="background: linear-gradient(135deg, #10b981, #059669); color:white; padding:14px 45px; font-size:1.2rem; border:none; border-radius:30px; cursor:pointer; font-weight:bold; box-shadow:0 6px 15px rgba(5, 150, 105, 0.4); width:100%; max-width:350px;">
-            🔄 Next Student / Start New Test
-        </button>
-    `;
+    if (certCloseZone) {
+        certCloseZone.style.display = "block";
+        certCloseZone.innerHTML = `
+            <div style="text-align:center; margin-top:30px; display: flex; flex-direction: column; align-items: center; gap: 15px;">
+                <!-- 📥 డౌన్‌లోడ్ బటన్ -->
+                <button onclick="downloadCertificate()" style="background: linear-gradient(135deg, #2563eb, #1d4ed8); color:white; padding:14px 45px; font-size:1.2rem; border:none; border-radius:30px; cursor:pointer; font-weight:bold; box-shadow:0 6px 15px rgba(37, 99, 235, 0.4); width:100%; max-width:350px;">
+                    📥 Download Certificate (.JPG)
+                </button>
+                
+                <!-- 🔄 నెక్స్ట్ స్టూడెంట్ బటన్ -->
+                <button onclick="resetToSetup()" style="background: linear-gradient(135deg, #10b981, #059669); color:white; padding:14px 45px; font-size:1.2rem; border:none; border-radius:30px; cursor:pointer; font-weight:bold; box-shadow:0 6px 15px rgba(5, 150, 105, 0.4); width:100%; max-width:350px;">
+                    🔄 Next Student / Start New Test
+                </button>
+            </div>
+        `;
+    }
+}
+
+// 📥 కొత్తగా యాడ్ చేసిన సర్టిఫికేట్ డౌన్‌లోడ్ ఫంక్షన్
+function downloadCertificate() {
+    const certCard = document.getElementById("certificate-card");
+    const studentName = document.getElementById("cert-name").innerText || "Student";
+    
+    // డౌన్‌లోడ్ చేసేటప్పుడు బటన్లు ఇమేజ్‌లో పడకుండా కేవలం కార్డ్‌ని మాత్రమే క్యాప్చర్ చేస్తాం
+    html2canvas(certCard, {
+        scale: 2, // ఇమేజ్ క్వాలిటీ అద్భుతంగా (HD) రావడానికి
+        useCORS: true
+    }).then(canvas => {
+        const link = document.createElement("a");
+        link.download = `${studentName}_Reading_Certificate.jpg`;
+        link.href = canvas.toDataURL("image/jpeg", 0.9); // .jpg ఫార్మాట్ లోకి కన్వర్ట్
+        link.click();
+    }).catch(err => {
+        console.error("Download failed:", err);
+        alert("Certificate download failed. Please try again.");
+    });
+}
+
+function resetToSetup() {
+    // సర్టిఫికేట్ ప్యానల్ మొత్తాన్ని దాచేస్తున్నాం
+    document.getElementById("certificate-panel").style.display = "none";
+    document.getElementById("setup-screen").style.display = "block";
+    
+    // లోపల ఉన్న విడివిడి కంటైనర్లను కూడా క్లీన్ గా రీసెట్ చేస్తున్నాం
+    const errorContainer = document.getElementById("clean-error-container");
+    if (errorContainer) {
+        errorContainer.innerHTML = "";
+        errorContainer.style.display = "block";
+    }
+    
+    const certCard = document.getElementById("certificate-card");
+    if (certCard) certCard.style.display = "none";
+    
+    const certCloseZone = document.getElementById("cert-close-zone");
+    if (certCloseZone) {
+        certCloseZone.innerHTML = "";
+        certCloseZone.style.display = "none";
+    }
+
+    // ఇన్పుట్ ఫీల్డ్స్ క్లియర్
+    const nameInput = document.getElementById("student-name");
+    if (nameInput) {
+        nameInput.value = "";
+        nameInput.focus();
+    }
+    
+    const selectionBox = document.getElementById("selection-box-container");
+    if (selectionBox) selectionBox.style.display = "none";
+    
+    // వేరియబుల్స్ రీసెట్[cite: 1]
+    currentSentences = [];
+    sentenceIndex = 0;
+    accumulatedScores = 0;
+    questionsAttempted = 0;
+    isAssessmentActive = false;
+    isMicrophoneIntendedToBeActive = false;
+    wrongWordsLog = [];
+    totalWordsReadSuccessfully = 0;
+    totalReadingTimeSeconds = 0;
+    permanentlyMatchedWordsSet.clear();
+    if (autoNextTimeout) { clearTimeout(autoNextTimeout); autoNextTimeout = null; } //[cite: 1]
+    if (lineMaxTimeout) { clearTimeout(lineMaxTimeout); lineMaxTimeout = null; } //[cite: 1]
 }
 
 </script>
