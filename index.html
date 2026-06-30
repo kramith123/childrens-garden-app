@@ -231,7 +231,7 @@
         
         @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.6; } 100% { opacity: 1; } }
     </style>
-	<!-- html2canvas లైబ్రరీ (సర్టిఫికేట్ డౌన్‌లోడ్ కోసం) -->
+    <!-- html2canvas లైబ్రరీ (సర్టిఫికేట్ మరియు రిపోర్ట్ డౌన్‌లోడ్ కోసం) -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 </head>
 <body>
@@ -311,12 +311,11 @@
 <div id="certificate-panel" style="display: none; max-width: 800px; margin: 0 auto; padding: 20px;">
     
     <!-- 1️⃣ మొదటి పేజీ: ఎర్రర్ రిపోర్ట్ సెక్షన్ (సర్టిఫికేట్ దీనిలో కనిపించదు) -->
-    <div id="clean-error-container" style="display: block;">
+    <div id="clean-error-container" style="display: block; background: #ffffff; border-radius: 12px; padding: 5px;">
         <!-- జావాస్క్రిప్ట్ ద్వారా ఇక్కడ కేవలం ఎర్రర్ రిపోర్ట్ మరియు 'Next: View Certificate' బటన్ మాత్రమే వస్తాయి -->
     </div>
 
     <!-- 2️⃣ రెండవ పేజీ: ఒరిజినల్ సర్టిఫికేట్ కార్డ్ సెక్షన్ (ఎర్రర్ రిపోర్ట్ దీనిలో కనిపించదు) -->
-    <!-- మీ పాత కోడ్ లో ఉన్న id="certificate-card" లేదా class="certificate" ఉన్న డివ్ (Div) ను మాత్రమే ఇక్కడ ఉంచండి -->
     <div id="certificate-card" class="certificate" style="display: none; border: 8px double #d4af37; padding: 30px; background: #fff; border-radius: 12px; position: relative; text-align: center;">
         
         <div class="badge" style="font-size: 3rem; margin-bottom: 10px;">🏆</div>
@@ -341,14 +340,14 @@
 
     <!-- 3️⃣ సర్టిఫికేట్ కింద మాత్రమే వచ్చే 'Next Student' బటన్ జోన్ -->
     <div id="cert-close-zone" style="display: none; text-align: center; margin-top: 30px;">
-        <!-- జావాscott ద్వారా ఇక్కడ గ్రీన్ బటన్ యాడ్ అవుతుంది -->
+        <!-- జావాస్క్రిప్ట్ ద్వారా ఇక్కడ గ్రీన్ బటన్ యాడ్ అవుతుంది -->
     </div>
 
 </div>   
 
 <script>
 // ⚠️ ఇక్కడ మీ గూగుల్ వెబ్ యాప్ URL ని పేస్ట్ చేయండి:
-const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxpg2AwITjjNK6VwWcirfQhZW7bRgS9YHtqrSkyAcaxidfbx0nJWGMqugTw5NXRsZiQ/exec";
+const WEB_APP_URL = "https://script.google.com/macros/s/AKfycby3sgvZvofiEdjyeLmTFFHA-pfZCIPTA3CswXJDRPxeMoYmMu8SRA1_eRtDwJJe2rzM/exec";
 
 const OFFLINE_DATABASE = {
     Nursery_Eng: ["A Apple", "B Ball", "C Cat", "D Dog", "E Elephant"],
@@ -379,7 +378,7 @@ let questionsAttempted = 0;
 let recognition = null;
 let isAssessmentActive = false;
 let autoNextTimeout = null;
-let lineMaxTimeout = null; // ✅ ఇక్కడ ఈ కొత్త లైన్ వచ్చేలా చూసుకోండి
+let lineMaxTimeout = null; 
 let startTime = null;
 let sentenceStartTime = null;
 let totalWordsReadSuccessfully = 0;
@@ -406,14 +405,12 @@ if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
     recognition.onresult = (event) => {
         let liveSpeech = '';
         
-        // లైవ్ లో వచ్చే Interim మరియు Final టెక్స్ట్ రెండింటినీ కలిపి వెంట వెంటనే తీసుకుంటుంది
         for (let i = event.resultIndex; i < event.results.length; ++i) {
             liveSpeech += event.results[i][0].transcript;
         }
         
         if (!liveSpeech.trim()) return;
         
-        // బ్రౌజర్ ఆలోచించే లోపే ఇన్స్టంట్‌గా అండర్‌లైన్ చేయడానికి పంపుతుంది
         evaluateLiveText(liveSpeech);
     };
 
@@ -467,11 +464,9 @@ function updateSentenceFontSize(text) {
     const box = document.getElementById("target-sentence");
     const len = text.length;
     
-    // 📱 మొబైల్ స్క్రీన్ అవునా కాదా అని చెక్ చేస్తున్నాం (స్క్రీన్ వెడల్పు 768px కంటే తక్కువ ఉంటే)
     const isMobile = window.innerWidth <= 768;
 
     if (isMobile) {
-        // --- మొబైల్ సైజులు (చిన్నగా ఉంటాయి) ---
         if (len > 120) { 
             box.style.fontSize = "1.3rem"; 
             box.style.lineHeight = "1.4"; 
@@ -480,10 +475,9 @@ function updateSentenceFontSize(text) {
         } else if (len > 35) { 
             box.style.fontSize = "2.0rem"; 
         } else { 
-            box.style.fontSize = "2.4rem"; // మొబైల్‌లో చిన్న వాక్యాలకు బెస్ట్ సైజ్
+            box.style.fontSize = "2.4rem"; 
         }
     } else {
-        // --- డెస్క్‌టాప్/లాప్‌టాప్ సైజులు (మీ పాత సైజులే ఇవి) ---
         if (len > 120) { 
             box.style.fontSize = "2.0rem"; 
             box.style.lineHeight = "1.6"; 
@@ -716,7 +710,6 @@ function setupSentenceDisplay() {
     const target = currentSentences[sentenceIndex];
     updateSentenceFontSize(target);
     
-    // పదాల సంఖ్యను లెక్కిస్తున్నాం
     const targetWords = target.split(/\s+/).map(w => w.trim()).filter(Boolean);
     const initialScores = targetWords.map(() => 0);
     renderSentenceHTML(targetWords, initialScores);
@@ -733,12 +726,9 @@ function setupSentenceDisplay() {
         }
     }, 200);
 
-    // 🔥 DYNAMIC TIMER: ప్రతి పదానికి 3.5 సెకన్లు ఇస్తున్నాం (చిన్న పిల్లల కోసం)
-    // వాక్యం పెద్దదైతే టైమ్ ఆటోమేటిక్‌గా పెరుగుతుంది
     let wordCount = targetWords.length;
-    let calculatedSeconds = wordCount * 3500; // 3.5 సెకన్లు ఒక పదానికి
+    let calculatedSeconds = wordCount * 3500; 
     
-    // కానీ కనీసం (Minimum) 15 సెకన్లు, గరిష్టంగా (Maximum) 40 సెకన్లు ఉండేలా కండిషన్
     if (calculatedSeconds < 15000) {
         calculatedSeconds = 15000; 
     } else if (calculatedSeconds > 40000) {
@@ -747,7 +737,6 @@ function setupSentenceDisplay() {
 
     console.log(`Words: ${wordCount}, Allowed Time: ${calculatedSeconds / 1000} seconds`);
 
-    // ఆటో-ఫార్వర్డ్ టైమర్ రన్ అవుతుంది
     lineMaxTimeout = setTimeout(() => {
         if (isAssessmentActive) {
             document.getElementById("status-text").innerText = "⏱️ Time up! Moving to next line...";
@@ -801,6 +790,32 @@ function moveToNextSentence() {
     }
 }
 
+// 📥 ఎర్రర్ రిపోర్ట్ డౌన్‌లోడ్ ఫంక్షన్
+function downloadErrorReport() {
+    const errorSection = document.getElementById("error-download-wrapper");
+    const studentName = document.getElementById("student-name").value || "Student";
+    const downloadBtn = document.getElementById("error-download-btn");
+    
+    // డౌన్‌లోడ్ చేసేటప్పుడు బటన్ ఇమేజ్‌లో పడకుండా దాస్తున్నాం
+    downloadBtn.style.display = "none";
+    
+    html2canvas(errorSection, {
+        scale: 2, 
+        useCORS: true,
+        backgroundColor: "#ffffff"
+    }).then(canvas => {
+        const link = document.createElement("a");
+        link.download = `${studentName}_Error_Report.jpg`;
+        link.href = canvas.toDataURL("image/jpeg", 0.9);
+        link.click();
+        downloadBtn.style.display = "inline-block"; // డౌన్‌లోడ్ అయ్యాక మళ్ళీ బటన్ చూపిస్తాం
+    }).catch(err => {
+        console.error("Report download failed:", err);
+        alert("Report download failed. Please try again.");
+        downloadBtn.style.display = "inline-block";
+    });
+}
+
 function finishAssessmentReport() {
     isAssessmentActive = false;
     isMicrophoneIntendedToBeActive = false; 
@@ -808,11 +823,9 @@ function finishAssessmentReport() {
     if (lineMaxTimeout) { clearTimeout(lineMaxTimeout); lineMaxTimeout = null; }
     try { recognition.stop(); } catch(e){}
     
-    // అసెస్మెంట్ దాచి, మెయిన్ ప్యానల్ ఓపెన్ చేస్తాం
     document.getElementById("assessment-panel").style.display = "none";
     document.getElementById("certificate-panel").style.display = "block";
     
-    // సర్టిఫికేట్ పేజీని మరియు గ్రీన్ బటన్‌ను ప్రస్తుతానికి దాచేస్తున్నాం
     document.getElementById("certificate-card").style.display = "none";
     document.getElementById("cert-close-zone").style.display = "none";
     
@@ -820,7 +833,6 @@ function finishAssessmentReport() {
     const name = document.getElementById("student-name").value || "Anonymous Student";
     const studentClass = document.getElementById("student-class").value;
     
-    // బ్యాక్‌గ్రౌండ్ లో డేటా సెట్ చేసి ఉంచుతాం
     document.getElementById("cert-name").innerText = name;
     document.getElementById("cert-class").innerText = studentClass;
     document.getElementById("cert-lang").innerText = currentLanguage;
@@ -830,67 +842,87 @@ function finishAssessmentReport() {
     document.getElementById("cert-wpm").innerText = Math.round(totalWordsReadSuccessfully / totalMinutes);
     document.getElementById("cert-time").innerText = `${Math.round(totalReadingTimeSeconds)}s`;
     
-    // ఎర్రర్ రిపోర్ట్ పేజీ బిల్డింగ్ (ఇందులో సర్టిఫికేట్ అస్సలు కనిపించదు)
+    // ప్రస్తుత తేదీ మరియు సమయం తీసుకోవడం
+    const currentDateTime = new Date().toLocaleString('en-IN', { 
+        timeZone: 'Asia/Kolkata',
+        dateStyle: 'medium',
+        timeStyle: 'short'
+    });
+
     const errorContainer = document.getElementById("clean-error-container");
     errorContainer.style.display = "block";
     
-    let scoreHeader = `<div style="text-align:center; font-size:1.6rem; font-weight:bold; color:#059669; margin-bottom:20px; background:#ecfdf5; padding:15px; border-radius:10px; border: 1px solid #a7f3d0;">
-        Assessment Score: ${finalScore}% 🎉
-    </div>`;
+    let reportContentHTML = `
+    <div id="error-download-wrapper" style="padding: 20px; border: 3px solid #cbd5e1; border-radius: 12px; background: #ffffff; text-align: center;">
+        <h2 style="color:#1e3a8a; margin-top:0; margin-bottom: 5px; font-size:1.8rem; text-transform:uppercase;">Children's Garden E.M. High School</h2>
+        <h3 style="color:#475569; margin-top:0; margin-bottom:15px; font-size:1.2rem;">Student Reading Error Report</h3>
+        
+        <!-- 📅 తేదీ మరియు సమయం జోన్ -->
+        <div style="background: #f8fafc; padding: 10px; border-radius: 8px; margin-bottom: 15px; font-size: 1rem; color: #334155; border: 1px solid #e2e8f0; line-height: 1.5;">
+            <strong>Student Name:</strong> ${name} &nbsp;|&nbsp; <strong>Class:</strong> ${studentClass}<br>
+            <strong>Assessment Date & Time:</strong> <span style="color:#2563eb; font-weight:bold;">${currentDateTime}</span>
+        </div>
 
-    let errorListHTML = "";
+        <div style="font-size:1.5rem; font-weight:bold; color:#059669; margin-bottom:20px; background:#ecfdf5; padding:12px; border-radius:10px; border: 1px solid #a7f3d0;">
+            Final Score: ${finalScore}% 🎉
+        </div>`;
+
     if (wrongWordsLog.length === 0) {
-        errorListHTML = "<div style='color: #059669; font-weight:bold; text-align:center; font-size:1.2rem; padding:20px;'>Excellent Reading! No errors found. ⭐</div>";
+        reportContentHTML += "<div style='color: #059669; font-weight:bold; font-size:1.2rem; padding:20px;'>Excellent Reading! No errors found. ⭐</div>";
     } else {
-        errorListHTML = `<h3 style="color:#dc2626; text-align:center; margin-bottom:15px; font-size:1.3rem; font-weight: bold;">❌ Mistaken Words / తప్పుగా చదివిన పదాలు:</h3>
-                         <div style="background: #fff; border: 1px solid #fee2e2; border-radius: 8px; padding: 15px; max-height: 300px; overflow-y: auto;">`;
+        reportContentHTML += `<h4 style="color:#dc2626; margin-bottom:10px; font-size:1.1rem; font-weight: bold; text-align:left;">❌ Mistaken Words / తప్పుగా చదివిన పదాలు:</h4>
+                             <div style="background: #fff; border: 1px solid #fee2e2; border-radius: 8px; padding: 15px; max-height: 300px; overflow-y: auto;">`;
         wrongWordsLog.forEach((log, idx) => {
-            errorListHTML += `
-                <div style="padding:10px; border-bottom:1px solid #fee2e2; font-size:1rem; line-height:1.6; text-align: left;">
+            reportContentHTML += `
+                <div style="padding:10px; border-bottom:1px solid #fee2e2; font-size:0.95rem; line-height:1.6; text-align: left;">
                     <strong>Line ${idx+1}:</strong> "${log.question}"<br>
                     <span style="color:#dc2626; font-weight:bold;">Missed:</span> 
                     ${log.words.map(w => `<span style="background: #fed7d7; padding: 2px 8px; border-radius: 4px; margin-right: 4px; display:inline-block; font-weight:600; color: #b91c1c;">${w}</span>`).join("")}
                 </div>`;
         });
-        errorListHTML += `</div>`;
+        reportContentHTML += `</div>`;
     }
 
+    reportContentHTML += `
+        <!-- 📥 ఎర్రర్ రిపోర్ట్ డౌన్‌లోడ్ బటన్ జోన్ -->
+        <div style="margin-top:20px; text-align:center;">
+            <button id="error-download-btn" onclick="downloadErrorReport()" style="background: linear-gradient(135deg, #f59e0b, #d97706); color:white; padding:12px 30px; font-size:1.1rem; border:none; border-radius:25px; cursor:pointer; font-weight:bold; box-shadow:0 4px 12px rgba(245, 158, 11, 0.4); width:100%; max-width:280px;">
+                📥 Download Error Report (.JPG)
+            </button>
+        </div>
+    </div>`;
+
+    // 🏆 'Next: View Certificate' బటన్ (ఇది డౌన్‌లోడ్ అయ్యే ఇమేజ్ లోపల రాకుండా బయట పెట్టబడింది)
     let nextButtonHTML = `
-        <div style="text-align:center; margin-top:30px;">
+        <div style="text-align:center; margin-top:20px;">
             <button onclick="toggleReportToCertificate()" style="background: linear-gradient(135deg, #4f46e5, #3730a3); color:white; padding:14px 50px; font-size:1.25rem; border:none; border-radius:30px; cursor:pointer; font-weight:bold; box-shadow:0 6px 20px rgba(79, 70, 229, 0.4); width:100%; max-width:320px; transition: 0.2s;">
                 Next: View Certificate 🏆
             </button>
         </div>`;
 
-    errorContainer.innerHTML = scoreHeader + errorListHTML + nextButtonHTML;
+    errorContainer.innerHTML = reportContentHTML + nextButtonHTML;
     
     sendPayloadToGoogleSheet(name, studentClass, finalScore, Math.round(totalReadingTimeSeconds));
 }
 
 function toggleReportToCertificate() {
-    // 1. ఎర్రర్ రిపోర్ట్ భాగాన్ని పూర్తిగా హైడ్ చేస్తున్నాం
     const errorContainer = document.getElementById("clean-error-container");
     if (errorContainer) errorContainer.style.display = "none";
     
-    // 2. సర్టిఫికేట్ కార్డును ఓపెన్ చేస్తున్నాం
     const certCard = document.getElementById("certificate-card");
     if (certCard) {
         certCard.style.display = "block";
         certCard.style.margin = "0 auto";
     }
     
-    // 3. సర్టిఫికేట్ కింద 'Download' మరియు 'Next Student' బటన్లను చూపిస్తున్నాం
     const certCloseZone = document.getElementById("cert-close-zone");
     if (certCloseZone) {
         certCloseZone.style.display = "block";
         certCloseZone.innerHTML = `
             <div style="text-align:center; margin-top:30px; display: flex; flex-direction: column; align-items: center; gap: 15px;">
-                <!-- 📥 డౌన్‌లోడ్ బటన్ -->
                 <button onclick="downloadCertificate()" style="background: linear-gradient(135deg, #2563eb, #1d4ed8); color:white; padding:14px 45px; font-size:1.2rem; border:none; border-radius:30px; cursor:pointer; font-weight:bold; box-shadow:0 6px 15px rgba(37, 99, 235, 0.4); width:100%; max-width:350px;">
                     📥 Download Certificate (.JPG)
                 </button>
-                
-                <!-- 🔄 నెక్స్ట్ స్టూడెంట్ బటన్ -->
                 <button onclick="resetToSetup()" style="background: linear-gradient(135deg, #10b981, #059669); color:white; padding:14px 45px; font-size:1.2rem; border:none; border-radius:30px; cursor:pointer; font-weight:bold; box-shadow:0 6px 15px rgba(5, 150, 105, 0.4); width:100%; max-width:350px;">
                     🔄 Next Student / Start New Test
                 </button>
@@ -899,19 +931,17 @@ function toggleReportToCertificate() {
     }
 }
 
-// 📥 కొత్తగా యాడ్ చేసిన సర్టిఫికేట్ డౌన్‌లోడ్ ఫంక్షన్
 function downloadCertificate() {
     const certCard = document.getElementById("certificate-card");
     const studentName = document.getElementById("cert-name").innerText || "Student";
     
-    // డౌన్‌లోడ్ చేసేటప్పుడు బటన్లు ఇమేజ్‌లో పడకుండా కేవలం కార్డ్‌ని మాత్రమే క్యాప్చర్ చేస్తాం
     html2canvas(certCard, {
-        scale: 2, // ఇమేజ్ క్వాలిటీ అద్భుతంగా (HD) రావడానికి
+        scale: 2, 
         useCORS: true
     }).then(canvas => {
         const link = document.createElement("a");
         link.download = `${studentName}_Reading_Certificate.jpg`;
-        link.href = canvas.toDataURL("image/jpeg", 0.9); // .jpg ఫార్మాట్ లోకి కన్వర్ట్
+        link.href = canvas.toDataURL("image/jpeg", 0.9); 
         link.click();
     }).catch(err => {
         console.error("Download failed:", err);
@@ -920,11 +950,9 @@ function downloadCertificate() {
 }
 
 function resetToSetup() {
-    // సర్టిఫికేట్ ప్యానల్ మొత్తాన్ని దాచేస్తున్నాం
     document.getElementById("certificate-panel").style.display = "none";
     document.getElementById("setup-screen").style.display = "block";
     
-    // లోపల ఉన్న విడివిడి కంటైనర్లను కూడా క్లీన్ గా రీసెట్ చేస్తున్నాం
     const errorContainer = document.getElementById("clean-error-container");
     if (errorContainer) {
         errorContainer.innerHTML = "";
@@ -940,7 +968,6 @@ function resetToSetup() {
         certCloseZone.style.display = "none";
     }
 
-    // ఇన్పుట్ ఫీల్డ్స్ క్లియర్
     const nameInput = document.getElementById("student-name");
     if (nameInput) {
         nameInput.value = "";
@@ -950,7 +977,6 @@ function resetToSetup() {
     const selectionBox = document.getElementById("selection-box-container");
     if (selectionBox) selectionBox.style.display = "none";
     
-    // వేరియబుల్స్ రీసెట్[cite: 1]
     currentSentences = [];
     sentenceIndex = 0;
     accumulatedScores = 0;
@@ -961,8 +987,41 @@ function resetToSetup() {
     totalWordsReadSuccessfully = 0;
     totalReadingTimeSeconds = 0;
     permanentlyMatchedWordsSet.clear();
-    if (autoNextTimeout) { clearTimeout(autoNextTimeout); autoNextTimeout = null; } //[cite: 1]
-    if (lineMaxTimeout) { clearTimeout(lineMaxTimeout); lineMaxTimeout = null; } //[cite: 1]
+    if (autoNextTimeout) { clearTimeout(autoNextTimeout); autoNextTimeout = null; }[cite: 1]
+    if (lineMaxTimeout) { clearTimeout(lineMaxTimeout); lineMaxTimeout = null; }[cite: 1]
 }
 
+function sendPayloadToGoogleSheet(name, studentClass, score, timeTaken) {
+    if(!WEB_APP_URL) return;
+    const payload = {
+        date: new Date().toISOString().split('T')[0],
+        studentName: name,
+        studentClass: studentClass,
+        language: currentLanguage,
+        questions: questionsAttempted,
+        score: score,
+        startingTime: testStartTimeGlobal ? testStartTimeGlobal.toLocaleTimeString() : new Date().toLocaleTimeString(),
+        timeTaken: timeTaken + "s"
+    };
+    fetch(WEB_APP_URL, {
+        method: "POST",
+        mode: "no-cors",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+    }).catch(err => console.error("Sheet save error:", err));
+}
+
+function abortAssessment() {
+    if (confirm("Are you sure you want to completely abort this active test? Progress will be lost.")) {
+        isAssessmentActive = false;
+        isMicrophoneIntendedToBeActive = false;
+        if (autoNextTimeout) { clearTimeout(autoNextTimeout); autoNextTimeout = null; }
+        if (lineMaxTimeout) { clearTimeout(lineMaxTimeout); lineMaxTimeout = null; }
+        try { recognition.stop(); } catch(e){}
+        document.getElementById("assessment-panel").style.display = "none";
+        document.getElementById("setup-screen").style.display = "block";
+    }
+}
 </script>
+</body>
+</html>
