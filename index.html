@@ -231,7 +231,6 @@
         
         @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.6; } 100% { opacity: 1; } }
     </style>
-    <!-- html2canvas లైబ్రరీ (సర్టిఫికేట్ మరియు రిపోర్ట్ డౌన్‌లోడ్ కోసం) -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 </head>
 <body>
@@ -307,30 +306,22 @@
         <button class="btn-primary" style="background-color: #ef4444; max-width: 300px; margin: 20px auto; display: block;" onclick="abortAssessment()">❌ Abort / Stop Test</button>
     </div>
 
- <!-- సర్టిఫికేట్ ప్యానల్ (ప్రధాన కంటైనర్) -->
 <div id="certificate-panel" style="display: none; max-width: 800px; margin: 0 auto; padding: 20px;">
     
-    <!-- 1️⃣ మొదటి పేజీ: ఎర్రర్ రిపోర్ట్ సెక్షన్ (సర్టిఫికేట్ దీనిలో కనిపించదు) -->
     <div id="clean-error-container" style="display: block; background: #ffffff; border-radius: 12px; padding: 5px;">
-        <!-- జావాస్క్రిప్ట్ ద్వారా ఇక్కడ కేవలం ఎర్రర్ రిపోర్ట్ మరియు 'Next: View Certificate' బటన్ మాత్రమే వస్తాయి -->
-    </div>
+        </div>
 
-    <!-- 2️⃣ రెండవ పేజీ: ఒరిజినల్ సర్టిఫికేట్ కార్డ్ సెక్షన్ (ఎర్రర్ రిపోర్ట్ దీనిలో కనిపించదు) -->
     <div id="certificate-card" class="certificate" style="display: none; border: 8px double #d4af37; padding: 30px; background: #fff; border-radius: 12px; position: relative; text-align: center;">
-        
         <div class="badge" style="font-size: 3rem; margin-bottom: 10px;">🏆</div>
         <h2 style="color: #78350f; font-size: 2rem; margin-bottom: 15px;">Children's Garden E.M. High School</h2>
-        
         <p style="font-size: 1.2rem; color: #374151;">This certifies that student <strong id="cert-name" style="color: #78350f;"></strong></p>
         <p style="font-size: 1.1rem; color: #374151;">
-    from <strong id="cert-class"></strong> has successfully evaluated their 
-    <span style="color: #b45309; font-weight: bold;">Reading Assessment Performance</span> in 
-    <strong id="cert-lang" style="color: #78350f;"></strong>.
+            from <strong id="cert-class"></strong> has successfully evaluated their 
+            <span style="color: #b45309; font-weight: bold;">Reading Assessment Performance</span> in 
+            <strong id="cert-lang" style="color: #78350f;"></strong>.
 		</p>
-        
         <h4 style="color: #b45309; letter-spacing: 1px; margin-top: 25px; margin-bottom: 5px;">ASSESSMENT METRICS</h4>
         <div id="cert-final-score" style="font-size: 3.5rem; font-weight: bold; color: #b45309; margin: 10px 0;">0%</div>
-        
         <p style="font-size: 0.95rem; color: #6b7280; font-weight: 500;">
             Total Questions: <span id="cert-q-count">0</span> | 
             Reading Speed: <span id="cert-wpm" style="color: #2563eb; font-weight: bold;">0</span> WPM | 
@@ -338,15 +329,12 @@
         </p>
     </div>
 
-    <!-- 3️⃣ సర్టిఫికేట్ కింద మాత్రమే వచ్చే 'Next Student' బటన్ జోన్ -->
     <div id="cert-close-zone" style="display: none; text-align: center; margin-top: 30px;">
-        <!-- జావాస్క్రిప్ట్ ద్వారా ఇక్కడ గ్రీన్ బటన్ యాడ్ అవుతుంది -->
-    </div>
-
+        </div>
 </div>   
 
 <script>
-// ⚠️ ఇక్కడ మీ గూగుల్ వెబ్ యాప్ URL ని పేస్ట్ చేయండి:
+// ⚠️ మీ గూగుల్ వెబ్ యాప్ URL ని ఇక్కడ పేస్ట్ చేయండి:
 const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzn9hT-Ur-w9_wSrO7dH6kciRQwjngUWY-zkGpadGkTb9Tps4AT1Vs4fzbKJVVIwNma/exec";
 
 const OFFLINE_DATABASE = {
@@ -358,10 +346,10 @@ const OFFLINE_DATABASE = {
     LKG_Numbers: ["10 Ten", "20 Twenty"],
     LKG_Hindi: ["अ अनार", "आम"],
     UKG_Eng: ["The sun is hot.", "I see a blue bird."],
-    UKG_Tel: ["బలపము", "రథము", "防త"],
+    UKG_Tel: ["బలపము", "రథము", "ఈక"],
     UKG_Hindi: ["उल्लू", "ऊनी"],
     "1st Class_Eng": ["The sun is very bright.", "The boy runs fast."],
-    "1st Class_Tel": ["అమ్మ మనకు దైవము.", "చెట్లు మనకు నీడను ఇస్తాయి.", "పిల్లలు చక్కగా చదవాలి."],
+    "1st Class_Tel": ["అమ్మ మనకు దైవము.", "CHECKING", "పిల్లలు చక్కగా చదవాలి."],
     "1st Class_Hin": ["सूरज पूर्व से निकलता है।"],
     "1st Class_Numbers": ["100 One Hundred"],
     "2nd Class_Eng": ["Keep your surroundings clean.", "Honesty is the best policy."],
@@ -404,13 +392,10 @@ if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
 
     recognition.onresult = (event) => {
         let liveSpeech = '';
-        
         for (let i = event.resultIndex; i < event.results.length; ++i) {
             liveSpeech += event.results[i][0].transcript;
         }
-        
         if (!liveSpeech.trim()) return;
-        
         evaluateLiveText(liveSpeech);
     };
 
@@ -463,31 +448,18 @@ function cleanText(text) {
 function updateSentenceFontSize(text) {
     const box = document.getElementById("target-sentence");
     const len = text.length;
-    
     const isMobile = window.innerWidth <= 768;
 
     if (isMobile) {
-        if (len > 120) { 
-            box.style.fontSize = "1.3rem"; 
-            box.style.lineHeight = "1.4"; 
-        } else if (len > 60) { 
-            box.style.fontSize = "1.6rem"; 
-        } else if (len > 35) { 
-            box.style.fontSize = "2.0rem"; 
-        } else { 
-            box.style.fontSize = "2.4rem"; 
-        }
+        if (len > 120) { box.style.fontSize = "1.3rem"; box.style.lineHeight = "1.4"; } 
+        else if (len > 60) { box.style.fontSize = "1.6rem"; } 
+        else if (len > 35) { box.style.fontSize = "2.0rem"; } 
+        else { box.style.fontSize = "2.4rem"; }
     } else {
-        if (len > 120) { 
-            box.style.fontSize = "2.0rem"; 
-            box.style.lineHeight = "1.6"; 
-        } else if (len > 60) { 
-            box.style.fontSize = "2.6rem"; 
-        } else if (len > 35) { 
-            box.style.fontSize = "3.5rem"; 
-        } else { 
-            box.style.fontSize = "4.5rem"; 
-        }
+        if (len > 120) { box.style.fontSize = "2.0rem"; box.style.lineHeight = "1.6"; } 
+        else if (len > 60) { box.style.fontSize = "2.6rem"; } 
+        else if (len > 35) { box.style.fontSize = "3.5rem"; } 
+        else { box.style.fontSize = "4.5rem"; }
     }
 }
 
@@ -609,9 +581,6 @@ function fetchSheetQuestions() {
                 return;
             }
             
-            if (rawList.length === 0) {
-                alert("గమనిక: ఈ షీట్ ట్యాబ్ లో ప్రశ్నలు ఏవీ లేవు!");
-            }
             let dynamicSentences = smartSentenceSplitter(rawList);
             buildQuestionsSelection(dynamicSentences, "Live Cloud Sheet");
         })
@@ -626,7 +595,7 @@ function fetchSheetQuestions() {
 
 function loadOfflineQuestions(cls, lang, reasonMsg) {
     const key = `${cls}_${lang.substring(0,3)}`;
-    let pool = OFFLINE_DATABASE[key] || OFFLINE_DATABASE[`${cls}_Eng`] || ["Sample reading line alpha", "Sample reading line beta"];
+    let pool = OFFLINE_DATABASE[key] || OFFLINE_DATABASE[`${cls}_Eng`] || ["Sample reading line"];
     const banner = document.getElementById("notice-banner");
     banner.innerText = `ℹ️ ${reasonMsg}`;
     banner.style.display = "block";
@@ -728,14 +697,8 @@ function setupSentenceDisplay() {
 
     let wordCount = targetWords.length;
     let calculatedSeconds = wordCount * 3500; 
-    
-    if (calculatedSeconds < 15000) {
-        calculatedSeconds = 15000; 
-    } else if (calculatedSeconds > 40000) {
-        calculatedSeconds = 40000; 
-    }
-
-    console.log(`Words: ${wordCount}, Allowed Time: ${calculatedSeconds / 1000} seconds`);
+    if (calculatedSeconds < 15000) calculatedSeconds = 15000; 
+    else if (calculatedSeconds > 40000) calculatedSeconds = 40000;
 
     lineMaxTimeout = setTimeout(() => {
         if (isAssessmentActive) {
@@ -790,13 +753,11 @@ function moveToNextSentence() {
     }
 }
 
-// 📥 ఎర్రర్ రిపోర్ట్ డౌన్‌లోడ్ ఫంక్షన్
 function downloadErrorReport() {
     const errorSection = document.getElementById("error-download-wrapper");
     const studentName = document.getElementById("student-name").value || "Student";
     const downloadBtn = document.getElementById("error-download-btn");
     
-    // డౌన్‌లోడ్ చేసేటప్పుడు బటన్ ఇమేజ్‌లో పడకుండా దాస్తున్నాం
     downloadBtn.style.display = "none";
     
     html2canvas(errorSection, {
@@ -808,7 +769,7 @@ function downloadErrorReport() {
         link.download = `${studentName}_Error_Report.jpg`;
         link.href = canvas.toDataURL("image/jpeg", 0.9);
         link.click();
-        downloadBtn.style.display = "inline-block"; // డౌన్‌లోడ్ అయ్యాక మళ్ళీ బటన్ చూపిస్తాం
+        downloadBtn.style.display = "inline-block";
     }).catch(err => {
         console.error("Report download failed:", err);
         alert("Report download failed. Please try again.");
@@ -825,7 +786,6 @@ function finishAssessmentReport() {
     
     document.getElementById("assessment-panel").style.display = "none";
     document.getElementById("certificate-panel").style.display = "block";
-    
     document.getElementById("certificate-card").style.display = "none";
     document.getElementById("cert-close-zone").style.display = "none";
     
@@ -842,7 +802,6 @@ function finishAssessmentReport() {
     document.getElementById("cert-wpm").innerText = Math.round(totalWordsReadSuccessfully / totalMinutes);
     document.getElementById("cert-time").innerText = `${Math.round(totalReadingTimeSeconds)}s`;
     
-    // ప్రస్తుత తేదీ మరియు సమయం తీసుకోవడం
     const currentDateTime = new Date().toLocaleString('en-IN', { 
         timeZone: 'Asia/Kolkata',
         dateStyle: 'medium',
@@ -857,7 +816,6 @@ function finishAssessmentReport() {
         <h2 style="color:#1e3a8a; margin-top:0; margin-bottom: 5px; font-size:1.8rem; text-transform:uppercase;">Children's Garden E.M. High School</h2>
         <h3 style="color:#475569; margin-top:0; margin-bottom:15px; font-size:1.2rem;">Student Reading Error Report</h3>
         
-        <!-- 📅 తేదీ మరియు సమయం జోన్ -->
         <div style="background: #f8fafc; padding: 10px; border-radius: 8px; margin-bottom: 15px; font-size: 1rem; color: #334155; border: 1px solid #e2e8f0; line-height: 1.5;">
             <strong>Student Name:</strong> ${name} &nbsp;|&nbsp; <strong>Class:</strong> ${studentClass}<br>
             <strong>Assessment Date & Time:</strong> <span style="color:#2563eb; font-weight:bold;">${currentDateTime}</span>
@@ -884,7 +842,6 @@ function finishAssessmentReport() {
     }
 
     reportContentHTML += `
-        <!-- 📥 ఎర్రర్ రిపోర్ట్ డౌన్‌లోడ్ బటన్ జోన్ -->
         <div style="margin-top:20px; text-align:center;">
             <button id="error-download-btn" onclick="downloadErrorReport()" style="background: linear-gradient(135deg, #f59e0b, #d97706); color:white; padding:12px 30px; font-size:1.1rem; border:none; border-radius:25px; cursor:pointer; font-weight:bold; box-shadow:0 4px 12px rgba(245, 158, 11, 0.4); width:100%; max-width:280px;">
                 📥 Download Error Report (.JPG)
@@ -892,60 +849,49 @@ function finishAssessmentReport() {
         </div>
     </div>`;
 
-    // 🏆 'Next: View Certificate' బటన్ (ఇది డౌన్‌లోడ్ అయ్యే ఇమేజ్ లోపల రాకుండా బయట పెట్టబడింది)
     let nextButtonHTML = `
         <div style="text-align:center; margin-top:20px;">
-            <button onclick="toggleReportToCertificate()" style="background: linear-gradient(135deg, #4f46e5, #3730a3); color:white; padding:14px 50px; font-size:1.25rem; border:none; border-radius:30px; cursor:pointer; font-weight:bold; box-shadow:0 6px 20px rgba(79, 70, 229, 0.4); width:100%; max-width:320px; transition: 0.2s;">
+            <button onclick="toggleReportToCertificate()" style="background: linear-gradient(135deg, #4f46e5, #3730a3); color:white; padding:14px 50px; font-size:1.25rem; border:none; border-radius:30px; cursor:pointer; font-weight:bold; box-shadow:0 6px 20px rgba(79, 70, 229, 0.4); width:100%; max-width:320px;">
                 Next: View Certificate 🏆
             </button>
         </div>`;
 
     errorContainer.innerHTML = reportContentHTML + nextButtonHTML;
-    
     sendPayloadToGoogleSheet(name, studentClass, finalScore, Math.round(totalReadingTimeSeconds));
 }
 
 function toggleReportToCertificate() {
-    const errorContainer = document.getElementById("clean-error-container");
-    if (errorContainer) errorContainer.style.display = "none";
-    
+    document.getElementById("clean-error-container").style.display = "none";
     const certCard = document.getElementById("certificate-card");
-    if (certCard) {
-        certCard.style.display = "block";
-        certCard.style.margin = "0 auto";
-    }
+    certCard.style.display = "block";
+    certCard.style.margin = "0 auto";
     
     const certCloseZone = document.getElementById("cert-close-zone");
-    if (certCloseZone) {
-        certCloseZone.style.display = "block";
-        certCloseZone.innerHTML = `
-            <div style="text-align:center; margin-top:30px; display: flex; flex-direction: column; align-items: center; gap: 15px;">
-                <button onclick="downloadCertificate()" style="background: linear-gradient(135deg, #2563eb, #1d4ed8); color:white; padding:14px 45px; font-size:1.2rem; border:none; border-radius:30px; cursor:pointer; font-weight:bold; box-shadow:0 6px 15px rgba(37, 99, 235, 0.4); width:100%; max-width:350px;">
-                    📥 Download Certificate (.JPG)
-                </button>
-                <button onclick="resetToSetup()" style="background: linear-gradient(135deg, #10b981, #059669); color:white; padding:14px 45px; font-size:1.2rem; border:none; border-radius:30px; cursor:pointer; font-weight:bold; box-shadow:0 6px 15px rgba(5, 150, 105, 0.4); width:100%; max-width:350px;">
-                    🔄 Next Student / Start New Test
-                </button>
-            </div>
-        `;
-    }
+    certCloseZone.style.display = "block";
+    certCloseZone.innerHTML = `
+        <div style="text-align:center; margin-top:30px; display: flex; flex-direction: column; align-items: center; gap: 15px;">
+            <button onclick="downloadCertificate()" style="background: linear-gradient(135deg, #2563eb, #1d4ed8); color:white; padding:14px 45px; font-size:1.2rem; border:none; border-radius:30px; cursor:pointer; font-weight:bold; box-shadow:0 6px 15px rgba(37, 99, 235, 0.4); width:100%; max-width:350px;">
+                📥 Download Certificate (.JPG)
+            </button>
+            <button onclick="resetToSetup()" style="background: linear-gradient(135deg, #10b981, #059669); color:white; padding:14px 45px; font-size:1.2rem; border:none; border-radius:30px; cursor:pointer; font-weight:bold; box-shadow:0 6px 15px rgba(5, 150, 105, 0.4); width:100%; max-width:350px;">
+                🔄 Next Student / Start New Test
+            </button>
+        </div>
+    `;
 }
 
 function downloadCertificate() {
     const certCard = document.getElementById("certificate-card");
     const studentName = document.getElementById("cert-name").innerText || "Student";
     
-    html2canvas(certCard, {
-        scale: 2, 
-        useCORS: true
-    }).then(canvas => {
+    html2canvas(certCard, { scale: 2, useCORS: true }).then(canvas => {
         const link = document.createElement("a");
         link.download = `${studentName}_Reading_Certificate.jpg`;
         link.href = canvas.toDataURL("image/jpeg", 0.9); 
         link.click();
     }).catch(err => {
         console.error("Download failed:", err);
-        alert("Certificate download failed. Please try again.");
+        alert("Certificate download failed.");
     });
 }
 
@@ -959,14 +905,8 @@ function resetToSetup() {
         errorContainer.style.display = "block";
     }
     
-    const certCard = document.getElementById("certificate-card");
-    if (certCard) certCard.style.display = "none";
-    
-    const certCloseZone = document.getElementById("cert-close-zone");
-    if (certCloseZone) {
-        certCloseZone.innerHTML = "";
-        certCloseZone.style.display = "none";
-    }
+    document.getElementById("certificate-card").style.display = "none";
+    document.getElementById("cert-close-zone").style.display = "none";
 
     const nameInput = document.getElementById("student-name");
     if (nameInput) {
@@ -974,8 +914,7 @@ function resetToSetup() {
         nameInput.focus();
     }
     
-    const selectionBox = document.getElementById("selection-box-container");
-    if (selectionBox) selectionBox.style.display = "none";
+    document.getElementById("selection-box-container").style.display = "none";
     
     currentSentences = [];
     sentenceIndex = 0;
@@ -987,14 +926,13 @@ function resetToSetup() {
     totalWordsReadSuccessfully = 0;
     totalReadingTimeSeconds = 0;
     permanentlyMatchedWordsSet.clear();
-    if (autoNextTimeout) { clearTimeout(autoNextTimeout); autoNextTimeout = null; }[cite: 1]
-    if (lineMaxTimeout) { clearTimeout(lineMaxTimeout); lineMaxTimeout = null; }[cite: 1]
+    if (autoNextTimeout) { clearTimeout(autoNextTimeout); autoNextTimeout = null; }
+    if (lineMaxTimeout) { clearTimeout(lineMaxTimeout); lineMaxTimeout = null; }
 }
 
 function sendPayloadToGoogleSheet(name, studentClass, score, timeTaken) {
     if(!WEB_APP_URL) return;
     const payload = {
-        date: new Date().toISOString().split('T')[0],
         studentName: name,
         studentClass: studentClass,
         language: currentLanguage,
