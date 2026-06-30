@@ -788,51 +788,189 @@ function moveToNextSentence() {
 
 function finishAssessmentReport() {
     isAssessmentActive = false;
-    // ... (పాత కోడ్) ...
+    isMicrophoneIntendedToBeActive = false; 
+    if (autoNextTimeout) { clearTimeout(autoNextTimeout); autoNextTimeout = null; }
+    if (lineMaxTimeout) { clearTimeout(lineMaxTimeout); lineMaxTimeout = null; }
+    try { recognition.stop(); } catch(e){}
+    
+    // 1. అసెస్మెంట్ ప్యానల్ క్లోజ్ చేసి సర్టిఫికేట్ ప్యానల్ ఓపెన్ చేస్తాం
     document.getElementById("assessment-panel").style.display = "none";
-    document.getElementById("certificate-panel").style.display = "block";
-
-    // 1. మొదట పాత ఎలిమెంట్స్ ఏవైనా ఉంటే క్లీన్ చేయండి
     const panel = document.getElementById("certificate-panel");
-    panel.innerHTML = ""; // మొత్తం ప్యానెల్ క్లియర్ చేస్తున్నాం
+    panel.style.display = "block";
+    
+    const finalScore = questionsAttempted ? Math.round(accumulatedScores / questionsAttempted) : 100;
+    const name = document.getElementById("student-name").value || "Anonymous Student";
+    const studentClass = document.getElementById("student-class").value;
+    
+    // బ్యాక్‌గ్రౌండ్‌లో సర్టిఫికేట్ డేటా ముందే నింపి ఉంచుతాం
+    document.getElementById("cert-name").innerText = name;
+    document.getElementById("cert-class").innerText = studentClass;
+    document.getElementById("cert-lang").innerText = currentLanguage;
+    document.getElementById("cert-final-score").innerText = `${finalScore}%`;
+    document.getElementById("cert-q-count").innerText = questionsAttempted;
+    const totalMinutes = totalReadingTimeSeconds > 0 ? (totalReadingTimeSeconds / 60) : 0.01;
+    document.getElementById("cert-wpm").innerText = Math.round(totalWordsReadSuccessfully / totalMinutes);
+    document.getElementById("cert-time").innerText = `${Math.round(totalReadingTimeSeconds)}s`;
+    
+    // 🚨 [STEP 1] సర్టిఫికేట్ కార్డ్‌ని మొదటి పేజీలో అసలు లేకుండా పూర్తిగా దాచేస్తాం
+    const certCard = document.querySelector(".certificate") || document.getElementById("certificate-card");
+    if (certCard) { certCard.style.display = "none"; }
 
-    // 2. ఇప్పుడు రిపోర్ట్ పేజీ కోసం కొత్త కంటైనర్ ని క్రియేట్ చేయండి
-    const reportDiv = document.createElement("div");
-    reportDiv.id = "report-only-view";
-    reportDiv.innerHTML = `
-        <h2 style="text-align:center;">Assessment Report</h2>
-        <div id="error-list-details">
-            <h3 style="color: #dc2626;">❌ Mistaken Words / తప్పుగా చదివిన పదాలు:</h3>
-            </div>
-        <div style="text-align:center; margin-top:20px;">
-            <button onclick="toggleReportToCertificate()" style="padding:15px 30px; background:#4f46e5; color:white; border:none; border-radius:25px;">
+    // పాత HTML లో గట్టిగా రాసి ఉన్న బ్రౌన్ బటన్లు, 'Congratulations!' హెడింగ్స్ అన్నింటినీ ఫోర్స్ గా దాచేస్తున్నాం
+    const panelElements = panel.querySelectorAll("h2, h3, p, button, a");
+    panelElements.forEach(el => {
+        if (!el.closest('.certificate') && !el.closest('#certificate-card')) {
+            el.style.display = "none";
+        }
+    });
+
+    // 🚨 [STEP 2] ప్రత్యేకమైన ఎర్రర్ రిపోర్ట్ కంటైనర్‌ను క్రియేట్ చేస్తున్నాం
+    let errorContainer = document.getElementById("clean-error-container");
+    if (!errorContainer) {
+        errorContainer = document.createElement("div");
+        errorContainer.id = "clean-error-container";
+        panel.appendChild(errorContainer);
+    }
+    errorContainer.style.display = "block";
+    errorContainer.style.padding = "20px";
+    errorContainer.style.background = "#fffbfb";
+    errorContainer.style.border = "2px solid #fee2e2";
+    errorContainer.style.borderRadius = "12px";
+    errorContainer.style.marginTop = "20px";
+
+    // గ్రీన్ కలర్ లో స్కోర్ బోర్డ్ హెడింగ్
+    let scoreHeader = `<div style="text-align:center; font-size:1.5rem; font-weight:bold; color:#059669; margin-bottom:20px; background:#ecfdf5; padding:10px; border-radius:8px;">
+        Assessment Score: ${finalScore}% 🎉
+    </div>`;
+
+    let errorListHTML = "";
+    if (wrongWordsLog.length === 0) {
+        errorListHTML = "<div style='color: #059669; font-weight:bold; text-align:center; font-size:1.2rem; padding:15px;'>Excellent Reading! No errors found. ⭐</div>";
+    } else {
+        errorListHTML = `<h3 style="color:#dc2626; text-align:center; margin-bottom:15px; font-size:1.3rem;">❌ Mistaken Words / తప్పుగా చదివిన పదాలు:</h3>`;
+        wrongWordsLog.forEach((log, idx) => {
+            errorListHTML += `
+                <div style="padding:10px; border-bottom:1px solid #fee2e2; font-size:1.05rem; line-height:1.6;">
+                    <strong>Line ${idx+1}:</strong> "${log.question}"<br>
+                    <span style="color:#dc2626; font-weight:bold;">Missed:</span> 
+                    ${log.words.map(w => `<span style="background: #fed7d7; padding: 2px 8px; border-radius: 4px; margin-right: 4px; display:inline-block; font-weight:600;">${w}</span>`).join("")}
+                </div>`;
+        });
+    }
+
+    // బ్లూ కలర్ లో అట్రాక్టివ్ 'Next: View Certificate' బటన్
+    let nextButtonHTML = `
+        <div style="text-align:center; margin-top:25px;">
+            <button onclick="toggleReportToCertificate()" style="background: linear-gradient(135deg, #4f46e5, #3730a3); color:white; padding:14px 45px; font-size:1.2rem; border:none; border-radius:30px; cursor:pointer; font-weight:bold; box-shadow:0 6px 15px rgba(79, 70, 229, 0.4); width:100%; max-width:320px;">
                 Next: View Certificate 🏆
             </button>
-        </div>
-    `;
-    panel.appendChild(reportDiv);
+        </div>`;
+
+    errorContainer.innerHTML = scoreHeader + errorListHTML + nextButtonHTML;
     
-    // (ఇక్కడ మీ తప్పుల డేటాను row లుగా యాడ్ చేసుకోండి)
+    // బ్యాక్‌ఎండ్‌లో గూగుల్ షీట్‌కి డేటా పంపడం
+    sendPayloadToGoogleSheet(name, studentClass, finalScore, Math.round(totalReadingTimeSeconds));
 }
 
 function toggleReportToCertificate() {
+    // 1. ఎర్రర్ రిపోర్ట్ పేజీ కంటైనర్‌ను పూర్తిగా మాయం చేస్తున్నాం
+    const errorContainer = document.getElementById("clean-error-container");
+    if (errorContainer) errorContainer.style.display = "none";
+    
+    // 2. అందమైన మెయిన్ సర్టిఫికేట్ కార్డును మాత్రమే చూపిస్తాం
+    const certCard = document.querySelector(".certificate") || document.getElementById("certificate-card");
+    if (certCard) {
+        certCard.style.display = "block";
+        certCard.style.margin = "0 auto";
+        certCard.style.boxShadow = "0 20px 40px rgba(0,0,0,0.15)";
+        certCard.style.borderRadius = "12px";
+        certCard.style.border = "8px double #d4af37"; // గోల్డెన్ డబుల్ బార్డర్ లుక్
+    }
+    
+    // 3. సర్టిఫికేట్ కింద గ్రీన్ కలర్ లో అట్రాక్టివ్ 'Next Student' బటన్‌ను ఫ్రెష్ గా బిల్డ్ చేస్తున్నాం
     const panel = document.getElementById("certificate-panel");
-    panel.innerHTML = ""; // రిపోర్ట్ పేజీని పూర్తిగా తీసేస్తున్నాం
-
-    // 3. ఇప్పుడు సర్టిఫికేట్ పేజీని క్రియేట్ చేయండి
-    const certDiv = document.createElement("div");
-    certDiv.id = "certificate-only-view";
-    certDiv.innerHTML = `
-        <div class="certificate" style="border: 8px double #d4af37; padding: 20px;">
-            <h1>Certificate of Completion</h1>
-            <p>Congratulations! ${document.getElementById("student-name").value}</p>
-            </div>
-        <div style="text-align:center; margin-top:30px;">
-            <button onclick="location.reload()" style="padding:15px 30px; background:#10b981; color:white; border:none; border-radius:25px;">
-                🔄 Next Student / Start New Test
-            </button>
-        </div>
+    let certCloseZone = document.getElementById("cert-close-zone");
+    if (!certCloseZone) {
+        certCloseZone = document.createElement("div");
+        certCloseZone.id = "cert-close-zone";
+        certCloseZone.style.textAlign = "center";
+        certCloseZone.style.marginTop = "30px";
+        panel.appendChild(certCloseZone);
+    }
+    certCloseZone.style.display = "block";
+    certCloseZone.innerHTML = `
+        <button onclick="resetToSetup()" style="background: linear-gradient(135deg, #10b981, #059669); color:white; padding:14px 45px; font-size:1.2rem; border:none; border-radius:30px; cursor:pointer; font-weight:bold; box-shadow:0 6px 15px rgba(5, 150, 105, 0.4); width:100%; max-width:350px;">
+            🔄 Next Student / Start New Test
+        </button>
     `;
-    panel.appendChild(certDiv);
 }
+
+function sendPayloadToGoogleSheet(name, studentClass, finalScore, totalTimeTaken) {
+    const today = new Date();
+    const formattedDate = `${String(today.getDate()).padStart(2, '0')}-${today.toLocaleString('default', { month: 'short' })}-${today.getFullYear()}`;
+    let startTimeString = "N/A";
+    if (testStartTimeGlobal) {
+        startTimeString = testStartTimeGlobal.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true });
+    }
+    const scorePayload = {
+        date: formattedDate,
+        studentName: name,
+        studentClass: studentClass,
+        language: currentLanguage,
+        questions: currentSentences.length,
+        score: `${finalScore}%`,
+        startingTime: startTimeString,
+        timeTaken: `${totalTimeTaken} Sec`
+    };
+    if (WEB_APP_URL) {
+        fetch(WEB_APP_URL, {
+            method: "POST",
+            mode: "no-cors", 
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(scorePayload)
+        }).catch(err => console.error("Error saving score:", err));
+    }
+}
+
+function abortAssessment() {
+    if (confirm("Are you sure you want to stop?")) {
+        isAssessmentActive = false;
+        isMicrophoneIntendedToBeActive = false;
+        if (autoNextTimeout) clearTimeout(autoNextTimeout);
+        if (lineMaxTimeout) clearTimeout(lineMaxTimeout);
+        try { recognition.stop(); } catch(e){}
+        resetToSetup();
+    }
+}
+
+function resetToSetup() {
+    document.getElementById("certificate-panel").style.display = "none";
+    document.getElementById("setup-screen").style.display = "block";
+    
+    // అన్ని డైనమిక్ కంటైనర్లను నెక్స్ట్ స్టూడెంట్ కోసం రీసెట్ చేస్తున్నాం
+    const errorContainer = document.getElementById("clean-error-container");
+    if (errorContainer) errorContainer.style.display = "none";
+    
+    const certCloseZone = document.getElementById("cert-close-zone");
+    if (certCloseZone) certCloseZone.style.display = "none";
+
+    const nameInput = document.getElementById("student-name");
+    nameInput.value = "";
+    nameInput.focus();
+    document.getElementById("selection-box-container").style.display = "none";
+    
+    currentSentences = [];
+    sentenceIndex = 0;
+    accumulatedScores = 0;
+    questionsAttempted = 0;
+    isAssessmentActive = false;
+    isMicrophoneIntendedToBeActive = false;
+    wrongWordsLog = [];
+    totalWordsReadSuccessfully = 0;
+    totalReadingTimeSeconds = 0;
+    permanentlyMatchedWordsSet.clear();
+    if (autoNextTimeout) { clearTimeout(autoNextTimeout); autoNextTimeout = null; }
+    if (lineMaxTimeout) { clearTimeout(lineMaxTimeout); lineMaxTimeout = null; }
+}
+
 </script>
